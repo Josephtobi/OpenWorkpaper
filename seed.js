@@ -27,14 +27,17 @@
  */
 
 const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient({
-  datasources: {
-    db: {
-      url: process.env.DATABASE_URL || 'file:/app/prisma/data/dev.db'
-    }
-  }
+const { PrismaLibSQL } = require('@prisma/adapter-libsql');
+const { createClient } = require('@libsql/client');
+
+const dbUrl = process.env.DATABASE_URL || 'file:/app/prisma/data/dev.db';
+
+const libsql = createClient({
+  url: dbUrl.startsWith('file:') ? dbUrl : `file:${dbUrl}`
 });
 
+const adapter = new PrismaLibSQL(libsql);
+const prisma = new PrismaClient({ adapter });
 // ─────────────────────────────────────────────
 // DATA: All 5 Templates
 // ─────────────────────────────────────────────
