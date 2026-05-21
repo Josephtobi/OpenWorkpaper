@@ -1,22 +1,22 @@
+// seed.mjs
 import { PrismaClient } from '@prisma/client';
 import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
-import bcrypt from 'bcryptjs';
 
 const dbUrl = process.env.DATABASE_URL || 'file:prisma/data/dev.db';
 const sqliteInput = { url: dbUrl.replace(/^file:/, '') };
 const adapter = new PrismaBetterSqlite3(sqliteInput);
 const prisma = new PrismaClient({ adapter });
 
-// EXACT SCHEMA FIELD NAMES:
-// AuditTemplate     : id, name (unique), description
-// TemplateGroup     : id, templateId, phase, title, displayOrder
-// TemplateProcedure : id, templateId, groupId, phase, title, purpose, displayOrder
-// NOTE: No 'source' field on TemplateProcedure — source refs included in purpose text
+// ============================================================================
+// DATA – All 5 templates (converted from original seed.js)
+// ============================================================================
 
 const TEMPLATES = [
+  // 1. UNIVERSAL – PLANNING & REPORTING
   {
     name: 'Universal — Planning & Reporting (All Industries)',
-    description: 'Engagement acceptance, risk assessment, materiality, audit strategy, completion procedures, and audit reporting. Import into every engagement regardless of industry.',
+    description:
+      'Engagement acceptance, risk assessment, materiality, audit strategy, completion procedures, and audit reporting. Import into every engagement regardless of industry.',
     phases: [
       {
         phase: 'Planning',
@@ -81,7 +81,7 @@ const TEMPLATES = [
             title: 'Internal Controls Assessment',
             procedures: [
               { title: 'Control Environment Assessment', purpose: 'To evaluate the overall control environment including management\'s philosophy, organisational structure, assignment of authority, and commitment to competence, as the foundation for assessing control risk across all audit areas, per ISA 315. [ISA 315.A68]' },
-              { title: 'Revenue Cycle Controls Walkthrough', purpose: 'To document and evaluate the design and implementation of controls over the revenue cycle, from order or contract initiation through invoicing, cash collection, and ledger posting, to determine whether reliance on controls is appropriate per ISA 330. [ISA 330.13; ISA 315.26]' },
+              { title: 'Revenue Cycle Controls Walkthrough', purpose: 'To document and evaluate the design and implementation of controls over the revenue cycle, from order/contract initiation through invoicing, cash collection, and ledger posting, to determine whether reliance on controls is appropriate per ISA 330. [ISA 330.13; ISA 315.26]' },
               { title: 'Expenditure Cycle Controls Walkthrough', purpose: 'To document and evaluate the design and implementation of controls over the purchase-to-pay cycle, including procurement authorisation, supplier onboarding, invoice approval, and payment processing, per ISA 330. [ISA 330.13]' },
               { title: 'Payroll Cycle Controls Walkthrough', purpose: 'To document and evaluate controls over the payroll process including new hire authorisation, changes to standing data, payroll computation, PAYE/PENCOM deductions, and bank transfer authorisation, per ISA 330 and ISA 240. [ISA 330.13; ISA 240; PENCOM Act 2014]' },
               { title: 'Cash & Treasury Controls Walkthrough', purpose: 'To document and evaluate controls over cash receipts, cash payments, bank account management, reconciliation procedures, and authorisation of transfers, given the elevated fraud risk associated with cash per ISA 240. [ISA 330.13; ISA 240]' },
@@ -164,9 +164,12 @@ const TEMPLATES = [
       },
     ],
   },
+
+  // 2. FIELDWORK – MANUFACTURING
   {
     name: 'Fieldwork — Manufacturing',
-    description: 'Substantive procedures for manufacturing clients. Covers revenue (IFRS 15), inventory (IAS 2), PPE (IAS 16), payroll, taxation (NTA 2025), and regulatory compliance (SON, NAFDAC, ITF, NESREA).',
+    description:
+      'Substantive procedures for manufacturing clients. Covers revenue (IFRS 15), inventory (IAS 2), PPE (IAS 16), payroll, taxation (NTA 2025), and regulatory compliance (SON, NAFDAC, ITF, NESREA).',
     phases: [
       {
         phase: 'Fieldwork',
@@ -317,9 +320,12 @@ const TEMPLATES = [
       },
     ],
   },
+
+  // 3. FIELDWORK – OIL & GAS SERVICES
   {
     name: 'Fieldwork — Oil & Gas Services',
-    description: 'Substantive procedures for oil and gas service companies. Covers IFRS 6 E&E assets, PPT computation (NTA 2025), NUPRC compliance, ARO decommissioning provisions (IAS 37), NDDC levy, and NOGICD Act local content requirements.',
+    description:
+      'Substantive procedures for oil and gas service companies. Covers IFRS 6 E&E assets, PPT computation (NTA 2025), NUPRC compliance, ARO decommissioning provisions (IAS 37), NDDC levy, and NOGICD Act local content requirements.',
     phases: [
       {
         phase: 'Fieldwork',
@@ -374,9 +380,12 @@ const TEMPLATES = [
       },
     ],
   },
+
+  // 4. FIELDWORK – HOSPITALITY & RESTAURANT
   {
     name: 'Fieldwork — Hospitality & Restaurant',
-    description: 'Substantive procedures for hotels and restaurants. Covers POS revenue reconciliation, F&B inventory, IFRS 15 loyalty programmes, IFRS 16 leases, and NTDC/state tourism licensing compliance.',
+    description:
+      'Substantive procedures for hotels and restaurants. Covers POS revenue reconciliation, F&B inventory, IFRS 15 loyalty programmes, IFRS 16 leases, and NTDC/state tourism licensing compliance.',
     phases: [
       {
         phase: 'Fieldwork',
@@ -419,4 +428,147 @@ const TEMPLATES = [
             ],
           },
           {
-            title: 'Regulatory Compliance — Hos
+            title: 'Regulatory Compliance — Hospitality',
+            procedures: [
+              { title: 'Hotel and Tourism Licensing — NTDC and State Tourism Board', purpose: 'To confirm that the entity holds a valid hotel licence from the Nigerian Tourism Development Corporation and the relevant State Tourism Board, that licences are current, and that licence fees are correctly expensed. [NTDC Act; state tourism laws; ISA 250]' },
+              { title: 'Fire Safety and Health Certificate', purpose: 'To confirm that current fire safety certificates and health inspection certificates are held, that there are no outstanding improvement notices, and that any required remediation expenditure has been appropriately provided for. [ISA 250; IAS 37]' },
+              { title: 'NAFDAC Compliance for Food Handling', purpose: 'To verify that food handling and storage operations comply with NAFDAC regulations, that relevant staff have valid food handler certificates, and that there are no outstanding enforcement actions or product recalls. [NAFDAC Act; ISA 250]' },
+              { title: 'Local Government and Entertainment Levies', purpose: 'To identify all applicable local government levies, entertainment taxes, and signage fees, confirm they are correctly computed, remitted on time, and any outstanding balances are properly accrued. [Local Government Finance Law; ISA 250]' },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+
+  // 5. FIELDWORK – CONSULTING
+  {
+    name: 'Fieldwork — Consulting',
+    description:
+      'Substantive procedures for consulting firms. Covers IFRS 15 contract assets and unbilled WIP, fixed-fee and retainer revenue, staff utilisation, WHT on sub-contractors, and professional body compliance.',
+    phases: [
+      {
+        phase: 'Fieldwork',
+        groups: [
+          {
+            title: 'Revenue — Consulting',
+            procedures: [
+              { title: 'Time-and-Materials Contracts — Cut-Off and Hours Billed', purpose: 'To verify that revenue on time-and-materials contracts is recognised as services are performed, test the completeness and accuracy of hours billed near the reporting date, and confirm that rates applied are per the applicable engagement letters or master service agreements per IFRS 15. [IFRS 15; ISA 330]' },
+              { title: 'Fixed-Fee Contracts — Stage of Completion', purpose: 'To verify that fixed-fee contract revenue is recognised using an appropriate output or input method reflecting the stage of completion, review the basis for percentage completion estimates, and confirm that estimates are reasonable and consistently applied per IFRS 15.39. [IFRS 15.39]' },
+              { title: 'Retainer Revenue — Period Allocation', purpose: 'To verify that retainer fees are allocated to the period in which the related services are rendered, and that any retainers received in advance of service delivery are recognised as deferred revenue / contract liabilities per IFRS 15. [IFRS 15]' },
+              { title: 'Unbilled WIP (Contract Assets) — Assessment', purpose: 'To verify the completeness and valuation of unbilled work-in-progress (contract assets), confirm that WIP represents enforceable rights to consideration for services rendered, and assess whether any WIP has become irrecoverable and requires write-off per IFRS 15.107. [IFRS 15.107]' },
+              { title: 'Contract Modifications — Variable Consideration', purpose: 'To identify contract modifications (scope changes, additions, cancellations) during the year, assess their accounting treatment as a modification or a new contract per IFRS 15.18, and verify that variable consideration has been constrained appropriately. [IFRS 15.18; IFRS 15.56]' },
+              { title: 'Reimbursable Expenses — Gross vs Net Presentation', purpose: 'To assess whether reimbursable expenses (travel, accommodation, third-party costs) are presented gross as revenue or net, applying the principal vs agent guidance of IFRS 15.B34, and confirm consistent application of the policy. [IFRS 15.B34]' },
+            ],
+          },
+          {
+            title: 'Trade and Other Receivables — Consulting',
+            procedures: [
+              { title: 'Aged WIP and Debtors — Project-by-Project Analysis', purpose: 'To review the aged analysis of both billed debtors and unbilled WIP on a project-by-project basis, identify balances at risk of non-recovery, and confirm that provisions reflect specific client credit risk rather than a generic percentage. [IFRS 9; ISA 540]' },
+              { title: 'Contract Asset vs Trade Receivable Distinction', purpose: 'To confirm that the distinction between contract assets (right to consideration conditional on completion of further performance obligations) and trade receivables (unconditional right to consideration) has been correctly applied and separately presented per IFRS 15.107. [IFRS 15.107]' },
+              { title: 'Debtors Confirmation — Key Client Balances', purpose: 'To obtain external confirmation from significant debtors of the amounts owed at the year-end date, with particular focus on balances where collectability risk is elevated per ISA 505. [ISA 505]' },
+            ],
+          },
+          {
+            title: 'Payroll and Sub-Contractors — Consulting',
+            procedures: [
+              { title: 'Staff Utilisation Analysis', purpose: 'To analyse billed versus unbilled hours by staff member and by engagement to assess the reasonableness of the revenue recognised on time-based contracts, identify idle time or over-runs, and support the valuation of unbilled WIP. [ISA 520; IFRS 15]' },
+              { title: 'Bonuses and Commissions — Accrual Basis', purpose: 'To verify that bonuses and commissions payable to staff are correctly accrued at year-end based on achieved performance metrics, and that the accrual basis and amount are consistent with approved schemes and prior year practice per IAS 19. [IAS 19; ISA 330]' },
+              { title: 'Sub-Contractor Costs — WHT Deduction Compliance', purpose: 'To verify that withholding tax has been correctly deducted at 5% on payments to sub-contractors and professional service providers, remitted to FIRS, and that sub-contractor costs are recognised in the period in which the related services are received. [NTA 2025; FIRS WHT regulations]' },
+              { title: 'Consultants vs Employees — Tax Classification', purpose: 'To assess whether individuals engaged as consultants (subject to WHT at 5%) are in substance employees (subject to PAYE), applying the tests of control and integration, and confirm the tax treatment is appropriate to avoid PAYE exposure. [NTA 2025; PITA; FIRS guidelines]' },
+            ],
+          },
+          {
+            title: 'Regulatory Compliance — Consulting',
+            procedures: [
+              { title: 'Professional Body Membership — Current Year', purpose: 'To confirm that the firm and relevant professional staff hold current membership of applicable professional bodies (ICAN, CIBN, NIM, CIPM, COREN, NSE, etc.), that practising licences are valid, and that annual fees are correctly expensed. [ISA 250; applicable professional body laws]' },
+              { title: 'Professional Indemnity Insurance', purpose: 'To confirm that current professional indemnity insurance cover is in place and adequate for the scale of the firm\'s operations, and that premium payments are correctly treated in the financial statements. [ISA 250]' },
+              { title: 'NOTAP Registration — Technology Transfer', purpose: 'To confirm that any agreements involving technology transfer, franchise, or technical services fees paid to foreign entities have been registered with the National Office for Technology Acquisition and Promotion (NOTAP) as required, and that related payments have the correct WHT treatment. [NOTAP Act; NTA 2025; ISA 250]' },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+];
+
+// ============================================================================
+// SEEDER LOGIC
+// ============================================================================
+
+async function seed() {
+  console.log('🌱 Seeding audit templates...\n');
+
+  let templateCount = 0;
+  let groupCount = 0;
+  let procedureCount = 0;
+
+  for (const template of TEMPLATES) {
+    console.log(`📄 Creating template: ${template.name}`);
+
+    // 1. Create the AuditTemplate
+    const auditTemplate = await prisma.auditTemplate.create({
+      data: {
+        name: template.name,
+        description: template.description,
+      },
+    });
+    templateCount++;
+    console.log(`   ✅ Template ID: ${auditTemplate.id}`);
+
+    // 2. Iterate over phases and groups
+    for (const phaseData of template.phases) {
+      const phaseName = phaseData.phase;
+      let groupOrder = 0;
+
+      for (const group of phaseData.groups) {
+        groupOrder++;
+        // Create TemplateGroup
+        const templateGroup = await prisma.templateGroup.create({
+          data: {
+            templateId: auditTemplate.id,
+            phase: phaseName,
+            title: group.title,
+            displayOrder: groupOrder,
+          },
+        });
+        groupCount++;
+
+        let procOrder = 0;
+        for (const proc of group.procedures) {
+          procOrder++;
+          // Create TemplateProcedure
+          await prisma.templateProcedure.create({
+            data: {
+              templateId: auditTemplate.id,
+              groupId: templateGroup.id,
+              phase: phaseName,
+              title: proc.title,
+              purpose: proc.purpose,
+              displayOrder: procOrder,
+            },
+          });
+          procedureCount++;
+        }
+        console.log(`      📁 ${phaseName} > ${group.title} (${group.procedures.length} procedures)`);
+      }
+    }
+    console.log('');
+  }
+
+  console.log('═══════════════════════════════════════════');
+  console.log(`✅ Seeding complete:`);
+  console.log(`   Templates  : ${templateCount}`);
+  console.log(`   Groups     : ${groupCount}`);
+  console.log(`   Procedures : ${procedureCount}`);
+  console.log('═══════════════════════════════════════════');
+}
+
+seed()
+  .catch((e) => {
+    console.error('❌ Seeding failed:', e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
