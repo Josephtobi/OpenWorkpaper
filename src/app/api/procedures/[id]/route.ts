@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
 import { getProcedureComplianceStatus } from '@/lib/compliance-gates';
+import type { Prisma } from '@prisma/client';
 
 interface ProcedureQuestionUpdate {
   id?: string;
@@ -24,6 +25,17 @@ interface ProcedureQuestionUpdate {
   validationStatus?: string;
   reviewerStatus?: string;
   displayOrder?: number;
+}
+
+function asOptionalString(value: string | null | undefined): string | undefined {
+  if (typeof value !== 'string') return undefined;
+  return value;
+}
+
+function asNullableString(value: string | null | undefined): string | null | undefined {
+  if (value === null) return null;
+  if (typeof value === 'string') return value;
+  return undefined;
 }
 
 export async function GET(
@@ -112,25 +124,27 @@ export async function PUT(
     if (questions.length > 0) {
       await prisma.$transaction(async (tx) => {
         for (const [index, question] of questions.entries()) {
-          const payload = {
-            prompt: question.prompt,
-            guidance: question.guidance,
-            questionType: question.questionType,
+          const payload: Prisma.ProcedureQuestionUncheckedUpdateInput = {
+            prompt: asOptionalString(question.prompt),
+            guidance: asNullableString(question.guidance),
+            questionType: asOptionalString(question.questionType),
             isRequired: question.isRequired,
             expectedEvidenceCount: question.expectedEvidenceCount,
-            expectedEvidenceTypes: question.expectedEvidenceTypes,
-            assertionTags: question.assertionTags,
-            riskRating: question.riskRating,
-            controlType: question.controlType,
-            responseText: question.responseText,
+            expectedEvidenceTypes: asNullableString(question.expectedEvidenceTypes),
+            assertionTags: asNullableString(question.assertionTags),
+            riskRating: asOptionalString(question.riskRating),
+            controlType: asOptionalString(question.controlType),
+            responseText: asNullableString(question.responseText),
             responseBoolean: question.responseBoolean,
             responseNumber: question.responseNumber,
-            responseDate: question.responseDate ? new Date(question.responseDate) : null,
-            responseSelection: question.responseSelection,
+            responseDate: question.responseDate === null
+              ? null
+              : (typeof question.responseDate === 'string' ? new Date(question.responseDate) : undefined),
+            responseSelection: asNullableString(question.responseSelection),
             exceptionFlag: question.exceptionFlag,
-            exceptionNarrative: question.exceptionNarrative,
-            validationStatus: question.validationStatus,
-            reviewerStatus: question.reviewerStatus,
+            exceptionNarrative: asNullableString(question.exceptionNarrative),
+            validationStatus: asOptionalString(question.validationStatus),
+            reviewerStatus: asOptionalString(question.reviewerStatus),
             displayOrder: question.displayOrder ?? index,
           };
 
@@ -143,8 +157,11 @@ export async function PUT(
             await tx.procedureQuestion.create({
               data: {
                 procedureId: params.id,
-                prompt: question.prompt.trim(),
                 ...payload,
+                prompt: question.prompt.trim(),
+                questionType: question.questionType || 'narrative',
+                riskRating: question.riskRating || 'Moderate',
+                controlType: question.controlType || 'Substantive',
               },
             });
           }
