@@ -4,6 +4,12 @@ import { getSession } from '@/lib/auth';
 import type { Procedure } from '@prisma/client';
 import { buildDefaultQuestionFromProcedure, normalizeQuestionType, parseBracketCitations } from '@/lib/compliance';
 
+function getTemplateQuestionId(question: unknown): string | null {
+  if (!question || typeof question !== 'object') return null;
+  const maybeId = (question as { id?: unknown }).id;
+  return typeof maybeId === 'string' ? maybeId : null;
+}
+
 export async function POST(req: Request, props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const session = await getSession();
@@ -88,9 +94,9 @@ export async function POST(req: Request, props: { params: Promise<{ id: string }
               const createdQuestion = await tx.procedureQuestion.create({
                 data: {
                   procedureId: created.id,
-                  templateQuestionId: 'id' in question ? question.id : null,
+                  templateQuestionId: getTemplateQuestionId(question),
                   prompt: question.prompt,
-                  guidance: question.guidance || ('guidance' in question ? question.guidance : tp.purpose),
+                  guidance: question.guidance || tp.purpose,
                   questionType: normalizeQuestionType(question.questionType),
                   isRequired: question.isRequired ?? true,
                   expectedEvidenceCount: Number(question.expectedEvidenceCount ?? 0),
@@ -151,9 +157,9 @@ export async function POST(req: Request, props: { params: Promise<{ id: string }
               const createdQuestion = await tx.procedureQuestion.create({
                 data: {
                   procedureId: created.id,
-                  templateQuestionId: 'id' in question ? question.id : null,
+                  templateQuestionId: getTemplateQuestionId(question),
                   prompt: question.prompt,
-                  guidance: question.guidance || ('guidance' in question ? question.guidance : tp.purpose),
+                  guidance: question.guidance || tp.purpose,
                   questionType: normalizeQuestionType(question.questionType),
                   isRequired: question.isRequired ?? true,
                   expectedEvidenceCount: Number(question.expectedEvidenceCount ?? 0),
