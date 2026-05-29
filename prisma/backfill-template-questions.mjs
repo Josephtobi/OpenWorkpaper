@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const dbUrl = process.env.DATABASE_URL || 'file:prisma/data/dev.db';
 const sqliteInput = { url: dbUrl.replace(/^file:/, '') };
@@ -61,10 +62,13 @@ function inferQuestionType(prompt) {
 }
 
 async function loadPrefillMap() {
+  const scriptDir = path.dirname(fileURLToPath(import.meta.url));
   const candidates = [
     process.env.PREFILL_QUESTIONS_FILE,
     path.resolve(process.cwd(), 'Prefill_Questions_All.md'),
+    path.resolve(process.cwd(), 'OpenWorkpaper', 'Prefill_Questions_All.md'),
     path.resolve(process.cwd(), '..', 'Prefill_Questions_All.md'),
+    path.resolve(scriptDir, '..', 'Prefill_Questions_All.md'),
   ].filter(Boolean);
 
   let markdown = null;
@@ -79,7 +83,10 @@ async function loadPrefillMap() {
   }
 
   if (!markdown) {
-    console.warn('[Backfill] Prefill_Questions_All.md not found. Falling back to default single-question generation.');
+    const attempted = candidates.map((candidate) => path.resolve(candidate)).join(', ');
+    console.warn(
+      `[Backfill] Prefill_Questions_All.md not found. Tried: ${attempted}. Falling back to default single-question generation.`
+    );
     return new Map();
   }
 
@@ -112,21 +119,24 @@ async function loadPrefillMap() {
       sectionPrefix = '';
       continue;
     }
+    const numberMatch = line.match(/^\d+\.\s+(.*)$/);
+    if (numberMatch) {
+      if (!currentTemplate || !currentGroup || !currentProcedure) continue;
+      let prompt = numberMatch[1].trim();
+      if (sectionPrefix) {
+        prompt = `${sectionPrefix} — ${prompt}`;
+      }
+
+      const key = `${normalizeKey(currentTemplate)}|${normalizeKey(currentGroup)}|${normalizeKey(currentProcedure)}`;
+      if (!map.has(key)) map.set(key, []);
+      map.get(key).push(prompt);
+      continue;
+    }
+
     if (/^[A-Z0-9][^:]{3,}:$/.test(line)) {
       sectionPrefix = line.replace(/:$/, '').trim();
       continue;
     }
-
-    const numberMatch = line.match(/^\d+\.\s+(.*)$/);
-    if (!numberMatch || !currentTemplate || !currentGroup || !currentProcedure) continue;
-    let prompt = numberMatch[1].trim();
-    if (sectionPrefix) {
-      prompt = `${sectionPrefix} — ${prompt}`;
-    }
-
-    const key = `${normalizeKey(currentTemplate)}|${normalizeKey(currentGroup)}|${normalizeKey(currentProcedure)}`;
-    if (!map.has(key)) map.set(key, []);
-    map.get(key).push(prompt);
   }
 
   return map;
