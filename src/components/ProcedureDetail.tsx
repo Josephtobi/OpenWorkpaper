@@ -83,9 +83,10 @@ export default function ProcedureDetail({
     const d = buildSavePayload(p);
 
     // Sanitize rich text fields so comparison is against what actually gets saved
-    RICH_TEXT_FIELDS.forEach(field => {
-      if (typeof d[field] === 'string') {
-        d[field] = DOMPurify.sanitize(d[field]).trim();
+    RICH_TEXT_FIELDS.forEach((field) => {
+      const typedField = field as keyof typeof d;
+      if (typeof d[typedField] === 'string') {
+        d[typedField] = DOMPurify.sanitize(String(d[typedField])).trim();
       }
     });
 
