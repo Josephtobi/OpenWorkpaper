@@ -1,6 +1,6 @@
 'use client';
 /** OpenWorkpaper ProcedureDetail - Full Page Editor with Auto-Save **/
-import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Trash2, Save, Paperclip, File as FileIcon, X, MessageSquare, RefreshCw, Send, User, CheckCircle, Clock, Link as LinkIcon, Check, ArrowLeft, Plus, ChevronDown, Lock, Unlock } from 'lucide-react';
@@ -8,6 +8,8 @@ import type { Attachment, ProcedureMessage, TeamMember } from '@prisma/client';
 import type { ProcedureQuestion, ProcedureWithRelations } from '@/lib/types';
 import DOMPurify from 'isomorphic-dompurify';
 import RichTextEditor from './RichTextEditor';
+
+const RICH_TEXT_FIELDS = ['purpose', 'source', 'scope', 'methodology', 'results', 'conclusions'] as const;
 
 export default function ProcedureDetail({ 
   procedure, 
@@ -23,8 +25,6 @@ export default function ProcedureDetail({
   auditId: string
 }) {
   const router = useRouter();
-
-  const RICH_TEXT_FIELDS = useMemo(() => ['purpose', 'source', 'scope', 'methodology', 'results', 'conclusions'], []);
 
   const formatDateForInput = (date: Date | string | null | number | undefined) => {
     if (!date) return '';
@@ -84,14 +84,11 @@ export default function ProcedureDetail({
 
     // Sanitize rich text fields so comparison is against what actually gets saved
     RICH_TEXT_FIELDS.forEach((field) => {
-      const typedField = field as keyof typeof d;
-      if (typeof d[typedField] === 'string') {
-        d[typedField] = DOMPurify.sanitize(String(d[typedField])).trim();
-      }
+      d[field] = DOMPurify.sanitize(d[field]).trim();
     });
 
     return JSON.stringify(d);
-  }, [RICH_TEXT_FIELDS, buildSavePayload]);
+  }, [buildSavePayload]);
 
   const [data, setData] = useState(procedure);
   const [saving, setSaving] = useState(false);
