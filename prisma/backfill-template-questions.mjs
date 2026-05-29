@@ -1,5 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 
 const dbUrl = process.env.DATABASE_URL || 'file:prisma/data/dev.db';
 const sqliteInput = { url: dbUrl.replace(/^file:/, '') };
@@ -34,15 +36,161 @@ function stripCitationSuffix(text) {
   return text.replace(/\[[^\]]+\]\s*$/, '').trim();
 }
 
+function normalizeKey(value) {
+  return (value || '')
+    .toLowerCase()
+    .replace(/\([^)]*\)/g, ' ')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+    .replace(/\s+/g, ' ');
+}
+
+function inferQuestionType(prompt) {
+  const lower = prompt.toLowerCase();
+  if (lower.includes('yes/no') || lower.includes('state yes/no') || lower.includes('yes/no and')) {
+    return 'yes_no_na';
+  }
+  if (lower.includes('rate') && (lower.includes('high') || lower.includes('medium') || lower.includes('low'))) {
+    return 'selection';
+  }
+  if (lower.includes('date')) return 'date';
+  if (lower.includes('number') || lower.includes('amount') || lower.includes('ratio') || lower.includes('%')) {
+    return 'numeric';
+  }
+  return 'narrative';
+}
+
+async function loadPrefillMap() {
+  const candidates = [
+    process.env.PREFILL_QUESTIONS_FILE,
+    path.resolve(process.cwd(), 'Prefill_Questions_All.md'),
+    path.resolve(process.cwd(), '..', 'Prefill_Questions_All.md'),
+  ].filter(Boolean);
+
+  let markdown = null;
+  for (const candidate of candidates) {
+    try {
+      markdown = await fs.readFile(candidate, 'utf8');
+      console.log(`[Backfill] Loaded prefill questions from: ${candidate}`);
+      break;
+    } catch {
+      // Try next candidate.
+    }
+  }
+
+  if (!markdown) {
+    console.warn('[Backfill] Prefill_Questions_All.md not found. Falling back to default single-question generation.');
+    return new Map();
+  }
+
+  const map = new Map();
+  const lines = markdown.split(/\r?\n/);
+  let currentTemplate = null;
+  let currentGroup = null;
+  let currentProcedure = null;
+  let sectionPrefix = '';
+
+  for (const rawLine of lines) {
+    const line = rawLine.trim();
+    if (!line) continue;
+
+    if (line.startsWith('# TEMPLATE:')) {
+      currentTemplate = line.replace('# TEMPLATE:', '').trim();
+      currentGroup = null;
+      currentProcedure = null;
+      sectionPrefix = '';
+      continue;
+    }
+    if (line.startsWith('## GROUP:')) {
+      currentGroup = line.replace('## GROUP:', '').trim();
+      currentProcedure = null;
+      sectionPrefix = '';
+      continue;
+    }
+    if (line.startsWith('### ')) {
+      currentProcedure = line.replace('### ', '').trim();
+      sectionPrefix = '';
+      continue;
+    }
+    if (/^[A-Z0-9][^:]{3,}:$/.test(line)) {
+      sectionPrefix = line.replace(/:$/, '').trim();
+      continue;
+    }
+
+    const numberMatch = line.match(/^\d+\.\s+(.*)$/);
+    if (!numberMatch || !currentTemplate || !currentGroup || !currentProcedure) continue;
+    let prompt = numberMatch[1].trim();
+    if (sectionPrefix) {
+      prompt = `${sectionPrefix} — ${prompt}`;
+    }
+
+    const key = `${normalizeKey(currentTemplate)}|${normalizeKey(currentGroup)}|${normalizeKey(currentProcedure)}`;
+    if (!map.has(key)) map.set(key, []);
+    map.get(key).push(prompt);
+  }
+
+  return map;
+}
+
 async function backfillTemplateQuestions() {
+  const prefillMap = await loadPrefillMap();
+
   const procedures = await prisma.templateProcedure.findMany({
     include: {
+      template: true,
+      group: true,
       questions: true,
     },
   });
 
   let createdTemplateQuestions = 0;
+  let replacedTemplateQuestions = 0;
   for (const procedure of procedures) {
+    const key = `${normalizeKey(procedure.template.name)}|${normalizeKey(procedure.group?.title || '')}|${normalizeKey(procedure.title)}`;
+    const prefillQuestions = prefillMap.get(key) || [];
+
+    if (prefillQuestions.length > 0) {
+      if (procedure.questions.length > 0) {
+        const questionIds = procedure.questions.map((q) => q.id);
+        if (questionIds.length > 0) {
+          await prisma.templateQuestionCitation.deleteMany({
+            where: { templateQuestionId: { in: questionIds } },
+          });
+        }
+        await prisma.templateProcedureQuestion.deleteMany({
+          where: { templateProcedureId: procedure.id },
+        });
+      }
+      const citations = parseBracketCitations(procedure.purpose);
+      for (const [index, prompt] of prefillQuestions.entries()) {
+        const question = await prisma.templateProcedureQuestion.create({
+          data: {
+            templateProcedureId: procedure.id,
+            prompt,
+            guidance: procedure.purpose,
+            questionType: inferQuestionType(prompt),
+            isRequired: true,
+            expectedEvidenceCount: 1,
+            riskRating: 'Moderate',
+            controlType: 'Substantive',
+            displayOrder: index,
+          },
+        });
+        if (citations.length > 0) {
+          await prisma.templateQuestionCitation.createMany({
+            data: citations.map((citation, citationIndex) => ({
+              templateQuestionId: question.id,
+              standardType: citation.standardType,
+              reference: citation.reference,
+              displayOrder: citationIndex,
+            })),
+          });
+        }
+      }
+      replacedTemplateQuestions += prefillQuestions.length;
+      continue;
+    }
+
     if (procedure.questions.length > 0) continue;
     const question = await prisma.templateProcedureQuestion.create({
       data: {
@@ -104,7 +252,9 @@ async function backfillTemplateQuestions() {
     createdProcedureQuestions++;
   }
 
-  console.log(`Created ${createdTemplateQuestions} template questions and ${createdProcedureQuestions} procedure questions.`);
+  console.log(
+    `[Backfill] Replaced ${replacedTemplateQuestions} template questions from prefill list, created ${createdTemplateQuestions} fallback template questions, and created ${createdProcedureQuestions} procedure questions.`
+  );
 }
 
 backfillTemplateQuestions()
