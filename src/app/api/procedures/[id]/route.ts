@@ -124,7 +124,7 @@ export async function PUT(
     if (questions.length > 0) {
       await prisma.$transaction(async (tx) => {
         for (const [index, question] of questions.entries()) {
-          const payload: Prisma.ProcedureQuestionUncheckedUpdateInput = {
+          const updatePayload: Prisma.ProcedureQuestionUncheckedUpdateInput = {
             prompt: asOptionalString(question.prompt),
             guidance: asNullableString(question.guidance),
             questionType: asOptionalString(question.questionType),
@@ -151,18 +151,34 @@ export async function PUT(
           if (question.id) {
             await tx.procedureQuestion.update({
               where: { id: question.id },
-              data: payload,
+              data: updatePayload,
             });
           } else if (question.prompt?.trim()) {
+            const createPayload: Prisma.ProcedureQuestionUncheckedCreateInput = {
+              procedureId: params.id,
+              prompt: question.prompt.trim(),
+              guidance: question.guidance ?? null,
+              questionType: question.questionType || 'narrative',
+              isRequired: question.isRequired ?? true,
+              expectedEvidenceCount: question.expectedEvidenceCount ?? 0,
+              expectedEvidenceTypes: question.expectedEvidenceTypes ?? null,
+              assertionTags: question.assertionTags ?? null,
+              riskRating: question.riskRating || 'Moderate',
+              controlType: question.controlType || 'Substantive',
+              responseText: question.responseText ?? null,
+              responseBoolean: question.responseBoolean ?? null,
+              responseNumber: question.responseNumber ?? null,
+              responseDate: question.responseDate ? new Date(question.responseDate) : null,
+              responseSelection: question.responseSelection ?? null,
+              exceptionFlag: question.exceptionFlag ?? false,
+              exceptionNarrative: question.exceptionNarrative ?? null,
+              validationStatus: question.validationStatus || 'Pending',
+              reviewerStatus: question.reviewerStatus || 'Pending',
+              displayOrder: question.displayOrder ?? index,
+            };
+
             await tx.procedureQuestion.create({
-              data: {
-                procedureId: params.id,
-                ...payload,
-                prompt: question.prompt.trim(),
-                questionType: question.questionType || 'narrative',
-                riskRating: question.riskRating || 'Moderate',
-                controlType: question.controlType || 'Substantive',
-              },
+              data: createPayload,
             });
           }
         }
