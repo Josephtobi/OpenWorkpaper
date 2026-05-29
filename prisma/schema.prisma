@@ -41,6 +41,7 @@ model Audit {
   procedures              Procedure[]
   procedureGroups         ProcedureGroup[]
   teamMembers             TeamMember[]
+  templateApplications    TemplateApplication[]
 }
 
 model TeamMember {
@@ -81,6 +82,7 @@ model Procedure {
   updatedAt    DateTime     @updatedAt
   attachments  Attachment[]
   messages     ProcedureMessage[]
+  questions    ProcedureQuestion[]
   audit        Audit        @relation(fields: [auditId], references: [id], onDelete: Cascade)
   group        ProcedureGroup? @relation(fields: [groupId], references: [id], onDelete: Cascade)
   assignedTo   TeamMember? @relation("ProcedureAssignment", fields: [assignedToId], references: [id], onDelete: SetNull)
@@ -130,8 +132,10 @@ model AuditTemplate {
   id          String              @id @default(uuid())
   name        String              @unique
   description String?
+  version     Int                 @default(1)
   groups      TemplateGroup[]
   procedures  TemplateProcedure[]
+  applications TemplateApplication[]
   createdAt   DateTime            @default(now())
   updatedAt   DateTime            @updatedAt
 }
@@ -154,10 +158,94 @@ model TemplateProcedure {
   phase        String        // Planning, Fieldwork, Reporting
   title        String
   purpose      String?
+  source       String?
   displayOrder Int          @default(0)
+  questions    TemplateProcedureQuestion[]
   
   template     AuditTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
   group        TemplateGroup? @relation(fields: [groupId], references: [id], onDelete: Cascade)
+}
+
+model TemplateProcedureQuestion {
+  id                    String                    @id @default(uuid())
+  templateProcedureId   String
+  prompt                String
+  guidance              String?
+  questionType          String                    @default("narrative")
+  isRequired            Boolean                   @default(true)
+  expectedEvidenceCount Int                       @default(0)
+  expectedEvidenceTypes String?
+  assertionTags         String?
+  riskRating            String                    @default("Moderate")
+  controlType           String                    @default("Substantive")
+  displayOrder          Int                       @default(0)
+  createdAt             DateTime                  @default(now())
+  updatedAt             DateTime                  @updatedAt
+  templateProcedure     TemplateProcedure         @relation(fields: [templateProcedureId], references: [id], onDelete: Cascade)
+  citations             TemplateQuestionCitation[]
+}
+
+model TemplateQuestionCitation {
+  id               String                    @id @default(uuid())
+  templateQuestionId String
+  standardType     String
+  reference        String
+  jurisdiction     String?
+  displayOrder     Int                       @default(0)
+  createdAt        DateTime                  @default(now())
+  templateQuestion TemplateProcedureQuestion @relation(fields: [templateQuestionId], references: [id], onDelete: Cascade)
+}
+
+model ProcedureQuestion {
+  id                    String                     @id @default(uuid())
+  procedureId           String
+  templateQuestionId    String?
+  prompt                String
+  guidance              String?
+  questionType          String                     @default("narrative")
+  isRequired            Boolean                    @default(true)
+  expectedEvidenceCount Int                        @default(0)
+  expectedEvidenceTypes String?
+  assertionTags         String?
+  riskRating            String                     @default("Moderate")
+  controlType           String                     @default("Substantive")
+  responseText          String?
+  responseBoolean       Boolean?
+  responseNumber        Float?
+  responseDate          DateTime?
+  responseSelection     String?
+  exceptionFlag         Boolean                    @default(false)
+  exceptionNarrative    String?
+  validationStatus      String                     @default("Pending")
+  reviewerStatus        String                     @default("Pending")
+  displayOrder          Int                        @default(0)
+  createdAt             DateTime                   @default(now())
+  updatedAt             DateTime                   @updatedAt
+  procedure             Procedure                  @relation(fields: [procedureId], references: [id], onDelete: Cascade)
+  citations             ProcedureQuestionCitation[]
+}
+
+model ProcedureQuestionCitation {
+  id                 String            @id @default(uuid())
+  procedureQuestionId String
+  standardType       String
+  reference          String
+  jurisdiction       String?
+  displayOrder       Int               @default(0)
+  createdAt          DateTime          @default(now())
+  procedureQuestion  ProcedureQuestion @relation(fields: [procedureQuestionId], references: [id], onDelete: Cascade)
+}
+
+model TemplateApplication {
+  id              String        @id @default(uuid())
+  auditId         String
+  templateId      String
+  templateVersion Int
+  appliedPhase    String?
+  appliedBy       String?
+  appliedAt       DateTime      @default(now())
+  audit           Audit         @relation(fields: [auditId], references: [id], onDelete: Cascade)
+  template        AuditTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
 }
 
 model AuditLog {

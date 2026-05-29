@@ -492,6 +492,34 @@ const TEMPLATES = [
   },
 ];
 
+function inferStandardType(reference) {
+  const upper = reference.toUpperCase();
+  if (upper.startsWith('ISA')) return 'ISA';
+  if (upper.startsWith('ISQM')) return 'ISQM';
+  if (upper.startsWith('IFRS') || upper.startsWith('IAS') || upper.startsWith('IFRIC')) return 'IFRS';
+  if (upper.includes('CAMA') || upper.includes('NTA') || upper.includes('FRCN') || upper.includes('PENCOM')) return 'NIGERIA_REGULATION';
+  return 'OTHER';
+}
+
+function parseCitations(purpose) {
+  if (!purpose) return [];
+  const match = purpose.match(/\[([^\]]+)\]/);
+  if (!match) return [];
+  return match[1]
+    .split(';')
+    .map((r) => r.trim())
+    .filter(Boolean)
+    .map((reference) => ({
+      standardType: inferStandardType(reference),
+      reference,
+    }));
+}
+
+function stripCitationSuffix(purpose) {
+  if (!purpose) return '';
+  return purpose.replace(/\[[^\]]+\]\s*$/, '').trim();
+}
+
 // ============================================================================
 // SEEDER LOGIC
 // ============================================================================
@@ -538,16 +566,41 @@ async function seed() {
         for (const proc of group.procedures) {
           procOrder++;
           // Create TemplateProcedure
-          await prisma.templateProcedure.create({
+          const createdProcedure = await prisma.templateProcedure.create({
             data: {
               templateId: auditTemplate.id,
               groupId: templateGroup.id,
               phase: phaseName,
               title: proc.title,
               purpose: proc.purpose,
+              source: proc.purpose || null,
               displayOrder: procOrder,
             },
           });
+          const citations = parseCitations(proc.purpose);
+          const question = await prisma.templateProcedureQuestion.create({
+            data: {
+              templateProcedureId: createdProcedure.id,
+              prompt: stripCitationSuffix(proc.purpose) || proc.title,
+              guidance: proc.purpose || null,
+              questionType: 'narrative',
+              isRequired: true,
+              expectedEvidenceCount: 1,
+              riskRating: 'Moderate',
+              controlType: 'Substantive',
+              displayOrder: 0,
+            }
+          });
+          if (citations.length > 0) {
+            await prisma.templateQuestionCitation.createMany({
+              data: citations.map((citation, citationIndex) => ({
+                templateQuestionId: question.id,
+                standardType: citation.standardType,
+                reference: citation.reference,
+                displayOrder: citationIndex,
+              }))
+            });
+          }
           procedureCount++;
         }
         console.log(`      📁 ${phaseName} > ${group.title} (${group.procedures.length} procedures)`);

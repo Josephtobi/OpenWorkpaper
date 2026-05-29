@@ -1,10 +1,19 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
+import {
+  buildDefaultQuestionFromProcedure,
+  normalizeQuestionType,
+  parseBracketCitations,
+  type CitationInput,
+  type TemplateQuestionInput,
+} from '@/lib/compliance';
 
 interface TemplateProcedureInput {
   title: string;
-  purpose: string;
+  purpose: string | null;
+  source?: string | null;
+  questions?: TemplateQuestionInput[];
 }
 
 interface TemplateGroupInput {
@@ -29,13 +38,29 @@ export async function GET(req: Request, props: { params: Promise<{ id: string }>
           orderBy: { displayOrder: 'asc' },
           include: {
             procedures: {
-              orderBy: { displayOrder: 'asc' }
+              orderBy: { displayOrder: 'asc' },
+              include: {
+                questions: {
+                  orderBy: { displayOrder: 'asc' },
+                  include: {
+                    citations: { orderBy: { displayOrder: 'asc' } }
+                  }
+                }
+              }
             }
           }
         },
         procedures: {
           where: { groupId: null },
-          orderBy: { displayOrder: 'asc' }
+          orderBy: { displayOrder: 'asc' },
+          include: {
+            questions: {
+              orderBy: { displayOrder: 'asc' },
+              include: {
+                citations: { orderBy: { displayOrder: 'asc' } }
+              }
+            }
+          }
         }
       }
     });
@@ -65,12 +90,32 @@ export async function PUT(req: Request, props: { params: Promise<{ id: string }>
 
   try {
     const { name, description, groups }: { name: string, description: string, groups: TemplateGroupInput[] } = await req.json();
+    if (!name?.trim()) {
+      return NextResponse.json({ error: 'Template name is required' }, { status: 400 });
+    }
+
+    const normalizedGroups = (groups || []).map((g) => ({
+      ...g,
+      title: g.title?.trim() || 'Untitled Group',
+      procedures: (g.procedures || []).map((p) => {
+        const questions = (p.questions || []).length > 0
+          ? p.questions
+          : [buildDefaultQuestionFromProcedure({ title: p.title, purpose: p.purpose })];
+        return {
+          ...p,
+          title: p.title?.trim() || 'Untitled Procedure',
+          purpose: p.purpose || '',
+          source: p.source || '',
+          questions,
+        };
+      }),
+    }));
 
     const result = await prisma.$transaction(async (tx) => {
       // Update template details
       await tx.auditTemplate.update({
         where: { id: params.id },
-        data: { name, description }
+        data: { name: name.trim(), description, version: { increment: 1 } }
       });
 
       // Clear existing structure
@@ -78,8 +123,8 @@ export async function PUT(req: Request, props: { params: Promise<{ id: string }>
       await tx.templateGroup.deleteMany({ where: { templateId: params.id } });
 
       // Create new groups and procedures
-      if (groups && Array.isArray(groups)) {
-        for (const [gIndex, g] of groups.entries()) {
+      if (normalizedGroups.length > 0) {
+        for (const [gIndex, g] of normalizedGroups.entries()) {
           const group = await tx.templateGroup.create({
             data: {
               templateId: params.id,
@@ -90,16 +135,53 @@ export async function PUT(req: Request, props: { params: Promise<{ id: string }>
           });
 
           if (g.procedures && Array.isArray(g.procedures)) {
-            await tx.templateProcedure.createMany({
-              data: g.procedures.map((p: TemplateProcedureInput, pIndex: number) => ({
-                templateId: params.id,
-                groupId: group.id,
-                phase: g.phase,
-                title: p.title,
-                purpose: p.purpose,
-                displayOrder: pIndex
-              }))
-            });
+            for (const [pIndex, p] of g.procedures.entries()) {
+              const procedure = await tx.templateProcedure.create({
+                data: {
+                  templateId: params.id,
+                  groupId: group.id,
+                  phase: g.phase,
+                  title: p.title,
+                  purpose: p.purpose,
+                  source: p.source || '',
+                  displayOrder: pIndex,
+                }
+              });
+
+              for (const [qIndex, question] of (p.questions || []).entries()) {
+                const citations: CitationInput[] = (question.citations && question.citations.length > 0)
+                  ? question.citations
+                  : parseBracketCitations(question.guidance || p.purpose);
+
+                const createdQuestion = await tx.templateProcedureQuestion.create({
+                  data: {
+                    templateProcedureId: procedure.id,
+                    prompt: question.prompt?.trim() || p.title || 'Untitled control prompt',
+                    guidance: question.guidance || null,
+                    questionType: normalizeQuestionType(question.questionType),
+                    isRequired: question.isRequired ?? true,
+                    expectedEvidenceCount: Number(question.expectedEvidenceCount ?? 0),
+                    expectedEvidenceTypes: question.expectedEvidenceTypes || null,
+                    assertionTags: question.assertionTags || null,
+                    riskRating: question.riskRating || 'Moderate',
+                    controlType: question.controlType || 'Substantive',
+                    displayOrder: question.displayOrder ?? qIndex,
+                  }
+                });
+
+                if (citations.length > 0) {
+                  await tx.templateQuestionCitation.createMany({
+                    data: citations.map((citation, citationIndex) => ({
+                      templateQuestionId: createdQuestion.id,
+                      standardType: citation.standardType,
+                      reference: citation.reference,
+                      jurisdiction: citation.jurisdiction || null,
+                      displayOrder: citationIndex,
+                    }))
+                  });
+                }
+              }
+            }
           }
         }
       }
@@ -112,7 +194,15 @@ export async function PUT(req: Request, props: { params: Promise<{ id: string }>
             orderBy: { displayOrder: 'asc' },
             include: {
               procedures: {
-                orderBy: { displayOrder: 'asc' }
+                orderBy: { displayOrder: 'asc' },
+                include: {
+                  questions: {
+                    orderBy: { displayOrder: 'asc' },
+                    include: {
+                      citations: { orderBy: { displayOrder: 'asc' } }
+                    }
+                  }
+                }
               }
             }
           }

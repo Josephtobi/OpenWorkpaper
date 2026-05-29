@@ -4,7 +4,7 @@ import { getSession } from '@/lib/auth';
 import ProcedureDetail from '@/components/ProcedureDetail';
 import { Suspense } from 'react';
 import type { Attachment, ProcedureMessage, TeamMember } from '@prisma/client';
-import type { ProcedureWithRelations } from '@/lib/types';
+import type { ProcedureQuestion, ProcedureQuestionCitation, ProcedureWithRelations } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -40,6 +40,7 @@ export default async function ProcedurePage(props: { params: Promise<{ id: strin
     proc: RawProcedure;
     attachments: Attachment[];
     messages: ProcedureMessage[];
+    questions: ProcedureQuestion[];
     teamMembers: TeamMember[];
     nomenclature: string;
   } | null = null;
@@ -74,6 +75,18 @@ export default async function ProcedurePage(props: { params: Promise<{ id: strin
       `SELECT * FROM ProcedureMessage WHERE procedureId = ? ORDER BY createdAt ASC`,
       proc.id
     );
+    const questionsRaw = await prisma.$queryRawUnsafe<ProcedureQuestion[]>(
+      `SELECT * FROM ProcedureQuestion WHERE procedureId = ? ORDER BY displayOrder ASC`,
+      proc.id
+    );
+    const questions: ProcedureQuestion[] = [];
+    for (const question of questionsRaw) {
+      const citations = await prisma.$queryRawUnsafe<ProcedureQuestionCitation[]>(
+        `SELECT * FROM ProcedureQuestionCitation WHERE procedureQuestionId = ? ORDER BY displayOrder ASC`,
+        question.id
+      );
+      questions.push({ ...question, citations });
+    }
 
     // 3. Fetch team members for the assignment dropdown
     const teamMembers = await prisma.teamMember.findMany({
@@ -126,6 +139,7 @@ export default async function ProcedurePage(props: { params: Promise<{ id: strin
         proc,
         attachments,
         messages,
+        questions,
         teamMembers,
         nomenclature
       };
@@ -160,7 +174,7 @@ export default async function ProcedurePage(props: { params: Promise<{ id: strin
     notFound();
   }
 
-  const { proc, attachments, messages, teamMembers, nomenclature } = procedureData;
+  const { proc, attachments, messages, questions, teamMembers, nomenclature } = procedureData;
 
   const procedureWithRelations = {
     ...proc,
@@ -171,7 +185,8 @@ export default async function ProcedurePage(props: { params: Promise<{ id: strin
       email: proc.assignedToEmail || ""
     } : null,
     attachments,
-    messages
+    messages,
+    questions,
   };
 
   return (

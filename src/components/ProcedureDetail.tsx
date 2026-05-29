@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Trash2, Save, Paperclip, File as FileIcon, X, MessageSquare, RefreshCw, Send, User, CheckCircle, Clock, Link as LinkIcon, Check, ArrowLeft, Plus, ChevronDown, Lock, Unlock } from 'lucide-react';
 import type { Attachment, ProcedureMessage, TeamMember } from '@prisma/client';
-import type { ProcedureWithRelations } from '@/lib/types';
+import type { ProcedureQuestion, ProcedureWithRelations } from '@/lib/types';
 import DOMPurify from 'isomorphic-dompurify';
 import RichTextEditor from './RichTextEditor';
 
@@ -37,9 +37,31 @@ export default function ProcedureDetail({
     }
   };
 
-  // Helper to get only the fields we care about for comparison
-  const normalizeData = useCallback((p: ProcedureWithRelations) => {
-    const d: Record<string, string> = {
+  const buildSavePayload = useCallback((p: ProcedureWithRelations) => {
+    const normalizedQuestions = (p.questions || []).map((question) => ({
+      id: question.id,
+      prompt: (question.prompt || '').trim(),
+      guidance: question.guidance || '',
+      questionType: question.questionType,
+      isRequired: question.isRequired,
+      expectedEvidenceCount: question.expectedEvidenceCount || 0,
+      expectedEvidenceTypes: question.expectedEvidenceTypes || '',
+      assertionTags: question.assertionTags || '',
+      riskRating: question.riskRating || 'Moderate',
+      controlType: question.controlType || 'Substantive',
+      responseText: (question.responseText || '').trim(),
+      responseBoolean: question.responseBoolean ?? null,
+      responseNumber: question.responseNumber ?? null,
+      responseDate: formatDateForInput(question.responseDate),
+      responseSelection: (question.responseSelection || '').trim(),
+      exceptionFlag: !!question.exceptionFlag,
+      exceptionNarrative: (question.exceptionNarrative || '').trim(),
+      validationStatus: question.validationStatus || 'Pending',
+      reviewerStatus: question.reviewerStatus || 'Pending',
+      displayOrder: question.displayOrder,
+    }));
+
+    return {
       title: (p.title || '').trim(),
       purpose: p.purpose || '',
       source: p.source || '',
@@ -52,7 +74,13 @@ export default function ProcedureDetail({
       reviewedBy: (p.reviewedBy || '').trim(),
       reviewedDate: formatDateForInput(p.reviewedDate),
       assignedToId: p.assignedToId || '',
+      questions: normalizedQuestions,
     };
+  }, []);
+
+  // Helper to get only the fields we care about for comparison
+  const normalizeData = useCallback((p: ProcedureWithRelations) => {
+    const d = buildSavePayload(p);
 
     // Sanitize rich text fields so comparison is against what actually gets saved
     RICH_TEXT_FIELDS.forEach(field => {
@@ -62,7 +90,7 @@ export default function ProcedureDetail({
     });
 
     return JSON.stringify(d);
-  }, [RICH_TEXT_FIELDS]);
+  }, [RICH_TEXT_FIELDS, buildSavePayload]);
 
   const [data, setData] = useState(procedure);
   const [saving, setSaving] = useState(false);
@@ -146,30 +174,35 @@ export default function ProcedureDetail({
       const res = await fetch(`/api/procedures/${procedure.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: currentDataStr,
+        body: JSON.stringify(buildSavePayload(rawData)),
       });
       
       if (res.ok) {
         const savedProcedure = await res.json();
         const savedNormalized = normalizeData(savedProcedure);
         setLastSavedData(savedNormalized);
-        
-        // Update local state with the sanitized values from savedNormalized 
-        // to ensure the next comparison in the Auto-Save useEffect matches exactly.
-        const parsedSaved = JSON.parse(savedNormalized);
-        setData(prev => ({ ...prev, ...parsedSaved }));
+
+        // Prefer canonical server payload to avoid client-side drift on question responses.
+        setData(prev => ({
+          ...prev,
+          ...savedProcedure,
+          questions: savedProcedure.questions || prev.questions || [],
+        }));
         setHasUnsavedChanges(false);
         
         router.refresh();
       } else if (res.status === 423) {
         alert("This procedure is locked for review and cannot be saved.");
+      } else if (res.status === 422) {
+        const gate = await res.json();
+        alert(`Compliance gate failed:\n- ${(gate.blockingIssues || []).join('\n- ')}`);
       }
     } catch (err: unknown) {
       console.error('Save failed:', err);
     } finally {
       setSaving(false);
     }
-  }, [procedure.id, router, normalizeData, isLocked]);
+  }, [procedure.id, router, normalizeData, isLocked, buildSavePayload]);
 
   // Debounced Auto-Save Logic - Depends only on data/lastSavedData changes
   useEffect(() => {
@@ -458,6 +491,18 @@ export default function ProcedureDetail({
     setData(prev => ({ ...prev, [fieldName]: content }));
   };
 
+  const questions = data.questions || [];
+
+  const updateQuestion = (questionId: string, patch: Partial<ProcedureQuestion>) => {
+    if (isLocked) return;
+    setData((prev) => ({
+      ...prev,
+      questions: (prev.questions || []).map((question) =>
+        question.id === questionId ? { ...question, ...patch } : question
+      ),
+    }));
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {isLocked && (
@@ -685,6 +730,103 @@ export default function ProcedureDetail({
                 </div>
               );
             })}
+          </div>
+
+          <div className={`bg-white p-8 rounded-[2.5rem] border border-gray-200 shadow-2xl space-y-6 transition-all ${isLocked ? 'opacity-70 grayscale-[0.2]' : ''}`}>
+            <div className="flex items-center justify-between">
+              <h4 className="text-xs font-black text-gray-400 tracking-[0.2em] uppercase">ISA/ISQM Question Responses</h4>
+              <span className="text-[10px] font-black text-blue-700 bg-blue-50 px-3 py-1 rounded-lg border border-blue-100 uppercase tracking-widest">
+                {questions.length} Questions
+              </span>
+            </div>
+            {questions.length === 0 ? (
+              <div className="text-sm font-medium text-gray-500 bg-gray-50 border border-gray-100 rounded-2xl p-4">
+                No structured questions on this procedure yet. Apply updated templates to include ISA-mapped questions.
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {questions.map((question, index) => (
+                  <div key={question.id} className="border border-gray-100 rounded-2xl p-5 bg-gray-50/60 space-y-3">
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Question {index + 1}</p>
+                        <p className="text-sm font-bold text-gray-900">{question.prompt}</p>
+                      </div>
+                      {question.isRequired && (
+                        <span className="text-[9px] font-black text-red-600 bg-red-50 border border-red-100 px-2 py-1 rounded-lg uppercase tracking-widest">
+                          Required
+                        </span>
+                      )}
+                    </div>
+
+                    {question.questionType === 'yes_no_na' ? (
+                      <select
+                        value={question.responseSelection || ''}
+                        onChange={(e) => updateQuestion(question.id, { responseSelection: e.target.value })}
+                        disabled={isLocked}
+                        className="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm font-semibold text-gray-800 outline-none"
+                      >
+                        <option value="">Select response</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                        <option value="N/A">N/A</option>
+                      </select>
+                    ) : question.questionType === 'numeric' ? (
+                      <input
+                        type="number"
+                        value={question.responseNumber ?? ''}
+                        onChange={(e) => updateQuestion(question.id, { responseNumber: e.target.value === '' ? null : Number(e.target.value) })}
+                        disabled={isLocked}
+                        className="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm font-semibold text-gray-800 outline-none"
+                        placeholder="Enter numeric response"
+                      />
+                    ) : question.questionType === 'date' ? (
+                      <input
+                        type="date"
+                        value={formatDateForInput(question.responseDate)}
+                        onChange={(e) => updateQuestion(question.id, { responseDate: e.target.value || null })}
+                        disabled={isLocked}
+                        className="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm font-semibold text-gray-800 outline-none"
+                      />
+                    ) : (
+                      <textarea
+                        value={question.responseText || ''}
+                        onChange={(e) => updateQuestion(question.id, { responseText: e.target.value })}
+                        disabled={isLocked}
+                        className="w-full min-h-24 bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm font-semibold text-gray-800 outline-none resize-y"
+                        placeholder="Document response and conclusion..."
+                      />
+                    )}
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      <input
+                        value={question.validationStatus || 'Pending'}
+                        onChange={(e) => updateQuestion(question.id, { validationStatus: e.target.value })}
+                        disabled={isLocked}
+                        className="bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-gray-700 outline-none"
+                        placeholder="Validation status"
+                      />
+                      <input
+                        value={question.reviewerStatus || 'Pending'}
+                        onChange={(e) => updateQuestion(question.id, { reviewerStatus: e.target.value })}
+                        disabled={isLocked}
+                        className="bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-gray-700 outline-none"
+                        placeholder="Reviewer status"
+                      />
+                      <input
+                        type="number"
+                        min={0}
+                        value={question.expectedEvidenceCount ?? 0}
+                        onChange={(e) => updateQuestion(question.id, { expectedEvidenceCount: Number(e.target.value) })}
+                        disabled={isLocked}
+                        className="bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-gray-700 outline-none"
+                        placeholder="Required evidence count"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Attachments Section */}

@@ -24,9 +24,56 @@ interface TemplateProcedure {
   id: string;
   title: string;
   purpose: string | null;
+  source?: string | null;
   phase: string;
   displayOrder: number;
+  questions?: TemplateQuestion[];
 }
+
+interface TemplateQuestionCitation {
+  id?: string;
+  standardType: string;
+  reference: string;
+  jurisdiction?: string | null;
+}
+
+interface TemplateQuestion {
+  id?: string;
+  prompt: string;
+  guidance?: string | null;
+  questionType: string;
+  isRequired: boolean;
+  expectedEvidenceCount: number;
+  expectedEvidenceTypes?: string | null;
+  assertionTags?: string | null;
+  riskRating?: string | null;
+  controlType?: string | null;
+  displayOrder: number;
+  citations: TemplateQuestionCitation[];
+}
+
+const QUESTION_TYPE_OPTIONS = [
+  { value: 'narrative', label: 'Narrative' },
+  { value: 'yes_no_na', label: 'Yes/No/N/A' },
+  { value: 'numeric', label: 'Numeric' },
+  { value: 'selection', label: 'Selection' },
+  { value: 'date', label: 'Date' },
+  { value: 'document_required', label: 'Document Required' },
+];
+
+const buildDefaultQuestion = (title: string, purpose?: string | null): TemplateQuestion => ({
+  prompt: purpose || title || 'Document audit conclusion.',
+  guidance: purpose || '',
+  questionType: 'narrative',
+  isRequired: true,
+  expectedEvidenceCount: 1,
+  expectedEvidenceTypes: '',
+  assertionTags: '',
+  riskRating: 'Moderate',
+  controlType: 'Substantive',
+  displayOrder: 0,
+  citations: [],
+});
 
 export default function TemplateEditor({ templateId }: { templateId: string }) {
   const [template, setTemplate] = useState<Template | null>(null);
@@ -40,9 +87,23 @@ export default function TemplateEditor({ templateId }: { templateId: string }) {
         const res = await fetch(`/api/admin/templates/${templateId}`);
         if (!res.ok) throw new Error('Failed to fetch template');
         const data = await res.json();
-        setTemplate(data);
-        if (data.groups && data.groups.length > 0) {
-          setActivePhase(data.groups[0].id);
+        const normalizedGroups = (data.groups || []).map((group: TemplateGroup) => ({
+          ...group,
+          procedures: (group.procedures || []).map((procedure: TemplateProcedure) => ({
+            ...procedure,
+            source: procedure.source || '',
+            questions: (procedure.questions && procedure.questions.length > 0)
+              ? procedure.questions
+              : [buildDefaultQuestion(procedure.title, procedure.purpose)],
+          }))
+        }));
+        const normalizedTemplate: Template = {
+          ...data,
+          groups: normalizedGroups,
+        };
+        setTemplate(normalizedTemplate);
+        if (normalizedTemplate.groups && normalizedTemplate.groups.length > 0) {
+          setActivePhase(normalizedTemplate.groups[0].id);
         }
       } catch (err: unknown) {
         console.error(err);
@@ -70,6 +131,16 @@ export default function TemplateEditor({ templateId }: { templateId: string }) {
         if (proc.purpose) {
           proc.purpose = DOMPurify.sanitize(proc.purpose);
         }
+        if (!proc.questions || proc.questions.length === 0) {
+          proc.questions = [buildDefaultQuestion(proc.title, proc.purpose)];
+        }
+        proc.questions = proc.questions.map((question, index) => ({
+          ...question,
+          prompt: DOMPurify.sanitize(question.prompt || ''),
+          guidance: question.guidance ? DOMPurify.sanitize(question.guidance) : '',
+          displayOrder: index,
+          citations: (question.citations || []).filter((citation) => citation.reference.trim().length > 0),
+        }));
       });
     });
 
@@ -126,8 +197,10 @@ export default function TemplateEditor({ templateId }: { templateId: string }) {
       id: `new-proc-${Date.now()}`,
       title: 'New Procedure',
       purpose: '',
+      source: '',
       phase: group.phase,
       displayOrder: (group.procedures || []).length,
+      questions: [buildDefaultQuestion('New Procedure')],
     };
 
     const newGroups = (template.groups || []).map(g => {
@@ -160,6 +233,71 @@ export default function TemplateEditor({ templateId }: { templateId: string }) {
         return { ...g, procedures: (g.procedures || []).filter(p => p.id !== procId) };
       }
       return g;
+    });
+    setTemplate({ ...template, groups: newGroups });
+  };
+
+  const addQuestion = (groupId: string, procId: string) => {
+    if (!template) return;
+    const newGroups = (template.groups || []).map((g) => {
+      if (g.id !== groupId) return g;
+      return {
+        ...g,
+        procedures: (g.procedures || []).map((p) => {
+          if (p.id !== procId) return p;
+          const questions = p.questions || [];
+          return {
+            ...p,
+            questions: [
+              ...questions,
+              {
+                ...buildDefaultQuestion(p.title, p.purpose),
+                displayOrder: questions.length,
+              },
+            ],
+          };
+        }),
+      };
+    });
+    setTemplate({ ...template, groups: newGroups });
+  };
+
+  const updateQuestion = (
+    groupId: string,
+    procId: string,
+    questionIndex: number,
+    field: keyof TemplateQuestion,
+    value: string | boolean | number | TemplateQuestionCitation[]
+  ) => {
+    if (!template) return;
+    const newGroups = (template.groups || []).map((g) => {
+      if (g.id !== groupId) return g;
+      return {
+        ...g,
+        procedures: (g.procedures || []).map((p) => {
+          if (p.id !== procId) return p;
+          const questions = (p.questions || []).map((q, index) =>
+            index === questionIndex ? { ...q, [field]: value } : q
+          );
+          return { ...p, questions };
+        }),
+      };
+    });
+    setTemplate({ ...template, groups: newGroups });
+  };
+
+  const removeQuestion = (groupId: string, procId: string, questionIndex: number) => {
+    if (!template) return;
+    const newGroups = (template.groups || []).map((g) => {
+      if (g.id !== groupId) return g;
+      return {
+        ...g,
+        procedures: (g.procedures || []).map((p) => {
+          if (p.id !== procId) return p;
+          const remaining = (p.questions || []).filter((_, idx) => idx !== questionIndex);
+          return { ...p, questions: remaining.map((q, idx) => ({ ...q, displayOrder: idx })) };
+        }),
+      };
     });
     setTemplate({ ...template, groups: newGroups });
   };
@@ -433,6 +571,92 @@ export default function TemplateEditor({ templateId }: { templateId: string }) {
                           onChange={(val) => updateProcedure(currentGroup.id, proc.id, 'purpose', val)}
                           placeholder="Describe the objective and high-level steps for this procedure..."
                         />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Source / ISA Notes</label>
+                        <input
+                          value={proc.source || ''}
+                          onChange={(e) => updateProcedure(currentGroup.id, proc.id, 'source', e.target.value)}
+                          className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-gray-700 outline-none focus:ring-2 focus:ring-blue-500/50"
+                          placeholder="e.g. ISA 315.26; ISA 330.13"
+                        />
+                      </div>
+                      <div className="space-y-4 border-t border-gray-100 pt-4">
+                        <div className="flex items-center justify-between">
+                          <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Structured Questions</label>
+                          <button
+                            onClick={() => addQuestion(currentGroup.id, proc.id)}
+                            className="px-3 py-1.5 bg-blue-50 text-blue-600 text-[10px] font-black rounded-lg border border-blue-100 uppercase tracking-widest"
+                          >
+                            Add Question
+                          </button>
+                        </div>
+                        {(proc.questions || []).map((question, qIndex) => (
+                          <div key={`${proc.id}-q-${qIndex}`} className="bg-gray-50 border border-gray-100 rounded-xl p-4 space-y-3">
+                            <div className="flex items-center justify-between">
+                              <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Question {qIndex + 1}</span>
+                              {(proc.questions || []).length > 1 && (
+                                <button
+                                  onClick={() => removeQuestion(currentGroup.id, proc.id, qIndex)}
+                                  className="text-[10px] font-bold text-red-500 hover:text-red-700 uppercase tracking-widest"
+                                >
+                                  Remove
+                                </button>
+                              )}
+                            </div>
+                            <input
+                              value={question.prompt}
+                              onChange={(e) => updateQuestion(currentGroup.id, proc.id, qIndex, 'prompt', e.target.value)}
+                              className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs font-semibold text-gray-800 outline-none focus:ring-2 focus:ring-blue-500/50"
+                              placeholder="Question prompt"
+                            />
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                              <select
+                                value={question.questionType}
+                                onChange={(e) => updateQuestion(currentGroup.id, proc.id, qIndex, 'questionType', e.target.value)}
+                                className="bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs font-semibold text-gray-700 outline-none"
+                              >
+                                {QUESTION_TYPE_OPTIONS.map((type) => (
+                                  <option key={type.value} value={type.value}>{type.label}</option>
+                                ))}
+                              </select>
+                              <input
+                                type="number"
+                                min={0}
+                                value={question.expectedEvidenceCount}
+                                onChange={(e) => updateQuestion(currentGroup.id, proc.id, qIndex, 'expectedEvidenceCount', Number(e.target.value))}
+                                className="bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs font-semibold text-gray-700 outline-none"
+                                placeholder="Required evidence count"
+                              />
+                              <label className="flex items-center gap-2 text-xs font-semibold text-gray-700 px-3 py-2 bg-white border border-gray-200 rounded-lg">
+                                <input
+                                  type="checkbox"
+                                  checked={question.isRequired}
+                                  onChange={(e) => updateQuestion(currentGroup.id, proc.id, qIndex, 'isRequired', e.target.checked)}
+                                />
+                                Mandatory
+                              </label>
+                            </div>
+                            <input
+                              value={question.citations.map((citation) => citation.reference).join('; ')}
+                              onChange={(e) =>
+                                updateQuestion(
+                                  currentGroup.id,
+                                  proc.id,
+                                  qIndex,
+                                  'citations',
+                                  e.target.value
+                                    .split(';')
+                                    .map((item) => item.trim())
+                                    .filter(Boolean)
+                                    .map((reference) => ({ standardType: 'OTHER', reference }))
+                                )
+                              }
+                              className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-xs font-semibold text-gray-700 outline-none"
+                              placeholder="Citations (semicolon separated)"
+                            />
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>

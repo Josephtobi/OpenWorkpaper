@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
+import { buildDefaultQuestionFromProcedure, parseBracketCitations } from '@/lib/compliance';
 
 export async function GET(req: Request) {
   try {
@@ -55,6 +56,36 @@ export async function POST(req: Request) {
         displayOrder: nextOrder,
       }
     });
+
+    const defaultQuestion = buildDefaultQuestionFromProcedure({
+      title: procedure.title,
+      purpose: procedure.purpose,
+    });
+    const createdQuestion = await prisma.procedureQuestion.create({
+      data: {
+        procedureId: procedure.id,
+        prompt: defaultQuestion.prompt,
+        guidance: defaultQuestion.guidance || null,
+        questionType: defaultQuestion.questionType || 'narrative',
+        isRequired: true,
+        expectedEvidenceCount: defaultQuestion.expectedEvidenceCount || 0,
+        riskRating: defaultQuestion.riskRating || 'Moderate',
+        controlType: defaultQuestion.controlType || 'Substantive',
+        displayOrder: 0,
+      }
+    });
+    const citations = parseBracketCitations(procedure.purpose);
+    if (citations.length > 0) {
+      await prisma.procedureQuestionCitation.createMany({
+        data: citations.map((citation, index) => ({
+          procedureQuestionId: createdQuestion.id,
+          standardType: citation.standardType,
+          reference: citation.reference,
+          jurisdiction: citation.jurisdiction || null,
+          displayOrder: index,
+        })),
+      });
+    }
 
     try {
       await prisma.auditLog.create({

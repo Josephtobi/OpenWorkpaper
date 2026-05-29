@@ -1,6 +1,30 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
+import { getProcedureComplianceStatus } from '@/lib/compliance-gates';
+
+interface ProcedureQuestionUpdate {
+  id?: string;
+  prompt?: string;
+  guidance?: string | null;
+  questionType?: string;
+  isRequired?: boolean;
+  expectedEvidenceCount?: number;
+  expectedEvidenceTypes?: string | null;
+  assertionTags?: string | null;
+  riskRating?: string | null;
+  controlType?: string | null;
+  responseText?: string | null;
+  responseBoolean?: boolean | null;
+  responseNumber?: number | null;
+  responseDate?: string | null;
+  responseSelection?: string | null;
+  exceptionFlag?: boolean;
+  exceptionNarrative?: string | null;
+  validationStatus?: string;
+  reviewerStatus?: string;
+  displayOrder?: number;
+}
 
 export async function GET(
   _req: Request, 
@@ -14,6 +38,12 @@ export async function GET(
         attachments: { orderBy: { displayOrder: 'asc' } },
         messages: { orderBy: { createdAt: 'asc' } },
         assignedTo: true,
+        questions: {
+          orderBy: { displayOrder: 'asc' },
+          include: {
+            citations: { orderBy: { displayOrder: 'asc' } },
+          },
+        },
       },
     });
 
@@ -40,6 +70,7 @@ export async function PUT(
 
     const params = await props.params;
     const data = await req.json();
+    const questions: ProcedureQuestionUpdate[] = Array.isArray(data.questions) ? data.questions : [];
 
     // Map fields from client to Prisma-friendly values
     const updates: Record<string, unknown> = {};
@@ -78,10 +109,75 @@ export async function PUT(
       updates.reviewedDate = new Date();
     }
 
+    if (questions.length > 0) {
+      await prisma.$transaction(async (tx) => {
+        for (const [index, question] of questions.entries()) {
+          const payload = {
+            prompt: question.prompt,
+            guidance: question.guidance,
+            questionType: question.questionType,
+            isRequired: question.isRequired,
+            expectedEvidenceCount: question.expectedEvidenceCount,
+            expectedEvidenceTypes: question.expectedEvidenceTypes,
+            assertionTags: question.assertionTags,
+            riskRating: question.riskRating,
+            controlType: question.controlType,
+            responseText: question.responseText,
+            responseBoolean: question.responseBoolean,
+            responseNumber: question.responseNumber,
+            responseDate: question.responseDate ? new Date(question.responseDate) : null,
+            responseSelection: question.responseSelection,
+            exceptionFlag: question.exceptionFlag,
+            exceptionNarrative: question.exceptionNarrative,
+            validationStatus: question.validationStatus,
+            reviewerStatus: question.reviewerStatus,
+            displayOrder: question.displayOrder ?? index,
+          };
+
+          if (question.id) {
+            await tx.procedureQuestion.update({
+              where: { id: question.id },
+              data: payload,
+            });
+          } else if (question.prompt?.trim()) {
+            await tx.procedureQuestion.create({
+              data: {
+                procedureId: params.id,
+                prompt: question.prompt.trim(),
+                ...payload,
+              },
+            });
+          }
+        }
+      });
+    }
+
+    const isTryingToSetReviewed = !!(updates.reviewedBy || updates.reviewedDate);
+    if (isTryingToSetReviewed) {
+      const compliance = await getProcedureComplianceStatus(params.id);
+      if (!compliance.isCompliant) {
+        return NextResponse.json(
+          {
+            error: 'Procedure failed ISA/ISQM compliance gate',
+            blockingIssues: compliance.blockingIssues,
+          },
+          { status: 422 }
+        );
+      }
+    }
+
     const procedure = await prisma.procedure.update({
       where: { id: params.id },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       data: updates as any,
+      include: {
+        questions: {
+          orderBy: { displayOrder: 'asc' },
+          include: {
+            citations: { orderBy: { displayOrder: 'asc' } },
+          },
+        },
+      },
     });
 
     return NextResponse.json(procedure);

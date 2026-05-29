@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
 import type { Procedure } from '@prisma/client';
+import { buildDefaultQuestionFromProcedure, normalizeQuestionType, parseBracketCitations } from '@/lib/compliance';
 
 export async function POST(req: Request, props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -21,10 +22,25 @@ export async function POST(req: Request, props: { params: Promise<{ id: string }
       where: { id: templateId },
       include: { 
         groups: {
-          include: { procedures: true }
+          include: {
+            procedures: {
+              include: {
+                questions: {
+                  include: { citations: true },
+                  orderBy: { displayOrder: 'asc' }
+                }
+              }
+            }
+          }
         },
         procedures: {
-          where: { groupId: null }
+          where: { groupId: null },
+          include: {
+            questions: {
+              include: { citations: true },
+              orderBy: { displayOrder: 'asc' }
+            }
+          }
         }
       }
     });
@@ -52,15 +68,59 @@ export async function POST(req: Request, props: { params: Promise<{ id: string }
         });
 
         const procs = await Promise.all(
-          tg.procedures.map(tp => tx.procedure.create({
-            data: {
-              auditId: params.id,
-              groupId: group.id,
-              phase: tp.phase,
-              title: tp.title,
-              purpose: tp.purpose
+          tg.procedures.map(async (tp) => {
+            const created = await tx.procedure.create({
+              data: {
+                auditId: params.id,
+                groupId: group.id,
+                phase: tp.phase,
+                title: tp.title,
+                purpose: tp.purpose,
+                source: tp.source,
+              }
+            });
+
+            const questions = tp.questions.length > 0
+              ? tp.questions
+              : [buildDefaultQuestionFromProcedure({ title: tp.title, purpose: tp.purpose })];
+
+            for (const [qIndex, question] of questions.entries()) {
+              const createdQuestion = await tx.procedureQuestion.create({
+                data: {
+                  procedureId: created.id,
+                  templateQuestionId: 'id' in question ? question.id : null,
+                  prompt: question.prompt,
+                  guidance: question.guidance || ('guidance' in question ? question.guidance : tp.purpose),
+                  questionType: normalizeQuestionType(question.questionType),
+                  isRequired: question.isRequired ?? true,
+                  expectedEvidenceCount: Number(question.expectedEvidenceCount ?? 0),
+                  expectedEvidenceTypes: question.expectedEvidenceTypes || null,
+                  assertionTags: question.assertionTags || null,
+                  riskRating: question.riskRating || 'Moderate',
+                  controlType: question.controlType || 'Substantive',
+                  displayOrder: question.displayOrder ?? qIndex,
+                }
+              });
+
+              const citations = 'citations' in question && Array.isArray(question.citations)
+                ? question.citations
+                : parseBracketCitations(tp.purpose);
+
+              if (citations.length > 0) {
+                await tx.procedureQuestionCitation.createMany({
+                  data: citations.map((citation, cIndex) => ({
+                    procedureQuestionId: createdQuestion.id,
+                    standardType: citation.standardType,
+                    reference: citation.reference,
+                    jurisdiction: citation.jurisdiction || null,
+                    displayOrder: cIndex,
+                  }))
+                });
+              }
             }
-          }))
+
+            return created;
+          })
         );
         createdProcedures.push(...procs);
       }
@@ -72,17 +132,71 @@ export async function POST(req: Request, props: { params: Promise<{ id: string }
 
       if (ungroupedToCopy.length > 0) {
         const procs = await Promise.all(
-          ungroupedToCopy.map(tp => tx.procedure.create({
-            data: {
-              auditId: params.id,
-              phase: tp.phase,
-              title: tp.title,
-              purpose: tp.purpose
+          ungroupedToCopy.map(async (tp) => {
+            const created = await tx.procedure.create({
+              data: {
+                auditId: params.id,
+                phase: tp.phase,
+                title: tp.title,
+                purpose: tp.purpose,
+                source: tp.source,
+              }
+            });
+
+            const questions = tp.questions.length > 0
+              ? tp.questions
+              : [buildDefaultQuestionFromProcedure({ title: tp.title, purpose: tp.purpose })];
+
+            for (const [qIndex, question] of questions.entries()) {
+              const createdQuestion = await tx.procedureQuestion.create({
+                data: {
+                  procedureId: created.id,
+                  templateQuestionId: 'id' in question ? question.id : null,
+                  prompt: question.prompt,
+                  guidance: question.guidance || ('guidance' in question ? question.guidance : tp.purpose),
+                  questionType: normalizeQuestionType(question.questionType),
+                  isRequired: question.isRequired ?? true,
+                  expectedEvidenceCount: Number(question.expectedEvidenceCount ?? 0),
+                  expectedEvidenceTypes: question.expectedEvidenceTypes || null,
+                  assertionTags: question.assertionTags || null,
+                  riskRating: question.riskRating || 'Moderate',
+                  controlType: question.controlType || 'Substantive',
+                  displayOrder: question.displayOrder ?? qIndex,
+                }
+              });
+
+              const citations = 'citations' in question && Array.isArray(question.citations)
+                ? question.citations
+                : parseBracketCitations(tp.purpose);
+
+              if (citations.length > 0) {
+                await tx.procedureQuestionCitation.createMany({
+                  data: citations.map((citation, cIndex) => ({
+                    procedureQuestionId: createdQuestion.id,
+                    standardType: citation.standardType,
+                    reference: citation.reference,
+                    jurisdiction: citation.jurisdiction || null,
+                    displayOrder: cIndex,
+                  }))
+                });
+              }
             }
-          }))
+
+            return created;
+          })
         );
         createdProcedures.push(...procs);
       }
+
+      await tx.templateApplication.create({
+        data: {
+          auditId: params.id,
+          templateId: template.id,
+          templateVersion: template.version,
+          appliedPhase: phase || null,
+          appliedBy: session.user.username,
+        }
+      });
     });
 
     await prisma.auditLog.create({
@@ -90,7 +204,7 @@ export async function POST(req: Request, props: { params: Promise<{ id: string }
         action: 'UPDATE',
         entityType: 'AUDIT',
         entityId: params.id,
-        details: `Applied template: ${template.name}${phase ? ` for phase: ${phase}` : ''}. Created ${createdProcedures.length} procedures.`,
+        details: `Applied template: ${template.name} (v${template.version})${phase ? ` for phase: ${phase}` : ''}. Created ${createdProcedures.length} procedures.`,
         performedBy: session.user.username,
       }
     });

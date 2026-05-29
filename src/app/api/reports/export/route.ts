@@ -18,8 +18,10 @@ interface ProcedureExport {
   assignedToName: string | null;
 }
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
+    const { searchParams } = new URL(req.url);
+    const profile = searchParams.get('profile') || 'standard';
     const session = await getSession();
     if (!session || session.user.role !== 'Business Operations') {
       return NextResponse.json({ error: 'Unauthorized. Business Operations only.' }, { status: 403 });
@@ -78,6 +80,101 @@ export async function GET() {
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Global Procedures');
 
+    const questionCitations = await prisma.procedureQuestionCitation.findMany({
+      include: {
+        procedureQuestion: {
+          include: {
+            procedure: {
+              include: {
+                audit: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: [{ standardType: 'asc' }, { reference: 'asc' }],
+    });
+
+    const isaCoverageRows = questionCitations
+      .filter((citation) => citation.standardType === 'ISA' || citation.standardType === 'ISQM')
+      .map((citation) => ({
+        'Audit': citation.procedureQuestion.procedure.audit.title,
+        'Phase': citation.procedureQuestion.procedure.phase,
+        'Procedure': citation.procedureQuestion.procedure.title || 'Untitled',
+        'Question Prompt': citation.procedureQuestion.prompt,
+        'Standard Type': citation.standardType,
+        'Reference': citation.reference,
+      }));
+    const isaCoverageSheet = XLSX.utils.json_to_sheet(isaCoverageRows);
+    XLSX.utils.book_append_sheet(workbook, isaCoverageSheet, 'ISA Coverage');
+
+    const unresolvedExceptions = await prisma.procedureQuestion.findMany({
+      where: {
+        OR: [
+          { exceptionFlag: true, validationStatus: { not: 'Resolved' } },
+          { isRequired: true, responseText: null, responseBoolean: null, responseNumber: null, responseDate: null, responseSelection: null },
+        ],
+      },
+      include: {
+        procedure: {
+          include: {
+            audit: true,
+          },
+        },
+      },
+      orderBy: { updatedAt: 'desc' },
+    });
+    const exceptionRows = unresolvedExceptions.map((question) => ({
+      'Audit': question.procedure.audit.title,
+      'Phase': question.procedure.phase,
+      'Procedure': question.procedure.title || 'Untitled',
+      'Question Prompt': question.prompt,
+      'Exception Flag': question.exceptionFlag ? 'Yes' : 'No',
+      'Validation Status': question.validationStatus,
+      'Reviewer Status': question.reviewerStatus,
+    }));
+    const exceptionsSheet = XLSX.utils.json_to_sheet(exceptionRows);
+    XLSX.utils.book_append_sheet(workbook, exceptionsSheet, 'Compliance Exceptions');
+
+    const templateApplications = await prisma.templateApplication.findMany({
+      include: {
+        audit: true,
+        template: true,
+      },
+      orderBy: { appliedAt: 'desc' },
+    });
+    const applicationRows = templateApplications.map((item) => ({
+      'Audit': item.audit.title,
+      'Template': item.template.name,
+      'Template Version': item.templateVersion,
+      'Applied Phase': item.appliedPhase || 'All',
+      'Applied By': item.appliedBy || 'Unknown',
+      'Applied At': item.appliedAt.toISOString(),
+    }));
+    const applicationsSheet = XLSX.utils.json_to_sheet(applicationRows);
+    XLSX.utils.book_append_sheet(workbook, applicationsSheet, 'Template Applications');
+
+    const overrideLogs = await prisma.auditLog.findMany({
+      where: {
+        OR: [
+          { details: { contains: 'unlocked for editing' } },
+          { details: { contains: 'override' } },
+        ],
+      },
+      orderBy: { timestamp: 'desc' },
+      take: 1000,
+    });
+    const overrideRows = overrideLogs.map((log) => ({
+      'Timestamp': log.timestamp.toISOString(),
+      'Action': log.action,
+      'Entity Type': log.entityType,
+      'Entity ID': log.entityId,
+      'Performed By': log.performedBy || 'Unknown',
+      'Details': log.details,
+    }));
+    const overrideSheet = XLSX.utils.json_to_sheet(overrideRows);
+    XLSX.utils.book_append_sheet(workbook, overrideSheet, 'Reviewer Override Log');
+
     const colWidths = [
       { wch: 30 }, { wch: 15 }, { wch: 15 }, { wch: 40 }, { wch: 15 },
       { wch: 20 }, { wch: 20 }, { wch: 15 }, { wch: 20 }, { wch: 15 }, { wch: 15 },
@@ -85,11 +182,14 @@ export async function GET() {
     worksheet['!cols'] = colWidths;
 
     const buffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
+    const filename = profile === 'certification'
+      ? 'OpenWorkpaper_Certification_Pack.xlsx'
+      : 'OpenWorkpaper_Global_Report.xlsx';
 
     return new Response(buffer, {
       headers: {
         'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        'Content-Disposition': 'attachment; filename="OpenWorkpaper_Global_Report.xlsx"'
+        'Content-Disposition': `attachment; filename="${filename}"`
       }
     });
 
