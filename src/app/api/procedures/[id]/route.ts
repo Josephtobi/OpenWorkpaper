@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
+import { canAccessProcedure } from '@/lib/audit-access';
 import { getProcedureComplianceStatus } from '@/lib/compliance-gates';
 import type { Prisma } from '@prisma/client';
 
@@ -43,7 +44,17 @@ export async function GET(
   props: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await getSession();
+    if (!session?.user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const params = await props.params;
+    const allowed = await canAccessProcedure(session.user, params.id);
+    if (!allowed) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
     const procedure = await prisma.procedure.findUnique({
       where: { id: params.id },
       include: {
@@ -81,6 +92,11 @@ export async function PUT(
     }
 
     const params = await props.params;
+    const allowed = await canAccessProcedure(session.user, params.id);
+    if (!allowed) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
     const data = await req.json();
     const questions: ProcedureQuestionUpdate[] = Array.isArray(data.questions) ? data.questions : [];
 
@@ -231,6 +247,11 @@ export async function PATCH(
     }
 
     const params = await props.params;
+    const allowed = await canAccessProcedure(session.user, params.id);
+    if (!allowed) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
     const body = await req.json();
 
     if (body.action === 'unlock') {
@@ -277,7 +298,17 @@ export async function DELETE(
   props: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await getSession();
+    if (!session?.user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const params = await props.params;
+    const allowed = await canAccessProcedure(session.user, params.id);
+    if (!allowed) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
     await prisma.procedure.delete({
       where: { id: params.id },
     });
