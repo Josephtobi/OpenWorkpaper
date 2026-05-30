@@ -1000,6 +1000,10 @@ All must be confirmed before physically signing:
    Step 5: Revenue recognised at point in time or over time? State basis and reason: ___
 3. Is the revenue recognition policy consistently applied across all transaction types? State yes/no: ___
 4. Is the policy appropriate for the type of transactions? State yes/no and reasons: ___
+5. For product sales, what event evidences transfer of control (dispatch, delivery, customer acceptance, or third-party warehouse receipt)? State policy and evidence source: ___
+6. Are quality test acceptance clauses or specification-based acceptance conditions present in customer contracts? State yes/no and impact on timing of revenue recognition: ___
+7. Are rebates, volume discounts, free goods, or returns rights built into sales contracts? State yes/no and how variable consideration constraint is applied: ___
+8. Where distributors or agents are used, has principal-vs-agent assessment been performed (gross vs net presentation)? State outcome: ___
 
 ### Completeness of Revenue — Cut-Off Testing
 1. State the cut-off date and testing window (e.g. ±15 days from year-end): ___
@@ -1010,6 +1014,8 @@ All must be confirmed before physically signing:
    Exception 1 (if any) — Invoice number: ___, Amount N___, Despatch date vs posting date discrepancy: ___
 6. Were any items found recorded in the wrong period? State yes/no and details: ___
 7. Total value of cut-off errors identified: N___ | Above or below performance materiality: ___
+8. For sampled period-end sales, agree quantity sold to batch release records or production completion records where applicable. Any mismatches? State yes/no and details: ___
+9. Are there any manual post-period revenue accruals or reversals processed in the first week after year-end? State count, value, and business rationale: ___
 
 ### Occurrence — Revenue Transaction Testing
 1. Total revenue for the year: N___ | Total number of transactions: ___
@@ -1148,6 +1154,9 @@ All must be confirmed before physically signing:
 3. Are costs in WIP limited to direct materials, direct labour, and systematically allocated production overheads? State yes/no: ___
 4. Are any WIP items that have been in WIP for an unusually long time identified? State yes/no and details: ___
 5. Is WIP valued at or below NRV? State yes/no: ___
+6. For process manufacturing lines, are equivalent units (or an equivalent stage-of-completion method) used consistently in WIP valuation? State yes/no and method: ___
+7. For major WIP batches, reconcile input quantities, expected yield, and output quantities. Any unexplained losses beyond normal process loss? State details: ___
+8. Are rework and reprocessing costs separately tracked and treated consistently (normal vs abnormal)? State yes/no and accounting treatment: ___
 
 ### Finished Goods — Standard vs Actual Cost Reconciliation
 1. Does the entity use standard costing for finished goods? State yes/no. If no — state cost method used: ___
@@ -1156,6 +1165,9 @@ All must be confirmed before physically signing:
 4. How has the variance been treated — expensed in the period, allocated to inventory, or other? State treatment: ___
 5. Is the treatment consistent with IAS 2.21 (abnormal variances must be expensed)? State yes/no: ___
 6. Is the variance material compared to performance materiality? State yes/no: ___
+7. Were standard cost updates approved through a documented process (BOM/routing/overhead rate approval)? State yes/no and approver: ___
+8. For selected SKUs, recalculate standard cost from latest BOM and routing master data. Does recalculation agree to system standard? State outcome: ___
+9. Are by-products or co-products generated (if applicable), and is cost allocation between main and by/co-products reasonable and consistently applied? State yes/no and basis: ___
 
 ### Production Overhead Absorption Rate
 1. Overhead absorption rate used and basis (per machine hour, per labour hour, etc.): ___
@@ -1164,6 +1176,8 @@ All must be confirmed before physically signing:
 4. Actual production volume vs normal capacity — state both: ___
 5. Under-absorbed or over-absorbed overhead amount: N___
 6. How has under or over-absorption been treated — expensed, credited, or allocated per IAS 2.12? State treatment: ___
+7. Are major conversion cost drivers (utilities, steam, power, maintenance, quality control) allocated using measurable and supportable drivers? State yes/no and basis per driver: ___
+8. Were abnormal idle time, plant shutdown costs, and unusual start-up losses excluded from inventory cost and expensed as incurred? State yes/no and amount: ___
 
 ### Net Realisable Value Assessment
 1. Current selling price list obtained for all major finished goods lines — date of price list: ___
@@ -1174,6 +1188,8 @@ All must be confirmed before physically signing:
 4. Has management recognised a write-down for items where NRV is below cost? State amount: N___
 5. Is total write-down consistent with your calculation? State yes/no and any difference: ___
 6. Is the difference above performance materiality? State yes/no: ___
+7. For items with volatile commodity-linked pricing, is NRV based on observable post-year-end sales or market data rather than outdated list prices? State yes/no: ___
+8. Are estimated costs to complete and costs to sell (freight, duties, commissions, packaging, rework) included in NRV calculations? State yes/no and any omissions: ___
 
 ### Obsolete and Slow-Moving Stock Assessment
 1. Items not moved in more than six months — number and value: N___
@@ -1182,6 +1198,8 @@ All must be confirmed before physically signing:
 4. Has a provision been recognised for items assessed as obsolete? State amount: N___
 5. Is the provision adequate? State yes/no and any additional write-down recommended: N___
 6. Were any obsolete or damaged items noted during the stock count? State yes/no and details: ___
+7. For perishable or shelf-life-controlled items, are expiry dates tracked and reflected in provision estimates? State yes/no and impact: ___
+8. For old items retained for strategic reasons (spares, safety stock), is there documented justification and periodic usability testing? State yes/no: ___
 
 ### Consignment and Third-Party Held Inventory
 1. Does the entity hold inventory at third-party locations or on consignment? State yes/no. If no — procedure is N/A: ___
@@ -1512,6 +1530,88 @@ Review each impairment indicator and state whether present:
 
 ---
 
+## GROUP: P&L Line Items — Manufacturing Completion
+
+### Revenue, Cost of Sales and Gross Margin Completion
+1. Final revenue per trial balance: N___ | Cross-reference to completed revenue procedures: ___
+2. Final cost of sales per trial balance: N___ | Reconciles to inventory movement and production consumption logic? Yes/No: ___
+3. Gross margin % current year: ___% | Prior year: ___% | Budget: ___% | Variance explained? Yes/No: ___
+4. Are any top-side/manual P&L entries posted to revenue or COS at period-end? State yes/no and details: ___
+
+### Other Income and Other Expenses
+1. List material other income accounts with amounts and supporting schedules: ___
+2. For sampled other income items — occurrence and correct classification confirmed? State yes/no: ___
+3. List material other expense accounts (losses, penalties, write-offs, one-offs) and amounts: ___
+4. For sampled other expenses — valid business purpose and approval evidenced? State yes/no: ___
+5. Are one-off/non-recurring items separately identified for disclosure? State yes/no and details: ___
+
+### Administrative, Selling and Distribution Expenses
+1. List major admin expense accounts (salaries, office costs, professional fees, IT, utilities) with balances: ___
+2. List major selling/distribution accounts (freight-out, delivery, commissions, marketing, trade rebates) with balances: ___
+3. For sampled transactions in both classes — occurrence, cut-off, and classification confirmed? State yes/no: ___
+4. Any capital items incorrectly expensed in admin or selling/distribution? State yes/no and amount: N___
+5. Any accrual omissions identified from post-year-end invoices? State yes/no and amount: N___
+
+### Finance Costs and Tax Expense
+1. Total finance costs per P&L: N___ | Agrees to loan/lease schedules and bank charges? Yes/No: ___
+2. Any borrowing costs eligible for IAS 23 capitalisation treated incorrectly? State yes/no and impact: N___
+3. Current tax expense per P&L agrees to tax computation? Yes/No: ___
+4. Deferred tax movement per P&L agrees to IAS 12 computation? Yes/No: ___
+5. Effective tax rate analysis completed and explained? State yes/no and summary: ___
+
+---
+
+## GROUP: Balance Sheet Line Items — Manufacturing Completion
+
+### Non-Current Assets Completion (PPE, Intangibles, Investments, Goodwill)
+1. PPE closing balance reconciled to lead schedule and notes? State yes/no: ___
+2. Intangible assets (including software, licences, goodwill where applicable) reconciled and impairment-assessed? Yes/No: ___
+3. Investments (subsidiaries/associates/financial assets) valuation and classification tested? Yes/No: ___
+4. Any non-current asset line item without substantive coverage evidence? State yes/no and details: ___
+
+### Current Assets Completion (Inventory, Receivables, Cash, Other Current Assets)
+1. Inventory, receivables, and cash balances reconcile to completed substantive procedures and FS notes? State yes/no: ___
+2. Prepayments and other current assets supported by schedules and recoverability assessment? Yes/No: ___
+3. Are credit balances within current assets investigated and reclassified where necessary? Yes/No: ___
+4. Any material current asset account not covered by procedures? State yes/no and details: ___
+
+### Current and Non-Current Liabilities Completion
+1. Trade payables and accruals completeness confirmed via subsequent payment testing and supplier reconciliations? Yes/No: ___
+2. Borrowings and lease liabilities current/non-current split tested and disclosure complete? Yes/No: ___
+3. Statutory liabilities (VAT, PAYE, WHT, pension, NSITF, ITF, tax payable) reconcile to filings/remittances? Yes/No: ___
+4. Provisions and contingencies (legal, regulatory, tax, environmental) assessed under IAS 37? Yes/No: ___
+5. Any material liability account not covered by procedures? State yes/no and details: ___
+
+### Equity, Retained Earnings and Reserves Completion
+1. Share capital and reserves movement reconciled to supporting documents and prior year closing balances? Yes/No: ___
+2. Retained earnings rollforward agrees to profit, dividends, and other equity movements? Yes/No: ___
+3. Equity note disclosures complete and consistent with statement of changes in equity? Yes/No: ___
+4. Any direct-to-equity adjustments lacking proper authority or disclosure? State yes/no and details: ___
+
+---
+
+## GROUP: Financial Statements Completion — Manufacturing
+
+### Final Accounts Coverage Matrix (Mandatory)
+1. For each material P&L line item, reference at least one completed substantive procedure and conclusion: ___
+2. For each material balance sheet line item, reference at least one completed substantive procedure and conclusion: ___
+3. Are any material FS line items lacking audit evidence linkage? State yes/no and remediation action: ___
+4. Misstatements mapping to FS lines completed (corrected and uncorrected)? Yes/No: ___
+
+### Notes and Presentation Completion (IAS 1)
+1. Are accounting policies for all material line items complete, accurate, and current-year consistent? Yes/No: ___
+2. Are all required note disclosures for significant balances complete (including judgements and estimates)? Yes/No: ___
+3. Are comparative disclosures and restatements, where applicable, compliant with IAS 8/IAS 1? Yes/No: ___
+4. Is presentation/classification current vs non-current consistent across statements and notes? Yes/No: ___
+
+### End-to-End Engagement Readiness Check
+1. Do completed procedures, reviewer sign-offs, and conclusions support the planned audit opinion? Yes/No: ___
+2. Are unresolved high-risk matters, open queries, or missing evidence remaining? State yes/no and list: ___
+3. Are going concern and subsequent events conclusions aligned with disclosures and report wording? Yes/No: ___
+4. Is the file ready for final partner sign-off without material outstanding items? Yes/No: ___
+
+---
+
 ## GROUP: Equity and Capital
 
 ### Share Capital Verification (CAMA 2020)
@@ -1646,6 +1746,8 @@ For each related party relationship — confirm the following are disclosed in t
 3. Have import duties been included in the cost of relevant inventory items per IAS 2.10? State yes/no: ___
 4. Have any duties been expensed rather than capitalised into inventory cost? State yes/no and amount: N___
 5. Are there outstanding customs disputes or unpaid duties? State yes/no and amount: N___
+6. For selected import batches, agree duty and clearance charges to customs documentation and confirm cost is assigned to the correct inventory lot or weighted-average pool. State outcome: ___
+7. Where foreign-currency imports are significant, are exchange differences treated in line with policy and not inappropriately included in inventory cost beyond permitted treatment? State yes/no: ___
 
 ### Environmental Compliance — NESREA Permits
 1. Does the entity hold a current NESREA environmental permit? State permit number and expiry date: ___
@@ -1811,158 +1913,367 @@ Review each IFRS 6.20 indicator — state whether present:
 
 ---
 
-# TEMPLATE: Fieldwork — Hospitality & Restaurant
+## GROUP: P&L Line Items — Oil & Gas Completion
+
+### Revenue, Royalties and Cost of Sales Completion
+1. Final revenue per trial balance agrees to detailed revenue schedules and completed substantive procedures? State yes/no: ___
+2. Royalties and government take treatment (gross vs net presentation) is consistent with policy and IFRS 15 principal-vs-agent analysis? Yes/No: ___
+3. Cost of sales and direct operating costs reconcile to production/lifting and service activity records? Yes/No: ___
+4. Gross margin trend (current year vs prior year vs budget) explained with supportable drivers? Yes/No: ___
+
+### Other Income, Other Expenses and Impairment Charges
+1. List material other income streams (JV recoveries, claims, FX gains, disposal gains, others) and amounts: ___
+2. For sampled other income items, occurrence and classification confirmed? State yes/no: ___
+3. List material other expenses (write-offs, penalties, dry-hole expense, unusual losses) and amounts: ___
+4. Are impairment losses or reversals (where permitted) correctly presented and disclosed? State yes/no: ___
+
+### Administrative, Selling and Distribution Expenses
+1. Material admin and distribution account balances listed and risk-ranked for testing? State yes/no: ___
+2. For sampled items, occurrence, cut-off, and classification confirmed with support? State yes/no: ___
+3. Any capital items incorrectly expensed or accrual omissions identified? State yes/no and amount: N___
+
+### Finance Costs and Tax Expense Completion
+1. Finance costs reconcile to borrowings, lease liabilities, and ARO unwinding schedules? State yes/no: ___
+2. Is any IAS 23 capitalisation for qualifying assets appropriately treated? State yes/no and impact: N___
+3. Current tax and deferred tax expense reconcile to computations and disclosures? State yes/no: ___
+4. Effective tax rate analysis completed and major reconciling items explained? State yes/no: ___
 
 ---
 
-## GROUP: Revenue — Hospitality
+## GROUP: Balance Sheet Line Items — Oil & Gas Completion
 
-### Room Revenue Recognition — Daily Basis & Cut-Off
-1. Total room revenue for the year: N___
-2. How is room revenue recognised — daily rate × occupied nights? State method: ___
-3. For cut-off — last seven days revenue relates only to nights within the year? State yes/no: ___
-4. Are any advance bookings recorded as revenue before guest checks in? State yes/no (these should be deferred): ___
+### Non-Current Assets Completion (E&E, Development, PPE, Intangibles, Investments)
+1. E&E assets and development assets reconcile to detailed schedules and reclassification records? Yes/No: ___
+2. PPE and DD&A/depreciation balances reconcile to lead schedules and notes? Yes/No: ___
+3. Intangibles, goodwill (if any), and investments tested for valuation/impairment/classification? Yes/No: ___
+4. Any material non-current asset line without substantive coverage evidence? State yes/no and details: ___
 
-### F&B Revenue — POS System Reconciliation
-1. Total F&B revenue per POS system for the year by outlet: N___
-2. Agrees to GL revenue account? State yes/no and difference: N___
-3. For a sample of daily reconciliations — POS total agrees to cash, card settlement, and room charges? Any variances? State yes/no: ___
-4. Are all outlets (restaurant, bar, room service, events) included? State yes/no: ___
+### Current Assets Completion (Inventory, Receivables, Cash, Other Current Assets)
+1. Hydrocarbon/product inventory and other inventories tested for quantity and valuation completeness? Yes/No: ___
+2. Receivables (including JV/operator/platform/government counterparties) reconciled and recoverability assessed? Yes/No: ___
+3. Cash and bank balances confirmed and unreconciled items resolved? Yes/No: ___
+4. Any material current asset account not covered by procedures? State yes/no and details: ___
 
-### Banqueting and Events Revenue
-1. Total events revenue: N___
-2. For a sample of events — revenue recognised on or after the event date? State yes/no: ___
-3. Were any event deposits received before year-end for events after year-end? State amount deferred as contract liability: N___
+### Liabilities Completion (Current and Non-Current)
+1. Trade payables, accruals, and unrecorded liabilities testing completed with satisfactory conclusions? Yes/No: ___
+2. Borrowings, lease liabilities, and covenant-related classification reviewed? Yes/No: ___
+3. Provisions including ARO/decommissioning, tax disputes, and regulatory exposures assessed under IAS 37? Yes/No: ___
+4. Statutory liabilities (PPT/CIT, VAT/WHT, NDDC and other levies) reconciled to filings and remittances? Yes/No: ___
+5. Any material liability line lacking substantive coverage? State yes/no and details: ___
 
-### Loyalty Points and Gift Vouchers — Liability Assessment
-1. Does the entity have a loyalty programme? State yes/no. If no — N/A: ___
-2. Total points outstanding at year-end: ___ | Value: N___
-3. Breakage assumption — expected % unredeemed: ___
-4. Contract liability recognised: N___ = Outstanding points × expected redemption value × (1 - breakage %): ___
-5. Are gift vouchers sold but not yet redeemed recognised as contract liabilities? State amount: N___
-
-### Third-Party OTA Commission and Net Revenue
-1. What OTAs does the entity use? List: ___
-2. Is OTA revenue presented gross or net of commission? State: ___
-3. Is the treatment consistent with IFRS 15.B34 principal vs agent? State rationale: ___
-4. Total OTA commissions paid: N___ | Agrees to GL booking costs? Yes/No: ___
-
-### Cash Revenue Controls and Fraud Risk Assessment
-1. What % of total revenue is received in cash? State %: ___
-2. Is there adequate segregation between cash collection and GL recording? State yes/no: ___
-3. Is daily cash banking performed? State yes/no and frequency: ___
-4. Are end-of-day POS reconciliations performed by someone independent of the cashier? State yes/no: ___
-5. Are there any unexplained cash variances or shortfalls? State yes/no and details: ___
+### Equity, Retained Earnings and Reserves Completion
+1. Share capital and reserves reconcile to legal documents and prior year audited balances? Yes/No: ___
+2. Retained earnings movement agrees to profit, dividends, and direct equity adjustments? Yes/No: ___
+3. Equity disclosures complete and consistent with statement of changes in equity? Yes/No: ___
 
 ---
 
-## GROUP: Inventories — F&B
+## GROUP: Financial Statements Completion — Oil & Gas
 
-### Food Inventory — Count and Valuation
-1. Date and location of food inventory count: ___
-2. Were you present or did you review management's count? State: ___
-3. Sample tested — number of items and total value: ___
-4. Were variances found? State yes/no and details: ___
-5. Are perishable items past their use-by date written off? State yes/no and amount: N___
-6. Is food inventory valued at lower of cost and NRV? State yes/no: ___
+### Final Accounts Coverage Matrix (Mandatory)
+1. For each material P&L line item, reference completed substantive procedures and conclusions: ___
+2. For each material balance sheet line item, reference completed substantive procedures and conclusions: ___
+3. Are there any material FS line items without audit evidence linkage? State yes/no and remediation: ___
+4. Are corrected and uncorrected misstatements mapped to FS line items and materiality evaluation? Yes/No: ___
 
-### Beverage Inventory — Liquor Stock Count and Wastage
-1. Date and location of beverage stock count: ___
-2. Total beverages counted: N___ | Agrees to management records? Yes/No: ___
-3. Wastage or spillage provision: N___ | As % of beverage revenue: ___% | Compared to industry norms (typically 5-8%): Reasonable? Yes/No: ___
-4. Are damaged, expired, or non-saleable items in inventory written off? State amount: N___
+### Notes, Presentation and Industry Disclosures
+1. Accounting policies for E&E, DD&A, ARO, royalties/government take, and lifting/entitlement are complete and current? Yes/No: ___
+2. Required disclosures for reserves assumptions, impairment sensitivities, decommissioning estimates, and regulatory exposures are complete? Yes/No: ___
+3. Current/non-current presentation and note cross-references are consistent across all statements? Yes/No: ___
 
-### Operating Supplies Inventory
-1. Categories of operating supplies held (linens, crockery, guest amenities, cleaning materials): ___
-2. Total operating supplies on balance sheet: N___ | Reasonable relative to scale of operations? Yes/No: ___
-3. Are high-value items (silverware, furniture) correctly treated as PPE rather than inventory? State yes/no: ___
-
-### Food Cost Percentage Benchmarking
-1. Total food revenue: N___ | Total food cost: N___ | Food cost %: ___
-2. Prior year food cost %: ___ | Industry benchmark (typically 28-35% for hotels): ___
-3. Is the food cost % consistent with prior year and benchmark? State yes/no and variance explanation: ___
-4. A food cost % significantly below benchmark could indicate under-recording; significantly higher could indicate theft or wastage. State assessment: ___
+### Going Concern and Subsequent Events Wrap-Up
+1. Going concern assessment includes commodity price sensitivity, funding profile, covenant headroom, and regulatory risk impacts? Yes/No: ___
+2. Subsequent events review captured material post-year-end production, price, financing, tax, or regulatory events? Yes/No: ___
+3. Final conclusions align with disclosures and planned report wording? Yes/No: ___
 
 ---
 
-## GROUP: PPE — Hospitality
-
-### FF&E Componentisation and Useful Lives
-1. Main FF&E categories and depreciation rates:
-   Category 1: ___ | Rate: ___% | Useful life: ___ years: ___
-2. For most significant FF&E items — are components with different useful lives separately depreciated? State yes/no: ___
-3. Have useful lives been reviewed in the current year? State yes/no: ___
-
-### Renovation and Refurbishment — Capex vs Opex
-1. Total renovation and refurbishment expenditure for the year: N___
-2. Amount capitalised as PPE: N___ | Amount expensed as maintenance: N___
-3. For the largest capitalised items — do they enhance future economic benefits beyond original specification per IAS 16.7? State yes/no for each: ___
-4. Are there items expensed that should have been capitalised (improvements not repairs)? State yes/no: ___
-
-### Property Lease — IFRS 16 Calculation
-1. Terms of all property leases:
-   Lease 1: Property: ___ | Annual rent N___ | Term ___ years | IBR: ___% | Commencement date: ___
-2. Cross-reference to IFRS 16 verification in borrowings procedure: ___
-3. Are any lease incentives (rent-free periods, landlord contributions) correctly accounted for? State yes/no: ___
-4. Is the IBR appropriate for the Nigerian market? State rate and basis: ___
+# TEMPLATE: Fieldwork — Restaurant
 
 ---
 
-## GROUP: Cash Controls — Hospitality
+## GROUP: Revenue — Restaurant Operations
 
-### Cash Float Reconciliation — Front Desk
-1. List all cash float locations and expected amounts:
-   Location 1: Expected N___ | Counted N___ | Difference N___: ___
-2. For any difference — explanation obtained from cashier: ___
-3. Were vouchers or receipts available for recent float disbursements? State yes/no: ___
-4. Are float amounts appropriate for the level of cash transactions at each location? State yes/no: ___
+### Dine-In, Takeaway and Delivery Revenue Recognition (IFRS 15)
+1. List all revenue channels by branch (dine-in, takeaway, own delivery, third-party delivery apps, catering, others): ___
+2. For each channel, state when control transfers and revenue is recognised (order served, handover to rider, customer pickup, event completion): ___
+3. For selected transactions near year-end, does timing of service or handover agree to timing of revenue posting? State yes/no and exceptions: ___
+4. Are prepayments or customer wallet balances recognised as contract liabilities until service is delivered? State yes/no and amount: N___
+5. Are cancellations, refunds, and chargebacks netted correctly against revenue with supporting records? State yes/no: ___
 
-### POS End-of-Day Reconciliation to Cash and Card
-1. Dates selected for sample testing: ___
-2. For each day selected:
-   POS total: N___ | Cash: N___ | Card settlements: N___ | Room charges: N___ | Total: N___ | Agrees to POS total? Yes/No: ___
-3. Were any daily variances found? State yes/no and details: ___
-4. Is the end-of-day reconciliation performed by someone independent of the cashier? State yes/no: ___
+### POS to GL Reconciliation — All Branches
+1. Number of branches and outlets included in the year-end POS to GL reconciliation: ___
+2. Total annual revenue per POS by branch: N___ | Total per GL revenue accounts: N___ | Difference: N___
+3. For selected days and branches, reconcile POS Z-read totals to cash, card, transfer, and digital wallet settlements. State outcome: ___
+4. Are all voids, refunds, discounts, and complimentary sales separately captured and approved? State yes/no: ___
+5. Were any branches using manual tickets or offline mode? State yes/no and how completeness was validated: ___
 
-### Cash Banking Frequency and Timeliness
-1. How frequently is cash banked? State frequency: ___
-2. For a sample period — banked amounts agree to POS cash totals for the same period? State yes/no: ___
-3. Were there any unexplained gaps in banking frequency? State yes/no and details: ___
-4. Were any banking shortfalls identified (banked less than POS total)? State yes/no and amounts: ___
+### Delivery Platform Revenue and Commission (Principal vs Agent)
+1. List all third-party delivery platforms used and total gross order value per platform: ___
+2. Is revenue presented gross or net of platform commission? State treatment per platform: ___
+3. Is the presentation consistent with IFRS 15.B34 principal-vs-agent assessment? State rationale: ___
+4. Platform remittance reports agree to recorded revenue, commissions, and receivables? State yes/no and differences: ___
+5. Any unreconciled platform deductions (marketing, penalties, promo subsidies)? State amount and treatment: ___
 
-### Tipping Policy — Payroll Tax Treatment
-1. Does the entity collect tips or service charges? State yes/no: ___
-2. How are tips distributed — directly from customers or pooled and distributed by management? State: ___
-3. Are amounts distributed to staff as tips included in payroll and subjected to PAYE? State yes/no: ___
-4. If managed service charge — is the full amount distributed to staff or does the entity retain a portion? State treatment: ___
+### Discounts, Promotions and Loyalty Programmes
+1. List active discount and promotion schemes (happy hour, coupons, branch promos, app promos): ___
+2. Were promo discounts authorised and configured in POS master settings? State yes/no: ___
+3. For sampled promo transactions, discount value agrees to approved scheme logic? State yes/no: ___
+4. If loyalty points or vouchers exist, are unredeemed balances recognised as contract liabilities? State amount: N___
+5. Is breakage estimate supportable using redemption history and reviewed periodically? State yes/no: ___
+
+### Catering, Events and Corporate Orders
+1. Total revenue from catering, events, and corporate orders: N___
+2. For sampled contracts, was revenue recognised when performance obligation was satisfied (event delivered / order fulfilled)? State yes/no: ___
+3. Are advance deposits for undelivered orders held as liabilities at year-end? State amount: N___
+4. For significant event jobs, does billed amount agree to contract terms and approved change orders? State yes/no: ___
+
+### Revenue Integrity — Branch-Level Exception Analytics
+1. For each branch, extract monthly counts and values of voids, refunds, and manager overrides: ___
+2. Are branches with unusually high void/refund ratios identified and investigated? State branch names and outcomes: ___
+3. Were backdated sales edits or post-close transaction edits identified in POS audit logs? State yes/no and details: ___
+4. Is there evidence of potential skimming (high cash share + high voids + low average ticket)? State yes/no and escalations: ___
 
 ---
 
-## GROUP: Regulatory Compliance — Hospitality
+## GROUP: Inventory, Costing and Kitchen Controls
 
-### Hotel and Tourism Licensing — NTDC and State Tourism Board
-1. Does the entity hold a current NTDC hotel licence? State licence number and expiry date: ___
-2. Does the entity hold a current State Tourism Board licence? State authority, licence number, and expiry: ___
-3. Are both licences current and valid? State yes/no: ___
-4. Are licence fees correctly expensed in P&L? State amount: N___
+### Food and Beverage Inventory Count (ISA 501)
+1. Date of inventory count by branch or warehouse: ___
+2. Were counts supervised with pre-numbered sheets and independent recounts? State yes/no: ___
+3. For sampled items, physical count agrees to stock records? State yes/no and variances: ___
+4. Were cut-off controls around goods received and issued during count period effective? State yes/no: ___
+5. Were expired, spoiled, or damaged items identified and segregated? State amount/write-off: N___
 
-### Fire Safety and Health Certificate
-1. Does the entity hold a current fire safety certificate? State issuing authority and expiry date: ___
-2. Does the entity hold a current health inspection certificate? State issuing authority and expiry: ___
-3. Are there any outstanding improvement notices or enforcement actions? State yes/no and details: ___
-4. Have any remediation costs been provided for? State yes/no and amount: N___
+### Inventory Valuation and NRV (IAS 2)
+1. Costing method used (FIFO, weighted average, standard): ___
+2. For sampled SKUs, unit cost agrees to latest valid purchase invoices or approved standard cost build-up? State outcome: ___
+3. Are packaging, freight-in, and import duties included appropriately in inventory cost? State yes/no: ___
+4. For perishable/high-risk items, is NRV support based on realistic selling prices net of wastage and selling costs? State yes/no: ___
+5. Is write-down for slow-moving or near-expiry items adequate? State yes/no and amount: N___
 
-### NAFDAC Compliance for Food Handling
-1. Do food handling staff hold current food handler certificates? State yes/no: ___
-2. Are food storage facilities compliant with NAFDAC standards (temperature control, labelling, expiry management)? State yes/no: ___
-3. Were any NAFDAC inspections conducted during the year? State outcome: ___
-4. Are there outstanding NAFDAC enforcement actions? State yes/no: ___
+### Recipe/BOM Yield and Consumption Testing
+1. Are approved recipes/BOMs maintained for major menu items? State yes/no: ___
+2. For sampled menu items, compare theoretical consumption (sales × standard recipe) to actual issues. Variance %: ___
+3. Are major yield losses, shrinkage, or pilferage variances investigated by branch and product category? State yes/no and outcomes: ___
+4. Are recipe or yield changes approved and documented before POS/costing update? State yes/no: ___
 
-### Local Government and Entertainment Levies
-1. List all LG levies applicable (signage, premises, entertainment or liquor licence, etc.): ___
-2. For each levy — amount, payment status, and due date:
-   Levy 1: Description: ___ | Amount N___ | Paid? Yes/No | Date: ___
-3. Are there outstanding LG levies? State yes/no and amount accrued: N___
+### Purchase, Receiving and Supplier Control
+1. For sampled purchases, verify PO → GRN → supplier invoice → payment matching. State exception rate: ___
+2. Are price changes above threshold approved by authorised personnel? State yes/no: ___
+3. Are supplier rebates, credit notes, and returns fully captured in inventory/cost of sales? State yes/no: ___
+4. Are emergency purchases outside normal procurement controls monitored and reviewed? State yes/no and frequency: ___
+
+### Food Cost and Gross Margin Analytics
+1. Compute food cost % and beverage cost % by branch and compare to budget/prior year: ___
+2. Are abnormal branch-level variances explained by menu mix, pricing, wastage, or control weaknesses? State findings: ___
+3. Are high-margin items showing unusual discount or void patterns? State yes/no and details: ___
+4. Based on analytics, list branches/items requiring extended substantive testing: ___
+
+---
+
+## GROUP: Cash, Banking and Branch Governance
+
+### Daily Cash-Up and Float Controls
+1. For each branch, are opening float, sales collection, paid-outs, and closing cash documented daily? State yes/no: ___
+2. For sampled days, does counted cash agree to expected cash per POS after approved adjustments? State yes/no: ___
+3. Are cash over/short accounts monitored, investigated, and approved timely? State yes/no: ___
+4. Are paid-outs supported by receipts and manager approval? State yes/no and exceptions: ___
+
+### Banking Timeliness and Completeness
+1. Cash banking policy (daily/next-day/other) and actual practice by branch: ___
+2. For sampled periods, bank deposits agree to branch cash summaries and POS cash takings? State yes/no: ___
+3. Are delayed deposits or split deposits investigated with documented reasons? State yes/no: ___
+4. Any unexplained bank shortfalls against recorded branch cash? State amount and branch: ___
+
+### Card, Transfer and Wallet Settlement Reconciliation
+1. Monthly settlement per processor (POS terminal providers, gateways, wallet partners): N___
+2. Do settlement statements reconcile to POS tender reports and GL? State yes/no and differences: ___
+3. Are MDR/charges, reversals, and chargebacks correctly recorded? State yes/no: ___
+4. Are unsettled balances aged and followed up promptly? State yes/no and aging profile: ___
+
+### POS Access Rights and Override Governance
+1. List user roles with rights to void, refund, discount override, and day-close reopen: ___
+2. Are high-risk rights restricted to authorised personnel and reviewed periodically? State yes/no: ___
+3. Are former staff accounts disabled promptly? State yes/no and exceptions: ___
+4. For sampled overrides, is documentary support and approval available? State yes/no: ___
+
+### Branch Audit Pack Completeness
+1. For each branch visit, were mandatory pack items obtained (daily sales summary, Z-reads, cash-up sheets, void log, discount log, GRNs, wastage log)? State yes/no: ___
+2. Were branch packs submitted within the required timeline? State average delay and late branches: ___
+3. Are missing pack items escalated and tracked to closure? State yes/no and open items: ___
+4. Is there consistency between field auditor observations and HQ records? State any contradictions: ___
+
+---
+
+## GROUP: Payroll and People Costs — Restaurant
+
+### Shift Payroll Reconciliation — Time to Pay
+1. For sampled periods, reconcile approved rosters/time attendance to payroll hours paid. State exception rate: ___
+2. Are overtime, night shifts, and public holiday premiums computed per policy and approved? State yes/no: ___
+3. Any ghost staff indicators (paid but no attendance / no active role)? State yes/no and details: ___
+4. Total payroll per branch agrees to labour cost reports and GL? State yes/no: ___
+
+### Service Charge and Tips Distribution
+1. Does the entity operate service charge pooling or tip pooling? State model by branch: ___
+2. Is collection, pooling, and distribution basis documented and consistently applied? State yes/no: ___
+3. For sampled periods, distributed amounts reconcile to collected balances net authorised deductions? State yes/no: ___
+4. Is payroll tax treatment of distributed amounts compliant (PAYE where applicable)? State yes/no: ___
+
+### PAYE, PENCOM, NSITF and ITF Compliance
+1. PAYE deducted vs remitted for the year: N___ vs N___ | Difference: N___
+2. Pension contributions (employer and employee) computed and remitted timely? State yes/no: ___
+3. NSITF and ITF obligations assessed and remitted where applicable? State yes/no and amounts: ___
+4. Any statutory arrears, penalties, or exposure? State amount and whether accrued: N___
+
+---
+
+## GROUP: Leases, Assets and Fit-Out
+
+### Outlet Lease Accounting (IFRS 16)
+1. List all restaurant outlet and warehouse leases with key terms and renewal options: ___
+2. Are all leases above 12 months captured in lease register and recognised under IFRS 16? State yes/no: ___
+3. For sampled leases, recalculate ROU asset and lease liability using approved IBR. State differences: ___
+4. Are lease modifications, rent concessions, or renegotiations treated correctly? State yes/no: ___
+
+### Store Fit-Out and Kitchen Equipment — Capex vs Opex
+1. Total branch fit-out and kitchen equipment spend for the year: N___
+2. For sampled items, does classification as PPE vs expense meet IAS 16 criteria? State yes/no: ___
+3. Are replacement parts and repairs correctly expensed unless major component replacement criteria are met? State yes/no: ___
+4. Are disposed or replaced assets derecognised fully from fixed asset register? State yes/no: ___
+
+### Asset Existence and Condition — Branch Sample
+1. For sampled branches, physically verify key assets (ovens, freezers, POS terminals, generators, furniture). State count and condition: ___
+2. Are asset tags/register details consistent with assets found? State yes/no and missing items: ___
+3. Are idle or damaged assets assessed for impairment indicators? State yes/no: ___
+
+---
+
+## GROUP: Regulatory Compliance — Restaurant
+
+### Food Safety, Hygiene and Public Health Certifications
+1. Does each branch hold required food handling and health inspection certifications? State status by branch: ___
+2. Are there expired certificates, pending renewals, or enforcement notices? State yes/no and details: ___
+3. Are critical food safety controls documented (temperature logs, storage segregation, cleaning schedules)? State yes/no: ___
+4. Any fines, closures, or remediation obligations requiring provision/disclosure? State amount and treatment: ___
+
+### NAFDAC and Product Labelling Compliance (Where Applicable)
+1. For packaged/private-label products, are NAFDAC registration and label requirements complied with? State yes/no: ___
+2. For sampled items, do labels match approved specifications (batch/expiry/allergen info where required)? State yes/no: ___
+3. Any outstanding NAFDAC queries, penalties, or enforcement actions? State yes/no and financial impact: ___
+
+### Local Government and Sector Levies
+1. List all applicable permits and levies by branch (premises, signage, waste, liquor/entertainment where applicable): ___
+2. For sampled branches, are payments current and supported by valid receipts? State yes/no: ___
+3. Are unpaid levies, penalties, or disputed assessments accrued/disclosed appropriately? State amount: N___
+
+### Fire, Safety and Environmental Compliance
+1. Are fire extinguishers, suppression systems, and safety certifications current for sampled branches? State yes/no: ___
+2. Are incident logs (fire, injuries, contamination) reviewed and escalated appropriately? State yes/no: ___
+3. Are any material compliance breaches likely to affect going concern, brand operations, or legal exposure? State yes/no and details: ___
+
+---
+
+## GROUP: P&L — Other Income and Operating Expenses
+
+### Cost of Sales and Consumption Completeness
+1. Total purchases + opening inventory - closing inventory = expected cost of sales N___ | GL cost of sales N___ | Difference N___: ___
+2. Are all kitchen issues/consumption postings captured in the period? State yes/no and controls relied on: ___
+3. Are stock adjustments and write-offs approved and separately analysed? State yes/no and amount: N___
+4. Are there unusual negative margins by branch/menu category? State yes/no and investigation outcome: ___
+
+### Operating Expense Testing — Branch and HQ
+1. Major expense classes tested (rent, utilities, repairs, marketing, logistics, security, cleaning, admin): ___
+2. For sampled expenses, agree to invoice/contract, evidence of receipt of service, approval, and payment. State exception rate: ___
+3. Were any expenses capital in nature but charged to P&L? State yes/no and amount: N___
+4. Were any accruals omitted for services consumed before year-end? State yes/no and amount: N___
+
+### Utilities and Energy Expense Reasonableness
+1. Monthly electricity/fuel/gas expense trend by branch compared to sales trend: ___
+2. Are major spikes supported by tariff changes, generator usage, or operational disruptions? State yes/no: ___
+3. Are any abnormal utility costs relating to prior periods incorrectly recorded in current year? State yes/no: ___
+
+### Marketing, Delivery and Platform Charges
+1. Total marketing and promotional spend: N___ | Agrees to approved campaigns/contracts? Yes/No: ___
+2. Delivery and platform commission charges agree to settlement reports and contracts? State yes/no and differences: ___
+3. Are rebates, ad credits, or promotional subsidies from platforms accounted for correctly (income/reduction of expense)? State treatment: ___
+
+### Other Income and Miscellaneous Credits
+1. List all other income streams (rebates, scrap sales, insurance recoveries, rent income, FX gains, others): ___
+2. For sampled items, verify occurrence, accuracy, and correct classification in P&L. State outcome: ___
+3. Any one-off or non-recurring items requiring separate disclosure? State yes/no and details: ___
+
+---
+
+## GROUP: Balance Sheet — Working Capital and Tax
+
+### Trade and Other Receivables
+1. Receivables by type (trade, delivery platforms, staff advances, deposits, intercompany): ___
+2. Reconciliation to ledger and ageing performed? State yes/no and unreconciled amount: N___
+3. Are overdue balances supported by recovery evidence or ECL provisioning? State yes/no and amount: N___
+4. Are related party receivables separately identified and disclosed? State yes/no: ___
+
+### Prepayments and Deposits
+1. Prepayment categories and balances (rent, insurance, maintenance contracts, software, others): ___
+2. For sampled balances, does service period extend beyond year-end and justify asset recognition? State yes/no: ___
+3. Are stale or non-recoverable deposits provided for or written off? State yes/no and amount: N___
+
+### Trade and Other Payables / Accruals
+1. Payables and accrual balances reconciled to supplier statements and support schedules? State yes/no: ___
+2. Subsequent payment testing identified unrecorded liabilities? State yes/no and amount: N___
+3. Are accrual estimates (utilities, payroll, branch expenses, professional fees) reasonable and documented? State yes/no: ___
+4. Are debit balances in payables investigated and reclassified where appropriate? State yes/no: ___
+
+### Statutory and Tax Balances
+1. VAT, PAYE, WHT, pension, NSITF, ITF balances agree to filings/remittance schedules? State yes/no: ___
+2. Are late filing penalties or interest liabilities identified and accrued? State yes/no and amount: N___
+3. Current tax payable/receivable agrees to tax computation and tax authority correspondence? State yes/no: ___
+4. Deferred tax asset/liability assessed under IAS 12 with support for recoverability where DTA exists? State yes/no: ___
+
+### Cash and Bank Balance Sheet Presentation
+1. Bank and cash balances reconcile to confirmations/statements and ledger at year-end? State yes/no: ___
+2. Are restricted cash balances, if any, separately identified and disclosed? State yes/no and amount: N___
+3. Are unreconciled suspense or transit items material and unresolved? State yes/no and details: ___
+
+---
+
+## GROUP: Balance Sheet — Equity, Provisions and Financing
+
+### Equity Rollforward and Retained Earnings
+1. Opening equity agrees to prior year audited closing balances? State yes/no: ___
+2. Movements (profit, dividends, reserves, corrections) fully supported and authorised? State yes/no: ___
+3. Closing equity reconciles to statement of changes in equity and trial balance? State yes/no: ___
+
+### Provisions and Contingent Liabilities (IAS 37)
+1. List all provisions (legal claims, regulatory penalties, onerous contracts, restoration obligations, others): ___
+2. For each provision, probability and measurement basis documented and reasonable? State yes/no: ___
+3. Are possible obligations disclosed as contingencies where provision criteria are not met? State yes/no: ___
+4. Any omitted exposures from compliance findings, HR disputes, or tax matters? State yes/no and impact: ___
+
+### Borrowings and Lease Liabilities
+1. Borrowings and lease liabilities classified current/non-current correctly? State yes/no: ___
+2. Interest expense and amortisation schedules agree to ledger and disclosures? State yes/no: ___
+3. Covenant breaches or refinancing risks identified and reflected in classification/disclosure? State yes/no: ___
+4. Any unrecorded finance arrangements (supplier financing, director loans, informal funding)? State yes/no: ___
+
+---
+
+## GROUP: Financial Statements and Disclosure Completion — Restaurant
+
+### Final Accounts Line-Item Coverage Check
+1. For each material P&L line, is there at least one completed substantive procedure with conclusion? State yes/no and exceptions: ___
+2. For each material balance sheet line, is there at least one completed substantive procedure with conclusion? State yes/no and exceptions: ___
+3. Are identified misstatements linked to affected line items and assessed against materiality? State yes/no: ___
+
+### Notes and Disclosure Adequacy
+1. Are accounting policies for restaurant-specific areas (revenue channels, inventory valuation, lease accounting, service charge treatment) clearly disclosed? State yes/no: ___
+2. Are related party, commitments, contingencies, and subsequent events disclosures complete and consistent with working papers? State yes/no: ___
+3. Are significant judgments and estimation uncertainty disclosures adequate (ECL, NRV, provisions, lease assumptions)? State yes/no: ___
+
+### Going Concern and Subsequent Events Wrap-Up
+1. Are branch performance trends, liquidity forecasts, and debt obligations considered in going concern assessment? State yes/no: ___
+2. Are post-year-end branch closures, major incidents, regulatory actions, or financing events identified and evaluated under IAS 10/ISA 560? State yes/no: ___
+3. Is final conclusion on going concern and subsequent events consistent with report wording and disclosures? State yes/no: ___
 
 ---
 
@@ -2086,3 +2397,81 @@ Review each IFRS 6.20 indicator — state whether present:
 2. If yes — are these agreements registered with NOTAP? State yes/no and registration number: ___
 3. What WHT rate has been applied to technology transfer payments — 10% (non-treaty) or lower treaty rate? State rate and basis: ___
 4. Were WHT remittances on technology transfer payments made on time? State yes/no: ___
+
+---
+
+## GROUP: P&L Line Items — Consulting Completion
+
+### Revenue, Cost of Sales and Gross Margin Completion
+1. Final revenue per trial balance agrees to completed contract testing (T&M, fixed-fee, retainers, reimbursables)? State yes/no: ___
+2. Cost of sales/direct project delivery costs reconcile to project records and consultant/subcontractor costs? State yes/no: ___
+3. Gross margin by service line (current year vs prior year) analysed and unusual variances explained? State yes/no: ___
+4. Any top-side/manual entries impacting revenue or direct costs near period-end? State yes/no and details: ___
+
+### Other Income and Other Expenses
+1. List material other income accounts (recoveries, FX gains, disposal gains, one-offs) and balances: ___
+2. For sampled other income items — occurrence, accuracy, and classification verified? State yes/no: ___
+3. List material other expenses (penalties, write-offs, litigation costs, restructuring) and balances: ___
+4. For sampled items — valid business rationale, approvals, and period cut-off confirmed? State yes/no: ___
+
+### Administrative, Selling and Distribution Expenses
+1. Material administrative expenses tested (staff costs, rent, software, professional fees, travel, utilities): ___
+2. Material selling/distribution expenses tested (business development, commissions, marketing, client acquisition costs): ___
+3. Any expenses capital in nature incorrectly charged to P&L? State yes/no and amount: N___
+4. Any missing accruals identified from post-year-end invoices or contracts? State yes/no and amount: N___
+
+### Finance Costs and Tax Expense Completion
+1. Finance costs reconcile to borrowings/lease schedules and bank charge support? State yes/no: ___
+2. Current tax expense agrees to CIT computation and tax schedules? State yes/no: ___
+3. Deferred tax movement agrees to IAS 12 computation and disclosures? State yes/no: ___
+4. Effective tax rate reconciliation completed and significant reconciling items explained? State yes/no: ___
+
+---
+
+## GROUP: Balance Sheet Line Items — Consulting Completion
+
+### Non-Current Assets Completion (PPE, Intangibles, Investments, Goodwill)
+1. PPE balances reconciled to FAR and lead schedules with additions/disposals/depreciation tested? Yes/No: ___
+2. Intangibles (software, licences, development costs) recognition and amortisation tested? Yes/No: ___
+3. Investments and goodwill (if applicable) tested for valuation/classification/impairment? Yes/No: ___
+4. Any material non-current asset account lacking substantive coverage? State yes/no and details: ___
+
+### Current Assets Completion (Contract Assets, Receivables, Cash, Other Current Assets)
+1. Contract assets and trade receivables reconciled, aged, and recoverability assessed? Yes/No: ___
+2. Cash and bank balances confirmed and reconciliations cleared for material items? Yes/No: ___
+3. Prepayments, deposits, staff advances, and other current assets supported and recoverable? Yes/No: ___
+4. Any material current asset account not covered by procedures? State yes/no and details: ___
+
+### Current and Non-Current Liabilities Completion
+1. Trade payables and accruals completeness confirmed via subsequent payment testing? Yes/No: ___
+2. Borrowings and lease liabilities classified correctly between current/non-current? Yes/No: ___
+3. Statutory liabilities (PAYE, WHT, VAT, pension, tax payable) reconciled to filings/remittances? Yes/No: ___
+4. Provisions and contingencies assessed under IAS 37 and disclosed where required? Yes/No: ___
+5. Any material liability account without substantive coverage? State yes/no and details: ___
+
+### Equity, Retained Earnings and Reserves Completion
+1. Share capital and reserves movements reconcile to legal records and prior year closing? Yes/No: ___
+2. Retained earnings rollforward agrees to profit, dividends, and equity adjustments? Yes/No: ___
+3. Equity disclosures complete and consistent with statement of changes in equity? Yes/No: ___
+
+---
+
+## GROUP: Financial Statements Completion — Consulting
+
+### Final Accounts Coverage Matrix (Mandatory)
+1. For each material P&L line item, reference at least one completed substantive procedure and conclusion: ___
+2. For each material balance sheet line item, reference at least one completed substantive procedure and conclusion: ___
+3. Are there any material FS line items with no evidence linkage? State yes/no and remediation: ___
+4. Are corrected and uncorrected misstatements mapped to affected FS line items and materiality evaluation? Yes/No: ___
+
+### Notes and Presentation Completion (IAS 1)
+1. Are accounting policies for consulting-specific areas (contract assets, variable consideration, reimbursables, subcontractor treatment) complete and current? Yes/No: ___
+2. Are key disclosures (judgements, estimates, related parties, contingencies, commitments) complete and consistent with workpapers? Yes/No: ___
+3. Are comparative disclosures and any restatements compliant with IAS 8/IAS 1? Yes/No: ___
+4. Is statement and note presentation current/non-current and classification-consistent across the FS? Yes/No: ___
+
+### End-to-End Engagement Readiness Check
+1. Do completed procedures and reviewer sign-offs support planned audit opinion? Yes/No: ___
+2. Are unresolved high-risk matters or missing evidence items still open? State yes/no and list: ___
+3. Are going concern and subsequent events conclusions aligned with disclosure and report wording? Yes/No: ___
+4. Is the file ready for partner sign-off without material outstanding issues? Yes/No: ___

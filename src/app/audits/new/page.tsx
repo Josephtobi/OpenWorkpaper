@@ -1,9 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+
+interface ExistingAudit {
+  id: string;
+  title: string;
+  auditNumber?: string | null;
+  category?: string | null;
+}
 
 export default function NewAudit() {
   const router = useRouter();
@@ -11,11 +18,33 @@ export default function NewAudit() {
   const [category, setCategory] = useState('');
   const [auditNumber, setAuditNumber] = useState('');
   const [objective, setObjective] = useState('');
+  const [carryForwardFromAuditId, setCarryForwardFromAuditId] = useState('');
+  const [existingAudits, setExistingAudits] = useState<ExistingAudit[]>([]);
+  const [loadingAudits, setLoadingAudits] = useState(true);
+  const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    async function loadAudits() {
+      try {
+        const res = await fetch('/api/audits');
+        if (!res.ok) throw new Error('Failed to load previous audits');
+        const audits: ExistingAudit[] = await res.json();
+        setExistingAudits(audits);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : String(err));
+      } finally {
+        setLoadingAudits(false);
+      }
+    }
+
+    loadAudits();
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSaving(true);
+    setError('');
     
     try {
       const res = await fetch('/api/audits', {
@@ -26,12 +55,16 @@ export default function NewAudit() {
           category,
           auditNumber,
           objective, 
-          status: 'In Progress' 
+          status: 'In Progress',
+          carryForwardFromAuditId: carryForwardFromAuditId || undefined,
         }),
       });
       if (res.ok) {
         router.push('/');
         router.refresh();
+      } else {
+        const payload = await res.json().catch(() => null);
+        setError(payload?.error || 'Failed to create audit');
       }
     } finally {
       setSaving(false);
@@ -47,8 +80,40 @@ export default function NewAudit() {
       
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
         <h1 className="text-2xl font-bold text-gray-900 mb-6">Create New Audit</h1>
+        {error && (
+          <div className="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            {error}
+          </div>
+        )}
         
         <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label htmlFor="carryForward" className="block text-sm font-medium text-gray-700 mb-1">
+              Carry Forward From Prior Audit (Optional)
+            </label>
+            <select
+              id="carryForward"
+              value={carryForwardFromAuditId}
+              onChange={(e) => setCarryForwardFromAuditId(e.target.value)}
+              disabled={loadingAudits}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white"
+            >
+              <option value="">
+                {loadingAudits ? 'Loading previous audits...' : 'Do not carry forward'}
+              </option>
+              {existingAudits.map((audit) => (
+                <option key={audit.id} value={audit.id}>
+                  {audit.title}
+                  {audit.auditNumber ? ` (${audit.auditNumber})` : ''}
+                  {audit.category ? ` - ${audit.category}` : ''}
+                </option>
+              ))}
+            </select>
+            <p className="mt-2 text-xs text-gray-500">
+              Carries over team members, groups, procedures, question setup, and template application history; resets working responses and review progress.
+            </p>
+          </div>
+
           <div>
             <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">Audit Title</label>
             <input

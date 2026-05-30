@@ -279,6 +279,32 @@ const TEMPLATES = [
             ],
           },
           {
+            title: 'P&L Line Items — Manufacturing Completion',
+            procedures: [
+              { title: 'Revenue, Cost of Sales and Gross Margin Completion', purpose: 'To complete final P&L validation over revenue, cost of sales, and gross margin by linking balances to completed substantive work and investigating abnormal variances. [ISA 330; ISA 520]' },
+              { title: 'Other Income and Other Expenses', purpose: 'To verify occurrence, classification, and disclosure of other income/expenses including non-recurring or unusual items requiring separate presentation. [IAS 1; ISA 330]' },
+              { title: 'Administrative, Selling and Distribution Expenses', purpose: 'To test completeness, occurrence, cut-off, and classification of administrative and selling/distribution expenses and identify capital items or omitted accruals. [ISA 330]' },
+              { title: 'Finance Costs and Tax Expense', purpose: 'To reconcile finance costs and tax expense to supporting schedules and ensure consistency with borrowing/lease and tax computations. [IFRS 9; IFRS 16; IAS 12]' },
+            ],
+          },
+          {
+            title: 'Balance Sheet Line Items — Manufacturing Completion',
+            procedures: [
+              { title: 'Non-Current Assets Completion (PPE, Intangibles, Investments, Goodwill)', purpose: 'To confirm that all material non-current asset balances are fully covered by substantive procedures, reconciliations, and disclosure checks. [IAS 16; IAS 36; IFRS 9; ISA 330]' },
+              { title: 'Current Assets Completion (Inventory, Receivables, Cash, Other Current Assets)', purpose: 'To confirm completeness and valuation coverage for all material current asset balances and related classifications. [IAS 2; IFRS 9; ISA 330]' },
+              { title: 'Current and Non-Current Liabilities Completion', purpose: 'To confirm completeness, measurement, and presentation of liability balances including borrowings, leases, statutory liabilities, and provisions. [IAS 1; IAS 37; IFRS 16; ISA 330]' },
+              { title: 'Equity, Retained Earnings and Reserves Completion', purpose: 'To verify equity movements and disclosures are fully supported, authorised, and consistent with profit allocation and prior period balances. [IAS 1.106; CAMA 2020]' },
+            ],
+          },
+          {
+            title: 'Financial Statements Completion — Manufacturing',
+            procedures: [
+              { title: 'Final Accounts Coverage Matrix (Mandatory)', purpose: 'To map every material P&L and balance sheet line item to completed substantive procedures and conclusions, and identify residual coverage gaps before sign-off. [ISA 330; ISA 230]' },
+              { title: 'Notes and Presentation Completion (IAS 1)', purpose: 'To verify note disclosures, accounting policies, and statement presentation are complete, consistent, and compliant with IAS 1 and related standards. [IAS 1; IAS 8]' },
+              { title: 'End-to-End Engagement Readiness Check', purpose: 'To confirm that evidence, conclusions, unresolved matters, and reporting implications are fully aligned for final partner sign-off. [ISA 220; ISA 700]' },
+            ],
+          },
+          {
             title: 'Equity and Capital',
             procedures: [
               { title: 'Share Capital Verification (CAMA 2020)', purpose: 'To verify the authorised, issued, and paid-up share capital agrees to the CAC filings, board resolutions, and share register, and complies with minimum capital requirements under CAMA 2020. [CAMA 2020 s.27]' },
@@ -376,64 +402,136 @@ const TEMPLATES = [
               { title: 'NAPIMS Reporting Obligations', purpose: 'To confirm that reporting obligations to NAPIMS have been fulfilled where the entity has NNPCL as a joint venture partner, and that government participation interests are correctly reflected in the accounts. [PIA 2021]' },
             ],
           },
+          {
+            title: 'P&L Line Items — Oil & Gas Completion',
+            procedures: [
+              { title: 'Revenue, Royalties and Cost of Sales Completion', purpose: 'To complete final P&L validation over revenue, royalties/government take treatment, and cost of sales by linking balances to substantive work and variance analytics. [ISA 330; ISA 520; IFRS 15]' },
+              { title: 'Other Income, Other Expenses and Impairment Charges', purpose: 'To verify occurrence, classification, and disclosure of other income/expenses, including impairment and unusual industry-specific charges. [IAS 1; IAS 36; ISA 330]' },
+              { title: 'Administrative, Selling and Distribution Expenses', purpose: 'To test completeness, occurrence, cut-off, and classification of administrative and distribution expenses and identify misclassifications or omitted accruals. [ISA 330]' },
+              { title: 'Finance Costs and Tax Expense Completion', purpose: 'To reconcile finance costs and tax expense to supporting schedules (including ARO unwinding and deferred tax) and confirm disclosure consistency. [IFRS 9; IAS 12; IAS 37]' },
+            ],
+          },
+          {
+            title: 'Balance Sheet Line Items — Oil & Gas Completion',
+            procedures: [
+              { title: 'Non-Current Assets Completion (E&E, Development, PPE, Intangibles, Investments)', purpose: 'To confirm all material non-current asset balances are covered by substantive procedures, reconciliations, classification checks, and impairment assessments. [IFRS 6; IAS 16; IAS 36; ISA 330]' },
+              { title: 'Current Assets Completion (Inventory, Receivables, Cash, Other Current Assets)', purpose: 'To confirm completeness, existence, valuation, and presentation coverage for all material current asset balances. [IAS 2; IFRS 9; ISA 330]' },
+              { title: 'Liabilities Completion (Current and Non-Current)', purpose: 'To confirm completeness, measurement, and presentation of liabilities including borrowings, leases, provisions (ARO), statutory balances, and accruals. [IAS 1; IAS 37; IFRS 16; ISA 330]' },
+              { title: 'Equity, Retained Earnings and Reserves Completion', purpose: 'To verify equity movements and disclosures are fully supported, authorised, and consistent with profit allocation and prior period balances. [IAS 1.106; ISA 330]' },
+            ],
+          },
+          {
+            title: 'Financial Statements Completion — Oil & Gas',
+            procedures: [
+              { title: 'Final Accounts Coverage Matrix (Mandatory)', purpose: 'To map every material P&L and balance sheet line item to completed substantive procedures and conclusions, and identify residual coverage gaps before sign-off. [ISA 330; ISA 230]' },
+              { title: 'Notes, Presentation and Industry Disclosures', purpose: 'To verify completeness and consistency of note disclosures for oil and gas specific accounting areas including E&E, DD&A, ARO, royalties, and regulatory exposures. [IAS 1; IFRS 6; IAS 37]' },
+              { title: 'Going Concern and Subsequent Events Wrap-Up', purpose: 'To confirm final going concern and subsequent events conclusions reflect commodity, financing, covenant, and regulatory developments and align with report wording. [ISA 570; ISA 560; IAS 10]' },
+            ],
+          },
         ],
       },
     ],
   },
 
-  // 4. FIELDWORK – HOSPITALITY & RESTAURANT
+  // 4. FIELDWORK – RESTAURANT
   {
-    name: 'Fieldwork — Hospitality & Restaurant',
+    name: 'Fieldwork — Restaurant',
     description:
-      'Substantive procedures for hotels and restaurants. Covers POS revenue reconciliation, F&B inventory, IFRS 15 loyalty programmes, IFRS 16 leases, and NTDC/state tourism licensing compliance.',
+      'Substantive procedures for restaurant businesses with branch-level controls. Covers POS and delivery revenue integrity, food and beverage inventory/costing, cash handling, shift payroll, IFRS 16 leases, and food safety regulatory compliance.',
     phases: [
       {
         phase: 'Fieldwork',
         groups: [
           {
-            title: 'Revenue — Hospitality',
+            title: 'Revenue — Restaurant Operations',
             procedures: [
-              { title: 'Room Revenue Recognition — Daily Basis & Cut-Off', purpose: 'To verify that room revenue is recognised on a daily basis as accommodation is provided (performance obligation satisfied over time per IFRS 15.35), and that cut-off is correct with no revenue recognised for periods after the reporting date. [IFRS 15.35; ISA 330]' },
-              { title: 'F&B Revenue — POS System Reconciliation', purpose: 'To reconcile total food and beverage revenue per the POS system to the general ledger, investigate significant variances, and confirm the completeness of revenue capture from all outlets and shifts. [ISA 330; IFRS 15]' },
-              { title: 'Banqueting and Events Revenue', purpose: 'To verify that revenue from banqueting, conferences, and events is recognised when the event takes place and that deposits received in advance are deferred as contract liabilities per IFRS 15. [IFRS 15; ISA 330]' },
-              { title: 'Loyalty Points and Gift Vouchers — Liability Assessment', purpose: 'To assess whether the entity has material outstanding loyalty point obligations or unredeemed gift voucher liabilities, verify these are recognised as contract liabilities per IFRS 15.B39, and review the breakage assumption applied. [IFRS 15.B39]' },
-              { title: 'Third-Party OTA Commission and Net Revenue', purpose: 'To review bookings made through online travel agencies, confirm whether revenue is recognised gross or net per IFRS 15.B34 (principal vs agent), and reconcile OTA commission charges to amounts recorded. [IFRS 15.B34]' },
-              { title: 'Cash Revenue Controls and Fraud Risk Assessment', purpose: 'To assess the heightened fraud risk associated with cash revenue in hospitality, review segregation of duties between cashiering and recording functions, and perform directional testing to identify potential understatement of cash sales per ISA 240. [ISA 240; ISA 315]' },
+              { title: 'Dine-In, Takeaway and Delivery Revenue Recognition (IFRS 15)', purpose: 'To verify that revenue is recognised when control transfers for each channel (dine-in, takeaway, own delivery, and aggregator delivery), and that prepayments are deferred until performance obligations are satisfied per IFRS 15. [IFRS 15; ISA 330]' },
+              { title: 'POS to GL Reconciliation — All Branches', purpose: 'To reconcile branch-level POS revenue to the general ledger, including all tenders and all outlets, and investigate unexplained differences to address completeness and accuracy risks. [ISA 330; ISA 240]' },
+              { title: 'Delivery Platform Revenue and Commission (Principal vs Agent)', purpose: 'To assess gross versus net presentation for third-party delivery channels under principal-vs-agent guidance and reconcile commissions and deductions to settlement reports. [IFRS 15.B34; ISA 330]' },
+              { title: 'Discounts, Promotions and Loyalty Programmes', purpose: 'To verify that discounts, promotions, vouchers, and loyalty arrangements are authorised, accurately recorded, and appropriately recognised as revenue reductions or contract liabilities. [IFRS 15; ISA 240]' },
+              { title: 'Catering, Events and Corporate Orders', purpose: 'To verify that catering and event revenue is recognised only when services are delivered, and that customer advances are held as liabilities until fulfilment. [IFRS 15; ISA 330]' },
+              { title: 'Revenue Integrity — Branch-Level Exception Analytics', purpose: 'To use branch-level exception analytics (voids, refunds, overrides, post-close edits) to identify potential revenue leakage or fraud and determine where extended testing is required. [ISA 240; ISA 520]' },
             ],
           },
           {
-            title: 'Inventories — F&B',
+            title: 'Inventory, Costing and Kitchen Controls',
             procedures: [
-              { title: 'Food Inventory — Count and Valuation', purpose: 'To attend or observe the count of food inventory at the reporting date, reconcile count results to inventory records, and confirm food inventory is valued at the lower of cost and NRV with appropriate provisions for perishable or slow-moving items per IAS 2. [ISA 501; IAS 2]' },
-              { title: 'Beverage Inventory — Liquor Stock Count and Wastage', purpose: 'To verify the completeness and accuracy of beverage inventory through count observation, compare to par levels, and analyse the wastage and spillage provision to assess whether it is reasonable relative to industry norms. [ISA 501; IAS 2]' },
-              { title: 'Operating Supplies Inventory', purpose: 'To confirm that operating supplies (linens, guest amenities, cleaning materials, crockery) are correctly classified as inventory or expensed on consumption, and that balances are reasonable relative to the scale of operations. [IAS 2; IAS 16]' },
-              { title: 'Food Cost Percentage Benchmarking', purpose: 'To perform analytical procedures comparing the food cost percentage to prior year and industry benchmarks (typically 28-35% for hotels), and investigate significant variances as potential indicators of theft, wastage, or pricing errors. [ISA 520; ISA 240]' },
+              { title: 'Food and Beverage Inventory Count (ISA 501)', purpose: 'To observe inventory count controls, perform independent test counts, and confirm year-end quantities for food and beverage items are complete and accurate. [ISA 501; IAS 2]' },
+              { title: 'Inventory Valuation and NRV (IAS 2)', purpose: 'To verify that inventory is measured at lower of cost and NRV, including perishable and slow-moving items, and that write-downs are adequate. [IAS 2; ISA 540]' },
+              { title: 'Recipe/BOM Yield and Consumption Testing', purpose: 'To compare theoretical consumption from approved recipes/BOMs against actual issues and identify yield, shrinkage, and pilferage anomalies requiring investigation. [ISA 330; ISA 520]' },
+              { title: 'Purchase, Receiving and Supplier Control', purpose: 'To test the procure-to-stock cycle (PO, GRN, invoice, payment), validate supplier pricing controls, and confirm completeness of rebates/returns/credits. [ISA 330; ISA 240]' },
+              { title: 'Food Cost and Gross Margin Analytics', purpose: 'To perform branch-level and category-level analytics on food cost and gross margin trends and identify outliers for focused substantive procedures. [ISA 520]' },
             ],
           },
           {
-            title: 'PPE — Hospitality',
+            title: 'Cash, Banking and Branch Governance',
             procedures: [
-              { title: 'FF&E Componentisation and Useful Lives', purpose: 'To verify that furniture, fixtures, and equipment have been componentised where significant parts have different useful lives, and that depreciation rates reflect the actual pattern of consumption per IAS 16.43. [IAS 16.43]' },
-              { title: 'Renovation and Refurbishment — Capex vs Opex', purpose: 'To assess whether renovation and refurbishment expenditure meets the IAS 16.7 recognition criteria for capitalisation or should be expensed, with particular attention to cyclical maintenance programmes. [IAS 16.7]' },
-              { title: 'Property Lease — IFRS 16 Calculation', purpose: 'To verify the completeness of the lease portfolio under IFRS 16, review the incremental borrowing rate applied, re-perform the right-of-use asset and lease liability calculations for material leases, and confirm that short-term and low-value lease exemptions are appropriate. [IFRS 16]' },
+              { title: 'Daily Cash-Up and Float Controls', purpose: 'To verify that branch cash-up sheets, opening/closing floats, and paid-outs are properly documented, approved, and reconciled to expected balances. [ISA 330; ISA 240]' },
+              { title: 'Banking Timeliness and Completeness', purpose: 'To confirm that cash collections are banked intact and timely, and that banked amounts reconcile to branch cash summaries and POS records. [ISA 240; ISA 330]' },
+              { title: 'Card, Transfer and Wallet Settlement Reconciliation', purpose: 'To reconcile processor settlements to POS tender reports and the ledger, and confirm correct treatment of fees, reversals, and chargebacks. [ISA 330]' },
+              { title: 'POS Access Rights and Override Governance', purpose: 'To review high-risk POS access rights and override controls, and test whether void/refund/discount overrides are properly authorised and evidenced. [ISA 240; ISA 315]' },
+              { title: 'Branch Audit Pack Completeness', purpose: 'To verify that mandatory branch audit pack documents are submitted completely and timely, and that exceptions are tracked to closure. [ISA 230; ISA 330]' },
             ],
           },
           {
-            title: 'Cash Controls — Hospitality',
+            title: 'Payroll and People Costs — Restaurant',
             procedures: [
-              { title: 'Cash Float Reconciliation — Front Desk', purpose: 'To count and reconcile all cash floats held at front desk, restaurant, and bar cashier points at or near the reporting date, and confirm the recorded float balances are accurate. [ISA 501]' },
-              { title: 'POS End-of-Day Reconciliation to Cash and Card', purpose: 'To review the process for end-of-day POS reconciliation, test a sample of daily reconciliations to confirm that cash and card receipts per POS agree to physical cash and card settlement reports. [ISA 330; ISA 240]' },
-              { title: 'Cash Banking Frequency and Timeliness', purpose: 'To verify that cash collections are banked frequently and intact, review banking records for the year, and identify any unusual gaps or shortfalls in banking that may indicate misappropriation. [ISA 240]' },
-              { title: 'Tipping Policy — Payroll Tax Treatment', purpose: 'To review the entity\'s policy for handling tips and service charges, confirm that amounts passed to employees are correctly included in payroll and subjected to PAYE deductions per the applicable tax legislation. [NTA 2025; PITA]' },
+              { title: 'Shift Payroll Reconciliation — Time to Pay', purpose: 'To reconcile approved shifts and attendance records to payroll and verify that overtime/allowances are correctly computed and authorised. [ISA 330; ISA 240]' },
+              { title: 'Service Charge and Tips Distribution', purpose: 'To verify that service charge/tips collection and distribution are complete, policy-compliant, and correctly treated for payroll tax purposes. [NTA 2025; PITA]' },
+              { title: 'PAYE, PENCOM, NSITF and ITF Compliance', purpose: 'To verify payroll statutory deductions and remittances are accurate, timely, and fully accrued where outstanding. [NTA 2025; Pension Reform Act 2014; Employee Compensation Act 2010; ITF Act 2011]' },
             ],
           },
           {
-            title: 'Regulatory Compliance — Hospitality',
+            title: 'Leases, Assets and Fit-Out',
             procedures: [
-              { title: 'Hotel and Tourism Licensing — NTDC and State Tourism Board', purpose: 'To confirm that the entity holds a valid hotel licence from the Nigerian Tourism Development Corporation and the relevant State Tourism Board, that licences are current, and that licence fees are correctly expensed. [NTDC Act; state tourism laws; ISA 250]' },
-              { title: 'Fire Safety and Health Certificate', purpose: 'To confirm that current fire safety certificates and health inspection certificates are held, that there are no outstanding improvement notices, and that any required remediation expenditure has been appropriately provided for. [ISA 250; IAS 37]' },
-              { title: 'NAFDAC Compliance for Food Handling', purpose: 'To verify that food handling and storage operations comply with NAFDAC regulations, that relevant staff have valid food handler certificates, and that there are no outstanding enforcement actions or product recalls. [NAFDAC Act; ISA 250]' },
-              { title: 'Local Government and Entertainment Levies', purpose: 'To identify all applicable local government levies, entertainment taxes, and signage fees, confirm they are correctly computed, remitted on time, and any outstanding balances are properly accrued. [Local Government Finance Law; ISA 250]' },
+              { title: 'Outlet Lease Accounting (IFRS 16)', purpose: 'To verify lease register completeness and the measurement/classification of ROU assets and lease liabilities for outlets and support locations. [IFRS 16; ISA 330]' },
+              { title: 'Store Fit-Out and Kitchen Equipment — Capex vs Opex', purpose: 'To assess whether fit-out and equipment spend is correctly classified as capital or expense and properly authorised. [IAS 16.7; ISA 330]' },
+              { title: 'Asset Existence and Condition — Branch Sample', purpose: 'To physically verify key branch assets, confirm register accuracy, and identify impairment indicators for damaged or idle assets. [ISA 501; IAS 36]' },
+            ],
+          },
+          {
+            title: 'Regulatory Compliance — Restaurant',
+            procedures: [
+              { title: 'Food Safety, Hygiene and Public Health Certifications', purpose: 'To confirm branch-level compliance with required food safety and health certifications, and assess financial statement impact of enforcement actions or remediation obligations. [ISA 250; IAS 37]' },
+              { title: 'NAFDAC and Product Labelling Compliance (Where Applicable)', purpose: 'To verify compliance for packaged/private-label products with applicable NAFDAC registration and labelling rules and identify unresolved exposures. [NAFDAC Act; ISA 250]' },
+              { title: 'Local Government and Sector Levies', purpose: 'To identify applicable branch permits and levies, confirm payment status, and ensure outstanding obligations are accrued or disclosed appropriately. [ISA 250; IAS 37]' },
+              { title: 'Fire, Safety and Environmental Compliance', purpose: 'To assess fire/safety/environmental compliance status and whether identified breaches create provisions, contingencies, or going concern implications. [ISA 250; IAS 37; ISA 570]' },
+            ],
+          },
+          {
+            title: 'P&L — Other Income and Operating Expenses',
+            procedures: [
+              { title: 'Cost of Sales and Consumption Completeness', purpose: 'To verify cost of sales completeness and accuracy using inventory movement logic, consumption records, and analysis of stock adjustments/write-offs. [ISA 330; IAS 2]' },
+              { title: 'Operating Expense Testing — Branch and HQ', purpose: 'To test occurrence, accuracy, cut-off, and classification of material operating expenses at branch and head-office level. [ISA 330]' },
+              { title: 'Utilities and Energy Expense Reasonableness', purpose: 'To perform analytical and substantive checks on utilities and energy expenses versus operational drivers and investigate abnormal movements. [ISA 520; ISA 330]' },
+              { title: 'Marketing, Delivery and Platform Charges', purpose: 'To verify marketing and delivery-platform related expenses are complete, accurate, authorised, and properly classified. [ISA 330; IFRS 15]' },
+              { title: 'Other Income and Miscellaneous Credits', purpose: 'To verify occurrence and proper classification of other income streams and identify non-recurring items requiring disclosure. [ISA 330; IAS 1]' },
+            ],
+          },
+          {
+            title: 'Balance Sheet — Working Capital and Tax',
+            procedures: [
+              { title: 'Trade and Other Receivables', purpose: 'To verify existence, valuation, classification, and recoverability of receivables including platform receivables and other debtor balances. [IFRS 9; ISA 330]' },
+              { title: 'Prepayments and Deposits', purpose: 'To verify recognition and valuation of prepayments and deposits, ensuring only future economic benefits are carried as assets. [IAS 1; ISA 330]' },
+              { title: 'Trade and Other Payables / Accruals', purpose: 'To test completeness and accuracy of payables/accruals and detect unrecorded liabilities through subsequent payment and supporting schedule review. [ISA 330; IAS 37]' },
+              { title: 'Statutory and Tax Balances', purpose: 'To reconcile statutory/tax balances to filings and remittances and assess adequacy of current and deferred tax balances. [NTA 2025; IAS 12; ISA 330]' },
+              { title: 'Cash and Bank Balance Sheet Presentation', purpose: 'To verify bank/cash balances, restricted cash classification, and the resolution of material reconciling items at year-end. [ISA 505; ISA 330]' },
+            ],
+          },
+          {
+            title: 'Balance Sheet — Equity, Provisions and Financing',
+            procedures: [
+              { title: 'Equity Rollforward and Retained Earnings', purpose: 'To reconcile equity movements from opening to closing balances and confirm all changes are authorised, accurate, and properly presented. [IAS 1.106; ISA 330]' },
+              { title: 'Provisions and Contingent Liabilities (IAS 37)', purpose: 'To assess whether provisions and contingencies are complete, appropriately measured, and disclosed in line with IAS 37 criteria. [IAS 37; ISA 501]' },
+              { title: 'Borrowings and Lease Liabilities', purpose: 'To verify measurement/classification of borrowings and lease liabilities, including covenant impacts and financing disclosures. [IFRS 9; IFRS 16; IAS 1]' },
+            ],
+          },
+          {
+            title: 'Financial Statements and Disclosure Completion — Restaurant',
+            procedures: [
+              { title: 'Final Accounts Line-Item Coverage Check', purpose: 'To confirm that all material P&L and balance sheet line items have completed substantive procedures and documented conclusions. [ISA 330; ISA 230]' },
+              { title: 'Notes and Disclosure Adequacy', purpose: 'To verify completeness and consistency of disclosures relevant to restaurant operations, including key judgments and estimates. [IAS 1; IFRS disclosure requirements]' },
+              { title: 'Going Concern and Subsequent Events Wrap-Up', purpose: 'To evaluate going concern and subsequent events based on latest evidence and confirm alignment with disclosures and report conclusions. [ISA 570; ISA 560; IAS 10]' },
             ],
           },
         ],
@@ -484,6 +582,32 @@ const TEMPLATES = [
               { title: 'Professional Body Membership — Current Year', purpose: 'To confirm that the firm and relevant professional staff hold current membership of applicable professional bodies (ICAN, CIBN, NIM, CIPM, COREN, NSE, etc.), that practising licences are valid, and that annual fees are correctly expensed. [ISA 250; applicable professional body laws]' },
               { title: 'Professional Indemnity Insurance', purpose: 'To confirm that current professional indemnity insurance cover is in place and adequate for the scale of the firm\'s operations, and that premium payments are correctly treated in the financial statements. [ISA 250]' },
               { title: 'NOTAP Registration — Technology Transfer', purpose: 'To confirm that any agreements involving technology transfer, franchise, or technical services fees paid to foreign entities have been registered with the National Office for Technology Acquisition and Promotion (NOTAP) as required, and that related payments have the correct WHT treatment. [NOTAP Act; NTA 2025; ISA 250]' },
+            ],
+          },
+          {
+            title: 'P&L Line Items — Consulting Completion',
+            procedures: [
+              { title: 'Revenue, Cost of Sales and Gross Margin Completion', purpose: 'To complete final P&L validation over revenue, direct costs, and gross margin by linking balances to substantive contract testing and variance analytics. [ISA 330; ISA 520]' },
+              { title: 'Other Income and Other Expenses', purpose: 'To verify occurrence, classification, and disclosure of other income and other expenses including unusual or non-recurring items. [IAS 1; ISA 330]' },
+              { title: 'Administrative, Selling and Distribution Expenses', purpose: 'To test completeness, occurrence, cut-off, and classification of administrative and selling/distribution expenses and detect misclassifications or omitted accruals. [ISA 330]' },
+              { title: 'Finance Costs and Tax Expense Completion', purpose: 'To reconcile finance costs and tax expense to supporting schedules and confirm consistency with tax computations and disclosures. [IFRS 9; IAS 12]' },
+            ],
+          },
+          {
+            title: 'Balance Sheet Line Items — Consulting Completion',
+            procedures: [
+              { title: 'Non-Current Assets Completion (PPE, Intangibles, Investments, Goodwill)', purpose: 'To confirm material non-current asset balances are fully covered by substantive procedures, reconciliations, and impairment/classification assessments. [IAS 16; IAS 36; ISA 330]' },
+              { title: 'Current Assets Completion (Contract Assets, Receivables, Cash, Other Current Assets)', purpose: 'To confirm completeness, existence, valuation, and presentation of all material current asset balances including contract assets and receivables. [IFRS 9; IFRS 15; ISA 330]' },
+              { title: 'Current and Non-Current Liabilities Completion', purpose: 'To confirm completeness, measurement, and classification of liabilities including accruals, borrowings, leases, and statutory obligations. [IAS 1; IAS 37; IFRS 16; ISA 330]' },
+              { title: 'Equity, Retained Earnings and Reserves Completion', purpose: 'To verify equity movements and disclosures are fully supported, authorised, and consistent with profit allocation and prior period balances. [IAS 1.106; ISA 330]' },
+            ],
+          },
+          {
+            title: 'Financial Statements Completion — Consulting',
+            procedures: [
+              { title: 'Final Accounts Coverage Matrix (Mandatory)', purpose: 'To map every material P&L and balance sheet line item to completed substantive procedures and conclusions, and identify residual coverage gaps before sign-off. [ISA 330; ISA 230]' },
+              { title: 'Notes and Presentation Completion (IAS 1)', purpose: 'To verify note disclosures and statement presentation are complete, consistent, and compliant with IAS 1 and related standards. [IAS 1; IAS 8]' },
+              { title: 'End-to-End Engagement Readiness Check', purpose: 'To confirm evidence, conclusions, unresolved matters, and reporting implications are fully aligned for final sign-off. [ISA 220; ISA 700]' },
             ],
           },
         ],
