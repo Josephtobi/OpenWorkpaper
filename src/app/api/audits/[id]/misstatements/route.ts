@@ -65,7 +65,10 @@ export async function POST(req: Request, props: { params: Promise<{ id: string }
   try {
     const { id: auditId } = await props.params;
     const { session, response } = await assertAuditAccess(auditId);
-    if (response || !session?.user) return response;
+    if (response) return response;
+    if (!session?.user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
     const body = await req.json();
     const accountLabel = typeof body.accountLabel === 'string' ? body.accountLabel.trim() : '';

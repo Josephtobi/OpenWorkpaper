@@ -47,7 +47,10 @@ export async function PUT(req: Request, props: { params: Promise<{ id: string }>
   try {
     const { id: auditId } = await props.params;
     const { session, response } = await assertAccess(auditId);
-    if (response || !session?.user) return response;
+    if (response) return response;
+    if (!session?.user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
     const body = await req.json();
     const opinionType = typeof body.opinionType === 'string' ? body.opinionType.trim() : '';
