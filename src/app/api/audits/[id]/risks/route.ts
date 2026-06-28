@@ -2,7 +2,19 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
 import { canAccessAudit } from '@/lib/audit-access';
-import type { Assertion, RiskCategory, RiskRating } from '@prisma/client';
+
+type RiskCategory = 'FRAUD' | 'ERROR' | 'GOING_CONCERN' | 'COMPLIANCE' | 'RELATED_PARTY' | 'ESTIMATE';
+type RiskRating = 'HIGH' | 'MEDIUM' | 'LOW';
+type Assertion =
+  | 'EXISTENCE'
+  | 'COMPLETENESS'
+  | 'VALUATION'
+  | 'RIGHTS_OBLIGATIONS'
+  | 'CUTOFF'
+  | 'CLASSIFICATION'
+  | 'PRESENTATION'
+  | 'OCCURRENCE'
+  | 'ACCURACY';
 
 const VALID_CATEGORIES: RiskCategory[] = ['FRAUD', 'ERROR', 'GOING_CONCERN', 'COMPLIANCE', 'RELATED_PARTY', 'ESTIMATE'];
 const VALID_RATINGS: RiskRating[] = ['HIGH', 'MEDIUM', 'LOW'];
@@ -71,7 +83,7 @@ export async function POST(req: Request, props: { params: Promise<{ id: string }
         where: { auditId, isPresumed: true },
         select: { reference: true },
       });
-      const existingRefs = new Set(existing.map((item) => item.reference));
+      const existingRefs = new Set(existing.map((item: any) => item.reference));
 
       const toCreate = [
         {
@@ -181,7 +193,7 @@ export async function PUT(req: Request, props: { params: Promise<{ id: string }>
       const assertions = Array.isArray(body.assertions) ? (body.assertions as Assertion[]) : [];
       const uniqueAssertions = [...new Set(assertions.filter((item) => VALID_ASSERTIONS.includes(item)))];
 
-      await prisma.$transaction(async (tx) => {
+      await prisma.$transaction(async (tx: any) => {
         await tx.riskAssertion.deleteMany({ where: { riskId } });
         if (uniqueAssertions.length > 0) {
           await tx.riskAssertion.createMany({
@@ -198,13 +210,13 @@ export async function PUT(req: Request, props: { params: Promise<{ id: string }>
         where: { auditId, id: { in: procedureIds } },
         select: { id: true },
       });
-      const validIds = validProcedures.map((item) => item.id);
+      const validIds = validProcedures.map((item: any) => item.id);
 
-      await prisma.$transaction(async (tx) => {
+      await prisma.$transaction(async (tx: any) => {
         await tx.riskProcedureLink.deleteMany({ where: { riskId } });
         if (validIds.length > 0) {
           await tx.riskProcedureLink.createMany({
-            data: validIds.map((procedureId) => ({ riskId, procedureId })),
+            data: validIds.map((procedureId: string) => ({ riskId, procedureId })),
           });
         }
       });

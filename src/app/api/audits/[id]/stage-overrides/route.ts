@@ -3,7 +3,16 @@ import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
 import { canAccessAudit } from '@/lib/audit-access';
 import { evaluateAuditStages, getOrCreateAuditStageProgress } from '@/lib/engagement-gates';
-import type { EngagementStageKey } from '@prisma/client';
+
+type EngagementStageKey =
+  | 'ACCEPTANCE'
+  | 'UNDERSTANDING'
+  | 'RISK'
+  | 'MATERIALITY'
+  | 'SAMPLING'
+  | 'FIELDWORK'
+  | 'COMPLETION'
+  | 'OPINION';
 
 const VALID_STAGES: EngagementStageKey[] = [
   'ACCEPTANCE',

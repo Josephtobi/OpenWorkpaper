@@ -12,7 +12,7 @@ export default async function AuditLogsPage() {
     redirect('/login');
   }
 
-  let logs = [];
+  let logs: any[] = [];
   try {
     logs = await prisma.auditLog.findMany({
       orderBy: { timestamp: 'desc' },

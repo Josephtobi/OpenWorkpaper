@@ -3,7 +3,6 @@ import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
 import { canAccessProcedure } from '@/lib/audit-access';
 import { getProcedureComplianceStatus } from '@/lib/compliance-gates';
-import type { Prisma } from '@prisma/client';
 
 interface ProcedureQuestionUpdate {
   id?: string;
@@ -138,9 +137,9 @@ export async function PUT(
     }
 
     if (questions.length > 0) {
-      await prisma.$transaction(async (tx) => {
+      await prisma.$transaction(async (tx: any) => {
         for (const [index, question] of questions.entries()) {
-          const updatePayload: Prisma.ProcedureQuestionUncheckedUpdateInput = {
+          const updatePayload: any = {
             prompt: asOptionalString(question.prompt),
             guidance: asNullableString(question.guidance),
             questionType: asOptionalString(question.questionType),
@@ -170,7 +169,7 @@ export async function PUT(
               data: updatePayload,
             });
           } else if (question.prompt?.trim()) {
-            const createPayload: Prisma.ProcedureQuestionUncheckedCreateInput = {
+            const createPayload: any = {
               procedureId: params.id,
               prompt: question.prompt.trim(),
               guidance: question.guidance ?? null,

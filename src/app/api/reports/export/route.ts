@@ -27,7 +27,7 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: 'Unauthorized. Business Operations only.' }, { status: 403 });
     }
 
-    const procedures = await prisma.$queryRawUnsafe<ProcedureExport[]>(
+    const procedures = (await prisma.$queryRawUnsafe(
       `SELECT 
         a.title as auditTitle,
         a.status as auditStatus,
@@ -43,9 +43,9 @@ export async function GET(req: Request) {
       JOIN Audit a ON p.auditId = a.id
       LEFT JOIN TeamMember t ON p.assignedToId = t.id
       ORDER BY a.createdAt DESC, p.phase, p.displayOrder ASC`
-    );
+    )) as ProcedureExport[];
 
-    const reportData = procedures.map(p => {
+    const reportData = procedures.map((p: ProcedureExport) => {
       const prepDate = p.preparedDate ? new Date(p.preparedDate) : null;
       const revDate = p.reviewedDate ? new Date(p.reviewedDate) : null;
       
@@ -96,8 +96,8 @@ export async function GET(req: Request) {
     });
 
     const isaCoverageRows = questionCitations
-      .filter((citation) => citation.standardType === 'ISA' || citation.standardType === 'ISQM')
-      .map((citation) => ({
+      .filter((citation: any) => citation.standardType === 'ISA' || citation.standardType === 'ISQM')
+      .map((citation: any) => ({
         'Audit': citation.procedureQuestion.procedure.audit.title,
         'Phase': citation.procedureQuestion.procedure.phase,
         'Procedure': citation.procedureQuestion.procedure.title || 'Untitled',
@@ -124,7 +124,7 @@ export async function GET(req: Request) {
       },
       orderBy: { updatedAt: 'desc' },
     });
-    const exceptionRows = unresolvedExceptions.map((question) => ({
+    const exceptionRows = unresolvedExceptions.map((question: any) => ({
       'Audit': question.procedure.audit.title,
       'Phase': question.procedure.phase,
       'Procedure': question.procedure.title || 'Untitled',
@@ -143,7 +143,7 @@ export async function GET(req: Request) {
       },
       orderBy: { appliedAt: 'desc' },
     });
-    const applicationRows = templateApplications.map((item) => ({
+    const applicationRows = templateApplications.map((item: any) => ({
       'Audit': item.audit.title,
       'Template': item.template.name,
       'Template Version': item.templateVersion,
@@ -164,7 +164,7 @@ export async function GET(req: Request) {
       orderBy: { timestamp: 'desc' },
       take: 1000,
     });
-    const overrideRows = overrideLogs.map((log) => ({
+    const overrideRows = overrideLogs.map((log: any) => ({
       'Timestamp': log.timestamp.toISOString(),
       'Action': log.action,
       'Entity Type': log.entityType,

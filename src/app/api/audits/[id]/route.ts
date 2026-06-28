@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
 import { canAccessAudit } from '@/lib/audit-access';
-import type { Audit } from '@prisma/client';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -145,7 +144,7 @@ export async function PUT(req: Request, props: { params: Promise<{ id: string }>
 
     const data = await req.json();
     
-    const updateData: Partial<Audit> = {};
+    const updateData: Record<string, any> = {};
     const parseDate = (val: string | null | undefined) => {
       if (val === undefined) return undefined;
       if (!val || val === '') return null;
@@ -219,7 +218,7 @@ export async function PUT(req: Request, props: { params: Promise<{ id: string }>
       }
       
       // Re-fetch to get current state (using raw to be safe)
-      const rawAudits: Audit[] = await prisma.$queryRawUnsafe(
+      const rawAudits: any[] = await prisma.$queryRawUnsafe(
         `SELECT * FROM Audit WHERE id = ? LIMIT 1`,
         params.id
       );

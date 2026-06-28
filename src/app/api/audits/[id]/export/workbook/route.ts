@@ -82,7 +82,7 @@ export async function GET(_req: Request, props: { params: Promise<{ id: string }
     ];
     XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(completionRows), 'Completion Summary');
 
-    const misstatementRows = misstatements.map((item) => ({
+    const misstatementRows = misstatements.map((item: any) => ({
       Account: item.accountLabel,
       Assertion: item.assertion,
       Amount: Number(item.amount.toString()),
@@ -95,7 +95,7 @@ export async function GET(_req: Request, props: { params: Promise<{ id: string }
     }));
     XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(misstatementRows), 'Misstatements');
 
-    const coverageRows = completion.coverageMatrix.map((row) => ({
+    const coverageRows = completion.coverageMatrix.map((row: any) => ({
       Leadsheet: `${row.reference} - ${row.name}`,
       Caption: row.fsCaption,
       Amount: row.amount,
@@ -111,7 +111,7 @@ export async function GET(_req: Request, props: { params: Promise<{ id: string }
       const sheetName = cleanSheetName(`${procedure.phase.slice(0, 1)}-${i + 1}-${procedure.title || 'Procedure'}`);
       procedureIndexRows.push({ Sheet: sheetName, Phase: procedure.phase, Title: procedure.title || 'Untitled' });
 
-      const questionRows = procedure.questions.map((question) => ({
+      const questionRows = procedure.questions.map((question: any) => ({
         Prompt: question.prompt,
         ResponseText: question.responseText || '',
         ResponseBoolean: question.responseBoolean === null ? '' : question.responseBoolean ? 'Yes' : 'No',

@@ -1,41 +1,13 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
-import { Prisma } from '@prisma/client';
 import {
   cloneLeadsheetsFromAudit,
   cloneMasterLeadsheetsToAudit,
   isEngagementEntityTypeSet,
 } from '@/lib/master-leadsheet-library';
 
-type SourceAudit = Prisma.AuditGetPayload<{
-  include: {
-    teamMembers: true;
-    templateApplications: true;
-    procedureGroups: {
-      include: {
-        procedures: {
-          include: {
-            questions: {
-              include: {
-                citations: true;
-              };
-            };
-          };
-        };
-      };
-    };
-    procedures: {
-      include: {
-        questions: {
-          include: {
-            citations: true;
-          };
-        };
-      };
-    };
-  };
-}>;
+type SourceAudit = any;
 
 export async function GET() {
   const session = await getSession();
@@ -137,7 +109,7 @@ export async function POST(req: Request) {
       );
     }
 
-    audit = await prisma.$transaction(async (tx) => {
+    audit = await prisma.$transaction(async (tx: any) => {
       const createdAudit = await tx.audit.create({
         data: {
           title: data.title || `${sourceAudit.title} (Carryforward)`,
@@ -226,7 +198,7 @@ export async function POST(req: Request) {
 
           if (question.citations.length > 0) {
             await tx.procedureQuestionCitation.createMany({
-              data: question.citations.map((citation) => ({
+              data: question.citations.map((citation: any) => ({
                 procedureQuestionId: createdQuestion.id,
                 standardType: citation.standardType,
                 reference: citation.reference,
@@ -261,7 +233,7 @@ export async function POST(req: Request) {
 
       if (sourceAudit.templateApplications.length > 0) {
         await tx.templateApplication.createMany({
-          data: sourceAudit.templateApplications.map((application) => ({
+          data: sourceAudit.templateApplications.map((application: any) => ({
             auditId: createdAudit.id,
             templateId: application.templateId,
             templateVersion: application.templateVersion,
@@ -278,7 +250,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'entityType must be COMMERCIAL or NGO.' }, { status: 400 });
     }
 
-    audit = await prisma.$transaction(async (tx) => {
+    audit = await prisma.$transaction(async (tx: any) => {
       const createdAudit = await tx.audit.create({
         data: {
           title: data.title,

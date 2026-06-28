@@ -3,7 +3,8 @@ import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
 import { canAccessProcedure } from '@/lib/audit-access';
 import { refreshBindingCache, refreshProcedureBindingCache } from '@/lib/field-bindings';
-import type { BindType } from '@prisma/client';
+
+type BindType = 'LEADSHEET_TOTAL' | 'GROUPING_TOTAL' | 'ACCOUNT' | 'PRIOR_YEAR';
 
 const VALID_BIND_TYPES: BindType[] = ['LEADSHEET_TOTAL', 'GROUPING_TOTAL', 'ACCOUNT', 'PRIOR_YEAR'];
 

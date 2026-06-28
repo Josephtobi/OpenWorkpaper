@@ -2,9 +2,19 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
 import { canAccessAudit } from '@/lib/audit-access';
-import type { Assertion } from '@prisma/client';
 import { getCompletionSummary } from '@/lib/completion';
 import { toDecimal } from '@/lib/sampling';
+
+type Assertion =
+  | 'EXISTENCE'
+  | 'COMPLETENESS'
+  | 'VALUATION'
+  | 'RIGHTS_OBLIGATIONS'
+  | 'CUTOFF'
+  | 'CLASSIFICATION'
+  | 'PRESENTATION'
+  | 'OCCURRENCE'
+  | 'ACCURACY';
 
 const VALID_ASSERTIONS: Assertion[] = [
   'EXISTENCE',

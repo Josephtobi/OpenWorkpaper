@@ -4,7 +4,8 @@ import { getSession } from '@/lib/auth';
 import { canAccessAudit } from '@/lib/audit-access';
 import { computeLeadsheetTotal } from '@/lib/field-bindings';
 import { deriveSampleSize, riskReliabilityFactor, toDecimal } from '@/lib/sampling';
-import type { RiskRating } from '@prisma/client';
+
+type RiskRating = 'HIGH' | 'MEDIUM' | 'LOW';
 
 function toNumber(value: unknown): number {
   if (typeof value === 'number') return Number.isFinite(value) ? value : 0;

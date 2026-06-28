@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
 import { canAccessAudit } from '@/lib/audit-access';
-import type { FsStatement } from '@prisma/client';
+
+type FsStatement = 'SOFP' | 'PROFIT_LOSS' | 'EQUITY' | 'CASHFLOW';
 
 interface ImportRowInput {
   accountCode: string;
@@ -123,7 +124,7 @@ export async function POST(req: Request, props: { params: Promise<{ id: string }
       return NextResponse.json({ error: 'No valid rows found in payload.' }, { status: 400 });
     }
 
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx: any) => {
       if (isCurrentYear) {
         await tx.trialBalanceImport.updateMany({
           where: { auditId, isCurrentYear: true },

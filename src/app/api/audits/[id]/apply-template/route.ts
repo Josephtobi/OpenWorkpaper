@@ -59,7 +59,7 @@ export async function POST(req: Request, props: { params: Promise<{ id: string }
     await prisma.$transaction(async (tx: any) => {
       // 1. Process Groups
       const templateGroups = phase 
-        ? template.groups.filter(g => g.phase === phase)
+        ? template.groups.filter((g: any) => g.phase === phase)
         : template.groups;
 
       for (const tg of templateGroups) {
@@ -73,7 +73,7 @@ export async function POST(req: Request, props: { params: Promise<{ id: string }
         });
 
         const procs = await Promise.all(
-          tg.procedures.map(async (tp) => {
+          tg.procedures.map(async (tp: any) => {
             const created = await tx.procedure.create({
               data: {
                 auditId: params.id,
@@ -113,7 +113,7 @@ export async function POST(req: Request, props: { params: Promise<{ id: string }
 
               if (citations.length > 0) {
                 await tx.procedureQuestionCitation.createMany({
-                  data: citations.map((citation, cIndex) => ({
+                  data: citations.map((citation: any, cIndex: number) => ({
                     procedureQuestionId: createdQuestion.id,
                     standardType: citation.standardType,
                     reference: citation.reference,
@@ -132,12 +132,12 @@ export async function POST(req: Request, props: { params: Promise<{ id: string }
 
       // 2. Process Ungrouped Procedures
       const ungroupedToCopy = phase 
-        ? template.procedures.filter(p => p.phase === phase)
+        ? template.procedures.filter((p: any) => p.phase === phase)
         : template.procedures;
 
       if (ungroupedToCopy.length > 0) {
         const procs = await Promise.all(
-          ungroupedToCopy.map(async (tp) => {
+          ungroupedToCopy.map(async (tp: any) => {
             const created = await tx.procedure.create({
               data: {
                 auditId: params.id,
@@ -176,7 +176,7 @@ export async function POST(req: Request, props: { params: Promise<{ id: string }
 
               if (citations.length > 0) {
                 await tx.procedureQuestionCitation.createMany({
-                  data: citations.map((citation, cIndex) => ({
+                  data: citations.map((citation: any, cIndex: number) => ({
                     procedureQuestionId: createdQuestion.id,
                     standardType: citation.standardType,
                     reference: citation.reference,

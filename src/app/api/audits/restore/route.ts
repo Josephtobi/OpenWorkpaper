@@ -108,7 +108,7 @@ export async function POST(req: Request) {
       data = await req.json();
     }
 
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx: any) => {
       // 1. Create the main audit record
       const audit = await tx.audit.create({
         data: {
