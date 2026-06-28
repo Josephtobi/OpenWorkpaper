@@ -116,11 +116,11 @@ export async function getCompletionSummary(auditId: string): Promise<CompletionS
   ]);
 
   const corrected = misstatements
-    .filter((item) => item.isCorrected)
-    .reduce((sum, item) => sum + Math.abs(toNumber(item.amount)), 0);
+    .filter((item: any) => item.isCorrected)
+    .reduce((sum: number, item: any) => sum + Math.abs(toNumber(item.amount)), 0);
   const uncorrected = misstatements
-    .filter((item) => !item.isCorrected)
-    .reduce((sum, item) => sum + Math.abs(toNumber(item.amount)), 0);
+    .filter((item: any) => !item.isCorrected)
+    .reduce((sum: number, item: any) => sum + Math.abs(toNumber(item.amount)), 0);
 
   const overallMateriality = materiality ? toNumber(materiality.overallMateriality) : null;
   const performanceMateriality = materiality ? toNumber(materiality.performanceMateriality) : null;
@@ -134,7 +134,7 @@ export async function getCompletionSummary(auditId: string): Promise<CompletionS
     leadsheetTotals.set(leadsheetId, current + (toNumber(account.debit) - toNumber(account.credit)));
   }
 
-  const reviewedProcedures = procedures.filter((procedure) => Boolean(procedure.reviewedDate));
+  const reviewedProcedures = procedures.filter((procedure: any) => Boolean(procedure.reviewedDate));
   const coverageByLeadsheet = new Map<string, Set<Assertion>>();
   for (const procedure of reviewedProcedures) {
     if (!procedure.leadsheetId) continue;
@@ -142,7 +142,7 @@ export async function getCompletionSummary(auditId: string): Promise<CompletionS
       coverageByLeadsheet.set(procedure.leadsheetId, new Set<Assertion>());
     }
     const assertionSet = coverageByLeadsheet.get(procedure.leadsheetId)!;
-    for (const assertion of procedure.assertions.map((item) => item.assertion)) {
+    for (const assertion of procedure.assertions.map((item: any) => item.assertion)) {
       assertionSet.add(assertion);
     }
     for (const question of procedure.questions) {
@@ -152,7 +152,7 @@ export async function getCompletionSummary(auditId: string): Promise<CompletionS
     }
   }
 
-  const coverageMatrix = leadsheets.map((leadsheet) => {
+  const coverageMatrix = leadsheets.map((leadsheet: any) => {
     const coveredSet = coverageByLeadsheet.get(leadsheet.id) || new Set<Assertion>();
     const coveredAssertions = ASSERTIONS.filter((assertion) => coveredSet.has(assertion));
     const uncoveredAssertions = ASSERTIONS.filter((assertion) => !coveredSet.has(assertion));
@@ -172,7 +172,7 @@ export async function getCompletionSummary(auditId: string): Promise<CompletionS
     };
   });
 
-  const linkedSignificantRiskCount = significantRisks.filter((risk) => risk.links.length > 0).length;
+  const linkedSignificantRiskCount = significantRisks.filter((risk: any) => risk.links.length > 0).length;
 
   return {
     totals: {
@@ -189,7 +189,7 @@ export async function getCompletionSummary(auditId: string): Promise<CompletionS
     significantRiskCoverage: {
       total: significantRisks.length,
       linked: linkedSignificantRiskCount,
-      unlinkedReferences: significantRisks.filter((risk) => risk.links.length === 0).map((risk) => risk.reference),
+      unlinkedReferences: significantRisks.filter((risk: any) => risk.links.length === 0).map((risk: any) => risk.reference),
     },
     coverageMatrix,
   };

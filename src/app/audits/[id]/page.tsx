@@ -5,8 +5,16 @@ import { notFound, redirect } from 'next/navigation';
 import AuditTabs from '@/components/AuditTabs';
 import EditableAuditHeader from '@/components/EditableAuditHeader';
 import { getSession } from '@/lib/auth';
-import type { TeamMember } from '@prisma/client';
 import type { AuditWithRelations } from '@/lib/types';
+
+interface TeamMemberRaw {
+  id: string;
+  auditId: string;
+  userId: string | null;
+  name: string;
+  role: string | null;
+  email: string | null;
+}
 
 interface AuditRaw {
   id: string;
@@ -95,7 +103,7 @@ export default async function AuditDetail(props: { params: Promise<{ id: string 
 
   let auditData: {
     auditBase: AuditRaw;
-    teamMembers: TeamMember[];
+    teamMembers: TeamMemberRaw[];
     rawGroups: ProcedureGroupRaw[];
     proceduresWithRelations: (ProcedureRaw & { attachments: AttachmentRaw[]; messages: ProcedureMessageRaw[] })[];
   } | null = null;
@@ -114,13 +122,13 @@ export default async function AuditDetail(props: { params: Promise<{ id: string 
     }
     
     const auditBase = audits[0];
-    const teamMembers = await prisma.teamMember.findMany({
+    const teamMembers = (await prisma.teamMember.findMany({
       where: { auditId: auditBase.id }
-    });
+    })) as TeamMemberRaw[];
 
     const isGlobalManager = userRole === 'Business Operations';
     if (!isGlobalManager) {
-      const isMember = teamMembers.some((m: TeamMember) => m.userId === user.id);
+      const isMember = teamMembers.some((m) => m.userId === user.id);
       if (!isMember) {
         isUnauthorized = true;
       }

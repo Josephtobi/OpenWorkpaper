@@ -89,9 +89,9 @@ export default async function ProcedurePage(props: { params: Promise<{ id: strin
     }
 
     // 3. Fetch team members for the assignment dropdown
-    const teamMembers = await prisma.teamMember.findMany({
+    const teamMembers = (await prisma.teamMember.findMany({
       where: { auditId: params.id }
-    });
+    })) as TeamMember[];
 
     // Access Control
     const isGlobalManager = userRole === 'Business Operations';

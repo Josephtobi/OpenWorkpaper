@@ -204,7 +204,7 @@ export async function evaluateAuditStages(auditId: string): Promise<{
   }
 
   const stageMap = new Map<EngagementStageKey, StageWithOverrides>(
-    progressRows.map((row) => [row.stage, row as StageWithOverrides])
+    progressRows.map((row: any) => [row.stage, row as StageWithOverrides])
   );
 
   const stages = STAGE_SEQUENCE.map((stage): StageEvaluation => {

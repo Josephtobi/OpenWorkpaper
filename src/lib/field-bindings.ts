@@ -21,7 +21,7 @@ export async function computeLeadsheetTotal(leadsheetId: string): Promise<number
     where: { grouping: { leadsheetId }, import: { isCurrentYear: true } },
     select: { debit: true, credit: true },
   });
-  return accounts.reduce((sum, account) => sum + netAmount(account.debit, account.credit), 0);
+  return accounts.reduce((sum: number, account: any) => sum + netAmount(account.debit, account.credit), 0);
 }
 
 export async function computeGroupingTotal(groupingId: string): Promise<number> {
@@ -29,7 +29,7 @@ export async function computeGroupingTotal(groupingId: string): Promise<number> 
     where: { groupingId, import: { isCurrentYear: true } },
     select: { debit: true, credit: true },
   });
-  return accounts.reduce((sum, account) => sum + netAmount(account.debit, account.credit), 0);
+  return accounts.reduce((sum: number, account: any) => sum + netAmount(account.debit, account.credit), 0);
 }
 
 export async function computeAccountTotal(accountId: string): Promise<number> {
@@ -63,7 +63,7 @@ async function computePriorYearCaptionTotal(leadsheetId: string): Promise<number
     select: { debit: true, credit: true },
   });
 
-  return priorYearAccounts.reduce((sum, account) => sum + netAmount(account.debit, account.credit), 0);
+  return priorYearAccounts.reduce((sum: number, account: any) => sum + netAmount(account.debit, account.credit), 0);
 }
 
 export async function computeBindingValue(binding: {
