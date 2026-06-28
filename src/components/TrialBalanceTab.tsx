@@ -255,7 +255,10 @@ export default function TrialBalanceTab({ auditId }: TrialBalanceTabProps) {
 
         <div className="space-y-4">
           <div className="rounded-xl border border-slate-200 p-4">
-            <p className="text-sm font-semibold text-slate-800">Create Leadsheet</p>
+            <p className="text-sm font-semibold text-slate-800">Add Client-Specific Leadsheet</p>
+            <p className="mt-1 text-xs text-slate-500">
+              Use this only for client exceptions. Standard leadsheets are cloned from the master library.
+            </p>
             <div className="mt-2 grid grid-cols-2 gap-2">
               <input
                 value={leadRef}
@@ -290,12 +293,15 @@ export default function TrialBalanceTab({ auditId }: TrialBalanceTabProps) {
               onClick={() => void createLeadsheet()}
               className="mt-2 rounded bg-slate-700 px-3 py-1 text-xs font-semibold text-white"
             >
-              Add Leadsheet
+              Add Client-Specific Leadsheet
             </button>
           </div>
 
           <div className="rounded-xl border border-slate-200 p-4">
-            <p className="text-sm font-semibold text-slate-800">Create Grouping</p>
+            <p className="text-sm font-semibold text-slate-800">Add Client-Specific Grouping</p>
+            <p className="mt-1 text-xs text-slate-500">
+              Groupings added here apply only to this engagement file.
+            </p>
             <select
               value={groupingLeadsheetId}
               onChange={(e) => setGroupingLeadsheetId(e.target.value)}
@@ -326,7 +332,7 @@ export default function TrialBalanceTab({ auditId }: TrialBalanceTabProps) {
               onClick={() => void createGrouping()}
               className="mt-2 rounded bg-slate-700 px-3 py-1 text-xs font-semibold text-white"
             >
-              Add Grouping
+              Add Client-Specific Grouping
             </button>
           </div>
         </div>

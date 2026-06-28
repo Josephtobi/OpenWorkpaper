@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import Link from 'next/link';
-import { Component as LogoIcon, ClipboardList, Users, BookOpen, Home } from 'lucide-react';
+import { Component as LogoIcon, ClipboardList, Users, BookOpen, Home, LibraryBig } from 'lucide-react';
 import { getSession } from '@/lib/auth';
 import UserMenu from '@/components/UserMenu';
 
@@ -72,13 +72,22 @@ export default async function RootLayout({
                     </Link>
                   )}
                   {user.role === 'Business Operations' && (
-                    <Link 
-                      href="/admin/templates" 
-                      className="flex items-center space-x-2 text-blue-100 hover:text-white transition-all text-sm font-medium hover:bg-white/10 px-4 py-2 rounded-xl active:scale-95"
-                    >
-                      <BookOpen className="h-4 w-4" />
-                      <span>Templates</span>
-                    </Link>
+                    <>
+                      <Link
+                        href="/admin/templates"
+                        className="flex items-center space-x-2 text-blue-100 hover:text-white transition-all text-sm font-medium hover:bg-white/10 px-4 py-2 rounded-xl active:scale-95"
+                      >
+                        <BookOpen className="h-4 w-4" />
+                        <span>Templates</span>
+                      </Link>
+                      <Link
+                        href="/admin/master-leadsheets"
+                        className="flex items-center space-x-2 text-blue-100 hover:text-white transition-all text-sm font-medium hover:bg-white/10 px-4 py-2 rounded-xl active:scale-95"
+                      >
+                        <LibraryBig className="h-4 w-4" />
+                        <span>Master Leadsheets</span>
+                      </Link>
+                    </>
                   )}
                 </nav>
               )}

@@ -732,6 +732,30 @@ const TEMPLATES = [
   },
 ];
 
+const MASTER_LEADSHEETS = [
+  // UNIVERSAL
+  { entitySet: 'UNIVERSAL', reference: 'A', name: 'Property, Plant & Equipment', fsCaption: 'Property, plant and equipment', fsStatement: 'SOFP', sortOrder: 10, groupings: ['A-01|Land & buildings', 'A-02|Plant & equipment', 'A-03|Motor vehicles', 'A-04|Furniture & IT'] },
+  { entitySet: 'UNIVERSAL', reference: 'B', name: 'Intangible Assets', fsCaption: 'Intangible assets', fsStatement: 'SOFP', sortOrder: 20, groupings: ['B-01|Software & licences', 'B-02|Goodwill'] },
+  { entitySet: 'UNIVERSAL', reference: 'C', name: 'Investment Property', fsCaption: 'Investment property', fsStatement: 'SOFP', sortOrder: 30, groupings: ['C-01|Investment property'] },
+  { entitySet: 'UNIVERSAL', reference: 'D', name: 'Investments / Financial Assets', fsCaption: 'Investments', fsStatement: 'SOFP', sortOrder: 40, groupings: ['D-01|Investments'] },
+  { entitySet: 'UNIVERSAL', reference: 'E', name: 'Inventories', fsCaption: 'Inventories', fsStatement: 'SOFP', sortOrder: 50, groupings: ['E-01|Finished goods', 'E-02|Raw materials & consumables'] },
+  { entitySet: 'UNIVERSAL', reference: 'F', name: 'Trade & Other Receivables', fsCaption: 'Trade and other receivables', fsStatement: 'SOFP', sortOrder: 60, groupings: ['F-01|Trade receivables', 'F-02|Prepayments', 'F-03|Other receivables'] },
+  { entitySet: 'UNIVERSAL', reference: 'G', name: 'Cash & Bank', fsCaption: 'Cash and cash equivalents', fsStatement: 'SOFP', sortOrder: 70, groupings: ['G-01|Bank balances', 'G-02|Cash on hand'] },
+  { entitySet: 'UNIVERSAL', reference: 'H', name: 'Trade & Other Payables', fsCaption: 'Trade and other payables', fsStatement: 'SOFP', sortOrder: 80, groupings: ['H-01|Trade payables', 'H-02|Accruals', 'H-03|Other payables & statutory'] },
+  { entitySet: 'UNIVERSAL', reference: 'I', name: 'Borrowings', fsCaption: 'Borrowings', fsStatement: 'SOFP', sortOrder: 90, groupings: ['I-01|Bank loans', 'I-02|Other borrowings'] },
+  { entitySet: 'UNIVERSAL', reference: 'J', name: 'Leases', fsCaption: 'Lease liabilities / right-of-use assets', fsStatement: 'SOFP', sortOrder: 100, groupings: ['J-01|Right-of-use assets', 'J-02|Lease liabilities'] },
+  { entitySet: 'UNIVERSAL', reference: 'K', name: 'Provisions', fsCaption: 'Provisions', fsStatement: 'SOFP', sortOrder: 110, groupings: ['K-01|Provisions'] },
+  { entitySet: 'UNIVERSAL', reference: 'N', name: 'Expenses', fsCaption: 'Operating & administrative expenses', fsStatement: 'PROFIT_LOSS', sortOrder: 120, groupings: ['N-01|Staff costs', 'N-02|Admin & overheads', 'N-03|Depreciation & amortisation', 'N-04|Finance costs'] },
+  { entitySet: 'UNIVERSAL', reference: 'O', name: 'Taxation', fsCaption: 'Taxation', fsStatement: 'PROFIT_LOSS', sortOrder: 130, groupings: ['O-01|Current tax', 'O-02|Deferred tax'] },
+  // COMMERCIAL OVERLAY
+  { entitySet: 'COMMERCIAL', reference: 'L', name: 'Equity & Reserves', fsCaption: 'Equity', fsStatement: 'EQUITY', sortOrder: 140, groupings: ['L-01|Share capital', 'L-02|Share premium', 'L-03|Retained earnings', 'L-04|Other reserves'] },
+  { entitySet: 'COMMERCIAL', reference: 'M', name: 'Revenue', fsCaption: 'Revenue', fsStatement: 'PROFIT_LOSS', sortOrder: 150, groupings: ['M-01|Revenue', 'M-02|Cost of sales'] },
+  // NGO OVERLAY
+  { entitySet: 'NGO', reference: 'L', name: 'Funds', fsCaption: 'Funds and reserves', fsStatement: 'EQUITY', sortOrder: 140, groupings: ['L-01|Accumulated (unrestricted) fund', 'L-02|Restricted funds', 'L-03|Endowment fund'] },
+  { entitySet: 'NGO', reference: 'M', name: 'Income', fsCaption: 'Income', fsStatement: 'PROFIT_LOSS', sortOrder: 150, groupings: ['M-01|Grants & donations', 'M-02|Programme income', 'M-03|Other income'] },
+  { entitySet: 'NGO', reference: 'P', name: 'Deferred Grant Income', fsCaption: 'Deferred grant income', fsStatement: 'SOFP', sortOrder: 160, groupings: ['P-01|Deferred restricted grants'] },
+];
+
 function inferStandardType(reference) {
   const upper = reference.toUpperCase();
   if (upper.startsWith('ISA')) return 'ISA';
@@ -760,11 +784,67 @@ function stripCitationSuffix(purpose) {
   return purpose.replace(/\[[^\]]+\]\s*$/, '').trim();
 }
 
+async function seedMasterLeadsheetLibrary() {
+  let masterLeadsheetCount = 0;
+  let masterGroupingCount = 0;
+
+  console.log('🏛️  Seeding master leadsheet library...\n');
+
+  for (const entry of MASTER_LEADSHEETS) {
+    const masterLeadsheet = await prisma.masterLeadsheet.upsert({
+      where: {
+        entitySet_reference: {
+          entitySet: entry.entitySet,
+          reference: entry.reference,
+        },
+      },
+      update: {
+        name: entry.name,
+        fsCaption: entry.fsCaption,
+        fsStatement: entry.fsStatement,
+        sortOrder: entry.sortOrder,
+        active: true,
+      },
+      create: {
+        entitySet: entry.entitySet,
+        reference: entry.reference,
+        name: entry.name,
+        fsCaption: entry.fsCaption,
+        fsStatement: entry.fsStatement,
+        sortOrder: entry.sortOrder,
+        active: true,
+      },
+    });
+    masterLeadsheetCount++;
+
+    await prisma.masterGrouping.deleteMany({
+      where: { masterLeadsheetId: masterLeadsheet.id },
+    });
+
+    for (let index = 0; index < entry.groupings.length; index++) {
+      const [code, name] = entry.groupings[index].split('|');
+      await prisma.masterGrouping.create({
+        data: {
+          masterLeadsheetId: masterLeadsheet.id,
+          code,
+          name,
+          sortOrder: (index + 1) * 10,
+        },
+      });
+      masterGroupingCount++;
+    }
+  }
+
+  console.log(`   ✅ Master leadsheets: ${masterLeadsheetCount}`);
+  console.log(`   ✅ Master groupings : ${masterGroupingCount}\n`);
+}
+
 // ============================================================================
 // SEEDER LOGIC
 // ============================================================================
 
 async function seed() {
+  await seedMasterLeadsheetLibrary();
   console.log('🌱 Seeding audit templates...\n');
 
   let templateCount = 0;

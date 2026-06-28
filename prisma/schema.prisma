@@ -28,6 +28,7 @@ model Audit {
   auditNumber             String?
   objective               String?
   status                  String       @default("In Progress")
+  entityType              EntityTypeSet?
   pbcRequests             String?
   fieldworkStartDate      DateTime?
   fieldworkEndDate        DateTime?
@@ -299,6 +300,12 @@ enum FsStatement {
   CASHFLOW
 }
 
+enum EntityTypeSet {
+  UNIVERSAL
+  COMMERCIAL
+  NGO
+}
+
 enum BindType {
   LEADSHEET_TOTAL
   GROUPING_TOTAL
@@ -397,6 +404,33 @@ model TrialBalanceAccount {
 
   @@index([importId])
   @@index([groupingId])
+}
+
+model MasterLeadsheet {
+  id           String          @id @default(cuid())
+  reference    String
+  name         String
+  fsCaption    String
+  fsStatement  FsStatement
+  entitySet    EntityTypeSet
+  sortOrder    Int             @default(0)
+  active       Boolean         @default(true)
+  groupings    MasterGrouping[]
+
+  @@unique([entitySet, reference])
+  @@index([entitySet, active, sortOrder])
+}
+
+model MasterGrouping {
+  id                String          @id @default(cuid())
+  masterLeadsheetId String
+  masterLeadsheet   MasterLeadsheet @relation(fields: [masterLeadsheetId], references: [id], onDelete: Cascade)
+  code              String
+  name              String
+  sortOrder         Int             @default(0)
+
+  @@unique([masterLeadsheetId, code])
+  @@index([masterLeadsheetId, sortOrder])
 }
 
 model Leadsheet {

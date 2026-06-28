@@ -2,6 +2,11 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
 import { Prisma } from '@prisma/client';
+import {
+  cloneLeadsheetsFromAudit,
+  cloneMasterLeadsheetsToAudit,
+  isEngagementEntityTypeSet,
+} from '@/lib/master-leadsheet-library';
 
 type SourceAudit = Prisma.AuditGetPayload<{
   include: {
@@ -72,6 +77,7 @@ export async function POST(req: Request) {
   }
 
   const data = await req.json();
+  const requestedEntityType = isEngagementEntityTypeSet(data.entityType) ? data.entityType : null;
   let audit;
 
   if (typeof data.carryForwardFromAuditId === 'string' && data.carryForwardFromAuditId.trim()) {
@@ -123,6 +129,14 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Source audit not found for carryforward' }, { status: 404 });
     }
 
+    const resolvedEntityType = sourceAudit.entityType ?? requestedEntityType;
+    if (!resolvedEntityType) {
+      return NextResponse.json(
+        { error: 'entityType is required when carryforward source has no entity type.' },
+        { status: 400 }
+      );
+    }
+
     audit = await prisma.$transaction(async (tx) => {
       const createdAudit = await tx.audit.create({
         data: {
@@ -131,6 +145,7 @@ export async function POST(req: Request) {
           category: data.category ?? sourceAudit.category,
           auditNumber: data.auditNumber ?? null,
           objective: data.objective ?? sourceAudit.objective,
+          entityType: resolvedEntityType,
           status: data.status || 'In Progress',
           fieldworkStartDate: null,
           fieldworkEndDate: null,
@@ -242,6 +257,8 @@ export async function POST(req: Request) {
         await cloneProcedure(sourceProcedure, null);
       }
 
+      await cloneLeadsheetsFromAudit(tx, sourceAudit.id, createdAudit.id);
+
       if (sourceAudit.templateApplications.length > 0) {
         await tx.templateApplication.createMany({
           data: sourceAudit.templateApplications.map((application) => ({
@@ -257,15 +274,25 @@ export async function POST(req: Request) {
       return createdAudit;
     });
   } else {
-    audit = await prisma.audit.create({
-      data: {
-        title: data.title,
-        description: data.description,
-        category: data.category,
-        auditNumber: data.auditNumber,
-        objective: data.objective,
-        status: data.status || 'In Progress',
-      }
+    if (!requestedEntityType) {
+      return NextResponse.json({ error: 'entityType must be COMMERCIAL or NGO.' }, { status: 400 });
+    }
+
+    audit = await prisma.$transaction(async (tx) => {
+      const createdAudit = await tx.audit.create({
+        data: {
+          title: data.title,
+          description: data.description,
+          category: data.category,
+          auditNumber: data.auditNumber,
+          objective: data.objective,
+          entityType: requestedEntityType,
+          status: data.status || 'In Progress',
+        },
+      });
+
+      await cloneMasterLeadsheetsToAudit(tx, createdAudit.id, requestedEntityType);
+      return createdAudit;
     });
   }
 

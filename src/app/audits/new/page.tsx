@@ -10,6 +10,7 @@ interface ExistingAudit {
   title: string;
   auditNumber?: string | null;
   category?: string | null;
+  entityType?: 'COMMERCIAL' | 'NGO' | 'UNIVERSAL' | null;
 }
 
 export default function NewAudit() {
@@ -18,6 +19,7 @@ export default function NewAudit() {
   const [category, setCategory] = useState('');
   const [auditNumber, setAuditNumber] = useState('');
   const [objective, setObjective] = useState('');
+  const [entityType, setEntityType] = useState<'COMMERCIAL' | 'NGO'>('COMMERCIAL');
   const [carryForwardFromAuditId, setCarryForwardFromAuditId] = useState('');
   const [existingAudits, setExistingAudits] = useState<ExistingAudit[]>([]);
   const [loadingAudits, setLoadingAudits] = useState(true);
@@ -55,6 +57,7 @@ export default function NewAudit() {
           category,
           auditNumber,
           objective, 
+          entityType,
           status: 'In Progress',
           carryForwardFromAuditId: carryForwardFromAuditId || undefined,
         }),
@@ -88,6 +91,24 @@ export default function NewAudit() {
         
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
+            <label htmlFor="entityType" className="block text-sm font-medium text-gray-700 mb-1">
+              Entity Type
+            </label>
+            <select
+              id="entityType"
+              value={entityType}
+              onChange={(e) => setEntityType(e.target.value as 'COMMERCIAL' | 'NGO')}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white"
+            >
+              <option value="COMMERCIAL">COMMERCIAL</option>
+              <option value="NGO">NGO</option>
+            </select>
+            <p className="mt-2 text-xs text-gray-500">
+              Universal master leadsheets are always included. This selection adds the COMMERCIAL or NGO overlay.
+            </p>
+          </div>
+
+          <div>
             <label htmlFor="carryForward" className="block text-sm font-medium text-gray-700 mb-1">
               Carry Forward From Prior Audit (Optional)
             </label>
@@ -106,6 +127,7 @@ export default function NewAudit() {
                   {audit.title}
                   {audit.auditNumber ? ` (${audit.auditNumber})` : ''}
                   {audit.category ? ` - ${audit.category}` : ''}
+                  {audit.entityType ? ` [${audit.entityType}]` : ''}
                 </option>
               ))}
             </select>
