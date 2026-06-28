@@ -772,11 +772,15 @@ async function seed() {
   let procedureCount = 0;
 
   for (const template of TEMPLATES) {
-    console.log(`📄 Creating template: ${template.name}`);
+    console.log(`📄 Seeding template: ${template.name}`);
 
-    // 1. Create the AuditTemplate
-    const auditTemplate = await prisma.auditTemplate.create({
-      data: {
+    // 1. Upsert template header so seeding is idempotent across redeploys.
+    const auditTemplate = await prisma.auditTemplate.upsert({
+      where: { name: template.name },
+      update: {
+        description: template.description,
+      },
+      create: {
         name: template.name,
         description: template.description,
       },
@@ -784,7 +788,16 @@ async function seed() {
     templateCount++;
     console.log(`   ✅ Template ID: ${auditTemplate.id}`);
 
-    // 2. Iterate over phases and groups
+    // 2. Clear existing groups/procedures/questions for this template, then rebuild.
+    // Keep template row stable so references by template name remain valid.
+    await prisma.templateProcedure.deleteMany({
+      where: { templateId: auditTemplate.id },
+    });
+    await prisma.templateGroup.deleteMany({
+      where: { templateId: auditTemplate.id },
+    });
+
+    // 3. Iterate over phases and groups
     for (const phaseData of template.phases) {
       const phaseName = phaseData.phase;
       let groupOrder = 0;
