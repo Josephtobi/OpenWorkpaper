@@ -111,7 +111,7 @@ export async function PUT(req: Request, props: { params: Promise<{ id: string }>
       }),
     }));
 
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx: any) => {
       // Update template details
       await tx.auditTemplate.update({
         where: { id: params.id },

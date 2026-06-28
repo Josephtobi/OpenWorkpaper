@@ -1,28 +1,5 @@
 type EntityTypeSet = 'UNIVERSAL' | 'COMMERCIAL' | 'NGO';
-type TxClient = {
-  masterLeadsheet: {
-    findMany: (args: Record<string, unknown>) => Promise<Array<{
-      reference: string;
-      name: string;
-      fsCaption: string;
-      fsStatement: string;
-      groupings: Array<{ code: string; name: string }>;
-    }>>;
-  };
-  leadsheet: {
-    create: (args: Record<string, unknown>) => Promise<{ id: string }>;
-    findMany: (args: Record<string, unknown>) => Promise<Array<{
-      reference: string;
-      name: string;
-      fsCaption: string;
-      fsStatement: string;
-      groupings: Array<{ code: string; name: string }>;
-    }>>;
-  };
-  grouping: {
-    create: (args: Record<string, unknown>) => Promise<unknown>;
-  };
-};
+type TxClient = any;
 
 const MASTER_BASE_SET: EntityTypeSet = 'UNIVERSAL';
 const ENGAGEMENT_ENTITY_SETS: EntityTypeSet[] = ['COMMERCIAL', 'NGO'];

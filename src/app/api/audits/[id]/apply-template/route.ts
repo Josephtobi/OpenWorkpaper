@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
-import type { Procedure } from '@prisma/client';
 import { buildDefaultQuestionFromProcedure, normalizeQuestionType, parseBracketCitations } from '@/lib/compliance';
 
 function getTemplateQuestionId(question: unknown): string | null {
@@ -55,9 +54,9 @@ export async function POST(req: Request, props: { params: Promise<{ id: string }
       return NextResponse.json({ error: 'Template not found' }, { status: 404 });
     }
 
-    const createdProcedures: Procedure[] = [];
+    const createdProcedures: any[] = [];
 
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: any) => {
       // 1. Process Groups
       const templateGroups = phase 
         ? template.groups.filter(g => g.phase === phase)
