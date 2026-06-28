@@ -1,8 +1,11 @@
-import { PrismaClient } from '@prisma/client';
-import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
+import * as prismaClientPkg from '@prisma/client';
+import * as prismaAdapterPkg from '@prisma/adapter-better-sqlite3';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+const { PrismaClient } = prismaClientPkg;
+const { PrismaBetterSqlite3 } = prismaAdapterPkg;
 
 const dbUrl = process.env.DATABASE_URL || 'file:prisma/data/dev.db';
 const sqliteInput = { url: dbUrl.replace(/^file:/, '') };

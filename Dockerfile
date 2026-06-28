@@ -30,6 +30,8 @@ WORKDIR /app
 
 ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
+ENV PREFILL_QUESTIONS_FILE /app/Prefill_Questions_All.md
+ENV PRISMA_SCHEMA_MODE push
 
 # Create a system user and group
 RUN groupadd --system --gid 1001 nodejs

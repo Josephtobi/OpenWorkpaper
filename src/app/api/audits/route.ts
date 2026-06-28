@@ -269,6 +269,32 @@ export async function POST(req: Request) {
     });
   }
 
+  // Bootstrap presumed fraud risks on every engagement.
+  await prisma.risk.createMany({
+    data: [
+      {
+        auditId: audit.id,
+        reference: 'FR-REV',
+        description: 'Presumed fraud risk: improper revenue recognition',
+        category: 'FRAUD',
+        isSignificant: true,
+        isPresumed: true,
+        likelihood: 'HIGH',
+        magnitude: 'HIGH',
+      },
+      {
+        auditId: audit.id,
+        reference: 'FR-MGT',
+        description: 'Presumed fraud risk: management override of controls',
+        category: 'FRAUD',
+        isSignificant: true,
+        isPresumed: true,
+        likelihood: 'HIGH',
+        magnitude: 'HIGH',
+      },
+    ],
+  });
+
   // Log the action
   await prisma.auditLog.create({
     data: {

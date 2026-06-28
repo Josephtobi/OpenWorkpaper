@@ -36,12 +36,23 @@ model Audit {
   milestoneAttachmentName  String?
   pbcAttachmentUrl         String?
   pbcAttachmentName        String?
+  engagementAccepted       Boolean      @default(false)
+  engagementLetterSigned   Boolean      @default(false)
   createdAt               DateTime     @default(now())
   updatedAt               DateTime     @updatedAt
   procedures              Procedure[]
   procedureGroups         ProcedureGroup[]
   teamMembers             TeamMember[]
   templateApplications    TemplateApplication[]
+  stageProgress           AuditStageProgress[]
+  stageOverrides          AuditStageOverride[]
+  trialBalanceImports     TrialBalanceImport[]
+  leadsheets              Leadsheet[]
+  risks                   Risk[]
+  materialityProfile      MaterialityProfile?
+  samplingPlans           SamplingPlan[]
+  misstatements           Misstatement[]
+  opinion                 AuditOpinion?
 }
 
 model TeamMember {
@@ -77,6 +88,7 @@ model Procedure {
   reviewedBy   String?
   reviewedDate DateTime?
   assignedToId String?
+  leadsheetId  String?
   displayOrder Int          @default(0)
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
@@ -86,6 +98,11 @@ model Procedure {
   audit        Audit        @relation(fields: [auditId], references: [id], onDelete: Cascade)
   group        ProcedureGroup? @relation(fields: [groupId], references: [id], onDelete: Cascade)
   assignedTo   TeamMember? @relation("ProcedureAssignment", fields: [assignedToId], references: [id], onDelete: SetNull)
+  leadsheet    Leadsheet?  @relation(fields: [leadsheetId], references: [id], onDelete: SetNull)
+  bindings     FieldBinding[]
+  assertions   ProcedureAssertion[]
+  riskLinks    RiskProcedureLink[]
+  misstatements Misstatement[]
 }
 
 model ProcedureGroup {
@@ -256,4 +273,310 @@ model AuditLog {
   details     String
   performedBy String?
   timestamp   DateTime @default(now())
+}
+
+enum EngagementStageKey {
+  ACCEPTANCE
+  UNDERSTANDING
+  RISK
+  MATERIALITY
+  SAMPLING
+  FIELDWORK
+  COMPLETION
+  OPINION
+}
+
+enum StageStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum FsStatement {
+  SOFP
+  PROFIT_LOSS
+  EQUITY
+  CASHFLOW
+}
+
+enum BindType {
+  LEADSHEET_TOTAL
+  GROUPING_TOTAL
+  ACCOUNT
+  PRIOR_YEAR
+}
+
+enum RiskCategory {
+  FRAUD
+  ERROR
+  GOING_CONCERN
+  COMPLIANCE
+  RELATED_PARTY
+  ESTIMATE
+}
+
+enum RiskRating {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum Assertion {
+  EXISTENCE
+  COMPLETENESS
+  VALUATION
+  RIGHTS_OBLIGATIONS
+  CUTOFF
+  CLASSIFICATION
+  PRESENTATION
+  OCCURRENCE
+  ACCURACY
+}
+
+model AuditStageProgress {
+  id            String             @id @default(uuid())
+  auditId        String
+  stage          EngagementStageKey
+  status         StageStatus        @default(NOT_STARTED)
+  tailoringNotes String?
+  completedAt    DateTime?
+  completedBy    String?
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+
+  audit          Audit              @relation(fields: [auditId], references: [id], onDelete: Cascade)
+  overrides      AuditStageOverride[]
+
+  @@unique([auditId, stage])
+  @@index([auditId, status])
+}
+
+model AuditStageOverride {
+  id              String            @id @default(uuid())
+  auditId          String
+  stageProgressId  String
+  gateCode         String
+  gateMessage      String
+  reason           String
+  overriddenBy     String?
+  createdAt        DateTime          @default(now())
+
+  audit            Audit             @relation(fields: [auditId], references: [id], onDelete: Cascade)
+  stageProgress    AuditStageProgress @relation(fields: [stageProgressId], references: [id], onDelete: Cascade)
+
+  @@index([auditId, createdAt])
+  @@index([stageProgressId])
+}
+
+model TrialBalanceImport {
+  id            String               @id @default(uuid())
+  auditId        String
+  periodLabel    String
+  isCurrentYear  Boolean              @default(true)
+  source         String
+  importedBy     String?
+  importedAt     DateTime             @default(now())
+  locked         Boolean              @default(false)
+  accounts       TrialBalanceAccount[]
+  audit          Audit                @relation(fields: [auditId], references: [id], onDelete: Cascade)
+
+  @@index([auditId, periodLabel])
+}
+
+model TrialBalanceAccount {
+  id            String            @id @default(uuid())
+  importId       String
+  accountCode    String
+  accountName    String
+  debit          Decimal           @default(0)
+  credit         Decimal           @default(0)
+  groupingId     String?
+  import         TrialBalanceImport @relation(fields: [importId], references: [id], onDelete: Cascade)
+  grouping       Grouping?         @relation(fields: [groupingId], references: [id], onDelete: SetNull)
+  bindings       FieldBinding[]    @relation("AccountBindings")
+
+  @@index([importId])
+  @@index([groupingId])
+}
+
+model Leadsheet {
+  id          String        @id @default(uuid())
+  auditId      String
+  reference    String
+  name         String
+  fsCaption    String
+  fsStatement  FsStatement
+  groupings    Grouping[]
+  procedures   Procedure[]
+  bindings     FieldBinding[]
+  samplingPlans SamplingPlan[]
+  misstatements Misstatement[]
+  audit        Audit         @relation(fields: [auditId], references: [id], onDelete: Cascade)
+
+  @@unique([auditId, reference])
+  @@index([auditId, fsStatement])
+}
+
+model Grouping {
+  id           String               @id @default(uuid())
+  code         String
+  name         String
+  leadsheetId   String
+  leadsheet     Leadsheet            @relation(fields: [leadsheetId], references: [id], onDelete: Cascade)
+  accounts      TrialBalanceAccount[]
+  bindings      FieldBinding[]
+
+  @@unique([leadsheetId, code])
+  @@index([leadsheetId])
+}
+
+model FieldBinding {
+  id            String      @id @default(uuid())
+  procedureId    String
+  questionRef    String
+  bindType       BindType
+  leadsheetId    String?
+  groupingId     String?
+  accountId      String?
+  cachedValue    Decimal?
+  cachedAt       DateTime?
+  procedure      Procedure   @relation(fields: [procedureId], references: [id], onDelete: Cascade)
+  leadsheet      Leadsheet?  @relation(fields: [leadsheetId], references: [id], onDelete: SetNull)
+  grouping       Grouping?   @relation(fields: [groupingId], references: [id], onDelete: SetNull)
+  account        TrialBalanceAccount? @relation("AccountBindings", fields: [accountId], references: [id], onDelete: SetNull)
+
+  @@index([procedureId])
+  @@index([leadsheetId])
+  @@index([groupingId])
+  @@index([accountId])
+}
+
+model Risk {
+  id            String            @id @default(uuid())
+  auditId        String
+  reference      String
+  description    String
+  category       RiskCategory
+  isSignificant  Boolean           @default(false)
+  isPresumed     Boolean           @default(false)
+  likelihood     RiskRating
+  magnitude      RiskRating
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  audit          Audit             @relation(fields: [auditId], references: [id], onDelete: Cascade)
+  assertions     RiskAssertion[]
+  links          RiskProcedureLink[]
+  samplingPlans  SamplingPlan[]
+
+  @@unique([auditId, reference])
+  @@index([auditId, isSignificant])
+}
+
+model RiskAssertion {
+  id         String     @id @default(uuid())
+  riskId      String
+  assertion   Assertion
+  risk        Risk       @relation(fields: [riskId], references: [id], onDelete: Cascade)
+
+  @@unique([riskId, assertion])
+}
+
+model ProcedureAssertion {
+  id           String     @id @default(uuid())
+  procedureId   String
+  assertion     Assertion
+  procedure     Procedure  @relation(fields: [procedureId], references: [id], onDelete: Cascade)
+
+  @@unique([procedureId, assertion])
+}
+
+model RiskProcedureLink {
+  id           String    @id @default(uuid())
+  riskId        String
+  procedureId   String
+  risk          Risk      @relation(fields: [riskId], references: [id], onDelete: Cascade)
+  procedure     Procedure @relation(fields: [procedureId], references: [id], onDelete: Cascade)
+
+  @@unique([riskId, procedureId])
+  @@index([procedureId])
+}
+
+model MaterialityProfile {
+  id                    String    @id @default(uuid())
+  auditId                String    @unique
+  benchmark              String
+  benchmarkValue         Decimal   @default(0)
+  percentage             Decimal   @default(0)
+  overallMateriality     Decimal   @default(0)
+  performanceMateriality Decimal   @default(0)
+  trivialThreshold       Decimal   @default(0)
+  specificMateriality    Decimal?
+  notes                  String?
+  updatedBy              String?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+  audit                  Audit     @relation(fields: [auditId], references: [id], onDelete: Cascade)
+}
+
+model SamplingPlan {
+  id                   String    @id @default(uuid())
+  auditId               String
+  leadsheetId           String?
+  riskId                String?
+  areaLabel             String
+  populationValue       Decimal   @default(0)
+  tolerableMisstatement Decimal   @default(0)
+  expectedMisstatement  Decimal   @default(0)
+  confidencePercent     Int       @default(95)
+  reliabilityFactor     Decimal   @default(1)
+  suggestedSampleSize   Int       @default(0)
+  selectedSampleSize    Int       @default(0)
+  overrideReason        String?
+  status                String    @default("Draft")
+  createdBy             String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  audit                 Audit     @relation(fields: [auditId], references: [id], onDelete: Cascade)
+  leadsheet             Leadsheet? @relation(fields: [leadsheetId], references: [id], onDelete: SetNull)
+  risk                  Risk?     @relation(fields: [riskId], references: [id], onDelete: SetNull)
+
+  @@index([auditId, areaLabel])
+  @@index([riskId])
+}
+
+model Misstatement {
+  id            String     @id @default(uuid())
+  auditId        String
+  procedureId    String?
+  leadsheetId    String?
+  accountLabel   String
+  assertion      Assertion
+  amount         Decimal    @default(0)
+  direction      String     @default("UNDERSTATEMENT")
+  isCorrected    Boolean    @default(false)
+  description    String?
+  createdBy      String?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  audit          Audit      @relation(fields: [auditId], references: [id], onDelete: Cascade)
+  procedure      Procedure? @relation(fields: [procedureId], references: [id], onDelete: SetNull)
+  leadsheet      Leadsheet? @relation(fields: [leadsheetId], references: [id], onDelete: SetNull)
+
+  @@index([auditId, isCorrected])
+  @@index([procedureId])
+  @@index([leadsheetId])
+}
+
+model AuditOpinion {
+  id                 String   @id @default(uuid())
+  auditId             String   @unique
+  opinionType         String
+  basis               String?
+  requiresModification Boolean @default(false)
+  modifiedDecisionReason String?
+  selectedBy          String?
+  selectedAt          DateTime?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  audit               Audit    @relation(fields: [auditId], references: [id], onDelete: Cascade)
 }

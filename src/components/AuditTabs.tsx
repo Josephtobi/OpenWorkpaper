@@ -7,9 +7,15 @@ import MilestonesTab from './MilestonesTab';
 import TeamMembersTab from './TeamMembersTab';
 import PBCRequestsTab from './PBCRequestsTab';
 import ProcedureMiniMap from './ProcedureMiniMap';
+import StageProgressPanel from './StageProgressPanel';
+import TrialBalanceTab from './TrialBalanceTab';
+import RiskEngineTab from './RiskEngineTab';
+import CompletionEngineTab from './CompletionEngineTab';
+import OpinionEngineTab from './OpinionEngineTab';
+import ExportWorkbookButton from './ExportWorkbookButton';
 import type { AuditWithRelations } from '@/lib/types';
 
-const PHASES = ['Planning', 'Fieldwork', 'Reporting', 'PBC Requests', 'Milestones', 'Team Members'];
+const PHASES = ['Planning', 'Risk Engine', 'TB Mapping', 'Fieldwork', 'Completion Engine', 'Opinion Engine', 'Reporting', 'PBC Requests', 'Milestones', 'Team Members'];
 const PHASE_NUMBERS: Record<string, string> = {
   'Planning': 'Phase 1',
   'Fieldwork': 'Phase 2',
@@ -100,6 +106,10 @@ export default function AuditTabs({
 
         {/* Right Side: Main Content */}
         <div className="flex-1 bg-white rounded-[2.5rem] border border-gray-200 p-10 min-h-[700px] shadow-2xl overflow-hidden">
+          <StageProgressPanel auditId={audit.id} activePhase={activePhase} />
+          <div className="mb-4 flex justify-end">
+            <ExportWorkbookButton auditId={audit.id} auditTitle={audit.title} />
+          </div>
           <div className="flex justify-between items-center mb-10 border-b border-gray-100 pb-6">
             <h2 className="text-2xl font-bold text-gray-900 tracking-tight flex items-center">
               <span className="w-1.5 h-7 bg-blue-600 rounded-full mr-4 shadow-sm" />
@@ -119,6 +129,14 @@ export default function AuditTabs({
               <TeamMembersTab auditId={audit.id} initialTeamMembers={audit.teamMembers} user={user} />
             ) : activePhase === 'PBC Requests' ? (
               <PBCRequestsTab audit={audit} />
+            ) : activePhase === 'Risk Engine' ? (
+              <RiskEngineTab auditId={audit.id} />
+            ) : activePhase === 'TB Mapping' ? (
+              <TrialBalanceTab auditId={audit.id} />
+            ) : activePhase === 'Completion Engine' ? (
+              <CompletionEngineTab auditId={audit.id} />
+            ) : activePhase === 'Opinion Engine' ? (
+              <OpinionEngineTab auditId={audit.id} />
             ) : (
               <ProcedureList 
                 auditId={audit.id} 

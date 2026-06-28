@@ -1,6 +1,9 @@
 // seed.mjs
-import { PrismaClient } from '@prisma/client';
-import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
+import * as prismaClientPkg from '@prisma/client';
+import * as prismaAdapterPkg from '@prisma/adapter-better-sqlite3';
+
+const { PrismaClient } = prismaClientPkg;
+const { PrismaBetterSqlite3 } = prismaAdapterPkg;
 
 const dbUrl = process.env.DATABASE_URL || 'file:prisma/data/dev.db';
 const sqliteInput = { url: dbUrl.replace(/^file:/, '') };
@@ -8,7 +11,7 @@ const adapter = new PrismaBetterSqlite3(sqliteInput);
 const prisma = new PrismaClient({ adapter });
 
 // ============================================================================
-// DATA – All 5 templates (converted from original seed.js)
+// DATA – Template library
 // ============================================================================
 
 const TEMPLATES = [
@@ -54,6 +57,15 @@ const TEMPLATES = [
               { title: 'IT Environment & General IT Controls Assessment', purpose: 'To understand and document the client\'s IT general controls (access controls, change management, operations) and assess the risk of material misstatement arising from IT system weaknesses, per ISA 315. [ISA 315.A56-A67]' },
               { title: 'Fraud Risk Assessment — Discussion & Documentation', purpose: 'To conduct and document the engagement team discussion on the susceptibility of the financial statements to material misstatement due to fraud, including identification of fraud risk factors, per ISA 240.15. [ISA 240.15; ISA 240.26]' },
               { title: 'Analytical Procedures — Planning', purpose: 'To apply analytical procedures at the planning stage to identify unusual transactions, balances, or trends that may indicate areas of higher risk requiring focused audit attention, per ISA 520. [ISA 520.3; ISA 315.6]' },
+            ],
+          },
+          {
+            title: 'Audit Evidence — Methodology',
+            procedures: [
+              { title: 'Audit Sampling — Design, Selection & Evaluation (ISA 530)', purpose: 'To design and evaluate sampling approaches for substantive testing, documenting population, selection method, sample size rationale, projection of misstatements, and conclusions under ISA 530. [ISA 530; ISA 450]' },
+              { title: 'Accounting Estimates — Audit Approach (ISA 540 Revised)', purpose: 'To audit material accounting estimates by evaluating methods, assumptions, data, estimation uncertainty, management bias indicators, and disclosure adequacy under ISA 540 and IAS 1. [ISA 540; IAS 1.125]' },
+              { title: 'Using the Work of an Auditor\'s Expert (ISA 620)', purpose: 'To evaluate competence, capability, objectivity, scope, and relevance of expert work used as audit evidence, and conclude on adequacy under ISA 620. [ISA 620]' },
+              { title: 'Journal Entry Testing — Management Override (ISA 240.32)', purpose: 'To perform mandatory risk-based journal-entry testing addressing management override risk, including extraction criteria, support testing, exception evaluation, and conclusion under ISA 240. [ISA 240.32]' },
             ],
           },
           {
@@ -183,7 +195,7 @@ const TEMPLATES = [
               { title: 'Revenue Journal Entry Testing', purpose: 'To identify and test unusual or irregular journal entries posted to revenue accounts, including manual journals, late adjustments, and entries posted by senior personnel, to address the presumed fraud risk of improper revenue recognition per ISA 240.32. [ISA 240.32]' },
               { title: 'Contract Liability and Deferred Revenue Assessment', purpose: 'To verify that amounts received from customers for performance obligations not yet satisfied are correctly recognised as contract liabilities rather than revenue, per IFRS 15.106. [IFRS 15.106]' },
               { title: 'Related Party Revenue Assessment', purpose: 'To identify all revenue transactions with related parties, confirm they are transacted at arm\'s length or that any non-arm\'s length terms are adequately disclosed, per ISA 550 and IAS 24. [ISA 550; IAS 24]' },
-              { title: 'VAT on Revenue — Compliance Review (NTA 2025)', purpose: 'To verify that VAT has been correctly charged at 7.5% on all taxable supplies, that VAT returns reconcile to the revenue ledger, and that VAT remittances are current with no outstanding liabilities per the Nigeria Tax Act 2025. [NTA 2025; FIRS regulations]' },
+              { title: 'VAT on Revenue — Compliance Review (NTA 2025)', purpose: 'To verify that VAT has been applied using the statutory rate in force for the audit period, that VAT returns reconcile to the revenue ledger, and that remittances are current with no outstanding liabilities. [NTA 2025; FIRS regulations]' },
               { title: 'Export Revenue — Foreign Currency & Variable Consideration', purpose: 'To verify that export revenue is correctly translated at the transaction date spot rate per IAS 21, that variable consideration elements are estimated and constrained appropriately per IFRS 15.56, and that foreign currency debtors are retranslated at the closing rate. [IFRS 15.56; IAS 21]' },
             ],
           },
@@ -351,7 +363,7 @@ const TEMPLATES = [
   {
     name: 'Fieldwork — Oil & Gas Services',
     description:
-      'Substantive procedures for oil and gas service companies. Covers IFRS 6 E&E assets, PPT computation (NTA 2025), NUPRC compliance, ARO decommissioning provisions (IAS 37), NDDC levy, and NOGICD Act local content requirements.',
+      'Substantive procedures for oil and gas service companies. Covers IFRS 6 E&E assets, upstream taxation (HCT/CIT or legacy PPT where applicable), NUPRC compliance, ARO decommissioning provisions (IAS 37), NDDC levy, and NOGICD Act local content requirements.',
     phases: [
       {
         phase: 'Fieldwork',
@@ -361,7 +373,7 @@ const TEMPLATES = [
             procedures: [
               { title: 'Revenue Recognition for Service Contracts (IFRS 15)', purpose: 'To assess whether revenue from oil and gas service contracts is recognised over time or at a point in time based on the specific terms of each contract per IFRS 15.35, and that the method selected appropriately reflects the pattern of transfer of control. [IFRS 15.35]' },
               { title: 'Lifting Entitlements — Reconciliation', purpose: 'To reconcile oil liftings during the period to the production allocation, confirm revenue is recognised on the entitlement method, and identify any lifting imbalances that require accrual or deferral. [IFRS 15; industry practice]' },
-              { title: 'PPT Treatment — Revenue Net of Royalties', purpose: 'To verify that Petroleum Profits Tax and royalties have been correctly treated in the financial statements, and assess whether the entity presents revenue gross or net of government take in accordance with IFRS 15.B34. [IFRS 15.B34; PPTA as modified by NTA 2025]' },
+              { title: 'Tax Treatment — Revenue, Royalties and Government Take', purpose: 'To verify treatment and presentation of royalties/government take and related tax impacts under the applicable upstream tax framework (HCT/CIT or legacy PPT where applicable), including gross-vs-net assessment under IFRS 15.B34. [IFRS 15.B34; NTA 2025; PIA 2021]' },
               { title: 'Signature Bonuses — Amortisation', purpose: 'To verify that signature bonuses paid for licence awards are capitalised and amortised over the licence period on a systematic basis, consistent with the entity\'s accounting policy. [IFRS 6; IAS 38]' },
               { title: 'Foreign Currency Revenue — Translation (IAS 21)', purpose: 'To verify that USD-denominated revenue and receivables are translated at the correct exchange rate per IAS 21, and that translation gains and losses are recognised in profit or loss. [IAS 21]' },
             ],
@@ -387,8 +399,8 @@ const TEMPLATES = [
           {
             title: 'Taxation — Oil & Gas',
             procedures: [
-              { title: 'Petroleum Profits Tax Computation (NTA 2025)', purpose: 'To verify the PPT computation under the applicable provisions of the NTA 2025, including the correct tax rate (65.75% for PSC and JOA, 85% for non-PSC deepwater), allowed deductions, investment tax credit, and any minimum tax provisions. [NTA 2025; PPTA]' },
-              { title: 'Investment Tax Credit / Allowance Verification', purpose: 'To verify that investment tax credits or allowances have been correctly claimed in the PPT computation, supported by qualifying capital expenditure documentation. [PPTA; NTA 2025]' },
+              { title: 'Upstream Petroleum Taxation — HCT + CIT or Legacy PPT (NTA 2025 / PIA 2021)', purpose: 'To verify upstream petroleum tax computations under the applicable regime: HCT + CIT for PIA-converted licences, or legacy PPT only where conversion has not occurred, including rates, deductions, royalties, and reconciliations to tax expense. [NTA 2025; PIA 2021; FIRS guidance]' },
+              { title: 'Investment Tax Credit / Allowance Verification', purpose: 'To verify that investment tax credits or allowances are correctly claimed under the applicable upstream tax regime, supported by qualifying capital expenditure documentation. [NTA 2025; PIA 2021; legacy PPT where applicable]' },
               { title: 'Gas Transfer Pricing', purpose: 'To assess whether the entity has applied the regulated gas transfer price in its tax computation where applicable, and whether any deviations require disclosure or could give rise to tax exposure. [FIRS Gas TP regulations]' },
               { title: 'NDDC Levy — 3% of Operating Expenditure', purpose: 'To verify that the NDDC levy of 3% of annual operating budget has been correctly computed and remitted, and any outstanding balance properly accrued. [NDDC Act]' },
             ],
@@ -572,7 +584,7 @@ const TEMPLATES = [
             procedures: [
               { title: 'Staff Utilisation Analysis', purpose: 'To analyse billed versus unbilled hours by staff member and by engagement to assess the reasonableness of the revenue recognised on time-based contracts, identify idle time or over-runs, and support the valuation of unbilled WIP. [ISA 520; IFRS 15]' },
               { title: 'Bonuses and Commissions — Accrual Basis', purpose: 'To verify that bonuses and commissions payable to staff are correctly accrued at year-end based on achieved performance metrics, and that the accrual basis and amount are consistent with approved schemes and prior year practice per IAS 19. [IAS 19; ISA 330]' },
-              { title: 'Sub-Contractor Costs — WHT Deduction Compliance', purpose: 'To verify that withholding tax has been correctly deducted at 5% on payments to sub-contractors and professional service providers, remitted to FIRS, and that sub-contractor costs are recognised in the period in which the related services are received. [NTA 2025; FIRS WHT regulations]' },
+              { title: 'Sub-Contractor Costs — WHT Deduction Compliance', purpose: 'To verify that withholding tax has been deducted at the rate in force for the service type on payments to sub-contractors/professional service providers, remitted to FIRS, and that related costs are recognised in the proper period. [NTA 2025; FIRS WHT regulations]' },
               { title: 'Consultants vs Employees — Tax Classification', purpose: 'To assess whether individuals engaged as consultants (subject to WHT at 5%) are in substance employees (subject to PAYE), applying the tests of control and integration, and confirm the tax treatment is appropriate to avoid PAYE exposure. [NTA 2025; PITA; FIRS guidelines]' },
             ],
           },
@@ -608,6 +620,110 @@ const TEMPLATES = [
               { title: 'Final Accounts Coverage Matrix (Mandatory)', purpose: 'To map every material P&L and balance sheet line item to completed substantive procedures and conclusions, and identify residual coverage gaps before sign-off. [ISA 330; ISA 230]' },
               { title: 'Notes and Presentation Completion (IAS 1)', purpose: 'To verify note disclosures and statement presentation are complete, consistent, and compliant with IAS 1 and related standards. [IAS 1; IAS 8]' },
               { title: 'End-to-End Engagement Readiness Check', purpose: 'To confirm evidence, conclusions, unresolved matters, and reporting implications are fully aligned for final sign-off. [ISA 220; ISA 700]' },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  // 6. FIELDWORK – EDUCATION (PRIVATE SCHOOL)
+  {
+    name: 'Education — Private School (Company Limited by Shares)',
+    description:
+      'Substantive procedures for private schools operating as companies, covering tuition recognition, fee cut-off/deferrals, school receivables, school-specific costs, and statutory/tax compliance.',
+    phases: [
+      {
+        phase: 'Fieldwork',
+        groups: [
+          {
+            title: 'Planning — Entity-Specific',
+            procedures: [
+              { title: 'School Structure & Regulatory Standing', purpose: 'To obtain and document legal form, education-regulator approvals, operating footprint, ownership structure, and related-party context for school audits. [ISA 315; CAMA 2020]' },
+              { title: 'Tuition Revenue — Risk Assessment', purpose: 'To assess tuition-revenue risks including enrolment-to-billing completeness, off-book cash collection risk, and session/year-end cut-off considerations. [ISA 315; IFRS 15]' },
+            ],
+          },
+          {
+            title: 'Fieldwork — Tuition & School Income',
+            procedures: [
+              { title: 'Tuition Income — Completeness & Occurrence (the key area)', purpose: 'To test tuition income completeness and occurrence by reconciling enrolment data to billings/ledger and tracing ledger receipts to student records/support. [ISA 330; IFRS 15]' },
+              { title: 'Fee Deferral — Unearned Income (Cutoff)', purpose: 'To verify proper recognition of fees received in advance as liabilities and cut-off between earned and unearned tuition income under IFRS 15. [IFRS 15; ISA 330]' },
+              { title: 'Fee Receivables & Bad Debts', purpose: 'To evaluate fee receivable existence and recoverability, including ageing analysis and expected credit loss/provision adequacy. [IFRS 9; ISA 540]' },
+              { title: 'Other School Income', purpose: 'To test completeness and accuracy of ancillary income streams such as transport, feeding, uniforms, books, and related charges. [ISA 330]' },
+            ],
+          },
+          {
+            title: 'Fieldwork — School-Specific Costs',
+            procedures: [
+              { title: 'Staff Costs — Teaching and Non-Teaching', purpose: 'To assess reasonableness and compliance of school payroll costs and statutory deductions for teaching and non-teaching staff. [ISA 330; NTA 2025]' },
+              { title: 'Proprietor and Related-Party Transactions', purpose: 'To test proprietor and related-party transactions for arm\'s-length basis, authorisation, and disclosure completeness. [ISA 550; IAS 24]' },
+              { title: 'Capital Items — Classification and Depreciation', purpose: 'To verify proper classification of school capital expenditure versus operating expense and adequacy of depreciation treatment. [IAS 16; ISA 330]' },
+            ],
+          },
+          {
+            title: 'Tax (verify against NTA 2025)',
+            procedures: [
+              { title: 'Education Tax Position — Private School', purpose: 'To evaluate whether claimed educational/tax exemptions are valid for a private school limited by shares under current law. [NTA 2025; ISA 250]' },
+              { title: 'Current Tax, Capital Allowances and Development Levy', purpose: 'To verify current tax computation, capital allowance treatment, and Development Levy applicability where taxable. [NTA 2025; IAS 12]' },
+              { title: 'VAT Treatment — Tuition and Ancillary Income', purpose: 'To verify VAT treatment of tuition and ancillary supplies based on current statutory classifications and rates. [NTA 2025; VAT Modification Order]' },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  // 7. FIELDWORK – NOT-FOR-PROFIT / NGO
+  {
+    name: 'Not-for-Profit / NGO (incl. school run as a foundation or company limited by guarantee)',
+    description:
+      'Substantive procedures for NGOs and foundations, including fund-accounting presentation, grant restrictions, donor-condition compliance, and tax-exemption/agent obligations.',
+    phases: [
+      {
+        phase: 'Fieldwork',
+        groups: [
+          {
+            title: 'Planning — NGO-Specific',
+            procedures: [
+              { title: 'Structure, Governing Framework & Funding Model', purpose: 'To document legal structure, governing instruments, funding model, and donor-condition landscape relevant to NGO financial reporting and compliance. [ISA 315; CAMA 2020]' },
+              { title: 'Fund Accounting Understanding', purpose: 'To confirm restricted/unrestricted fund architecture and appropriate statement captions for fund-based reporting. [IAS 1; ISA 315]' },
+            ],
+          },
+          {
+            title: 'Fieldwork — Income & Funds',
+            procedures: [
+              { title: 'Grant & Donation Income — Completeness & Classification', purpose: 'To test completeness, occurrence, and classification of grants/donations between restricted and unrestricted funds, including in-kind support where applicable. [ISA 330; IAS 20]' },
+              { title: 'Restricted Fund Utilisation — Compliance', purpose: 'To verify that restricted fund spending complies with donor conditions and that fund reconciliations are complete and accurate. [ISA 250; ISA 330]' },
+            ],
+          },
+          {
+            title: 'Fieldwork — Expenditure',
+            procedures: [
+              { title: 'Programme vs Support/Admin Expenditure', purpose: 'To test occurrence and classification of expenditure between programme and support/admin categories and evaluate allocation basis quality. [ISA 330]' },
+              { title: 'Combined Case — NGO Operating a School', purpose: 'To apply school-income completeness procedures within NGO fund-accounting structure for mixed-model entities. [ISA 330; IFRS 15]' },
+            ],
+          },
+          {
+            title: 'Assets, Liabilities & Funds',
+            procedures: [
+              { title: 'Donated and Grant-Funded Assets', purpose: 'To verify recognition/classification of donated and grant-funded assets, including disclosure of return or restriction clauses where applicable. [IAS 16; IAS 20]' },
+              { title: 'Cash and Bank — Fund Segregation', purpose: 'To test fund-segregated cash governance, including restricted-account reconciliations and completeness of balances. [ISA 505; ISA 330]' },
+              { title: 'Accumulated Fund and Fund Split Reconciliation', purpose: 'To reconcile accumulated fund movements and restricted/unrestricted splits to financial statements and supporting schedules. [IAS 1; ISA 330]' },
+            ],
+          },
+          {
+            title: 'Tax & Statutory (verify against current law)',
+            procedures: [
+              { title: 'Tax-Exempt Status and Conditions', purpose: 'To assess validity and sustainability of tax-exempt status, including risks from commercial activity or private-benefit leakage. [NTA 2025; ISA 250]' },
+              { title: 'PAYE, WHT and VAT Agent Obligations', purpose: 'To verify compliance with statutory payroll, withholding, and VAT agent obligations regardless of income-tax exemption position. [NTA 2025; PITA; FIRS guidance]' },
+              { title: 'CAMA Filing and Annual Returns', purpose: 'To confirm annual filing compliance and statutory-return obligations for NGO legal form. [CAMA 2020; ISA 250]' },
+            ],
+          },
+          {
+            title: 'Completion — NGO-Specific',
+            procedures: [
+              { title: 'Going Concern — Funding Continuity', purpose: 'To evaluate continuity of donor/support funding and going-concern implications for the next reporting horizon. [ISA 570]' },
+              { title: 'Financial Statements Presentation — Fund Structure', purpose: 'To verify correctness of fund-structure presentation in statements and disclosures, including deferred grants where applicable. [IAS 1; IAS 20]' },
+              { title: 'Related Parties and Governance Disclosures', purpose: 'To confirm completeness of governance and related-party disclosures for trustees, key management, and connected entities. [IAS 24; ISA 550]' },
+              { title: 'Donor Breach, Ultra Vires and Restricted-Fund Misuse', purpose: 'To identify and conclude on donor breaches, ultra vires activities, or restricted-fund misuse requiring governance escalation or disclosure. [ISA 250; IAS 37]' },
             ],
           },
         ],

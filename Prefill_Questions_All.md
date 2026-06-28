@@ -85,14 +85,17 @@
 7. Are all identified related parties consistent with management's disclosure? State any differences: ___
 
 ### Legal & Regulatory Framework Applicable to Client
-1. What CIT rate applies under NTA 2025? State rate and basis (turnover threshold): ___
-2. Is the entity registered for VAT at 7.5%? State yes/no and confirm registration status: ___
-3. Is the entity subject to PENCOM obligations (10% employer + 8% employee)? State yes/no: ___
-4. Is the entity subject to NSITF at 1% of monthly payroll? State yes/no: ___
-5. Is the entity subject to ITF levy at 1% of annual payroll? State yes/no and confirm threshold applies: ___
-6. What sector-specific regulations apply? State each and current compliance status: ___
-7. Are there any new or amended regulations in the current year affecting the financial statements? State details: ___
-8. Has the entity's FRCN registration status been confirmed (if applicable as a PIE)? State yes/no or N/A: ___
+1. What CIT rate applies under NTA 2025? State rate and basis (turnover/fixed asset thresholds): ___
+2. Is the entity a "small company" under NTA 2025 (turnover <= N100m and total fixed assets <= N250m)? If yes, is the company in professional services (carve-out)? State assessment: ___
+3. Confirm the current standard VAT rate in force for the period under audit and state it: ___% (verify current NTA/VAT Modification Order position): ___
+4. Has the client correctly applied exempt/zero-rated classifications under the current VAT Modification Order? State yes/no and details: ___
+5. Is the entity subject to PENCOM obligations (10% employer + 8% employee)? State yes/no: ___
+6. Is the entity subject to NSITF at 1% of monthly payroll? State yes/no: ___
+7. Is the entity subject to ITF levy at 1% of annual payroll? State yes/no and confirm threshold applies: ___
+8. Is the entity liable to Development Levy (4% of assessable profits), and exempt status tested (small company/non-resident/HCT-assessed profits)? State yes/no and basis: ___
+9. What sector-specific regulations apply? State each and current compliance status: ___
+10. Are there any new or amended regulations in the current year affecting the financial statements? State details: ___
+11. Has the entity's FRCN registration status been confirmed (if applicable as a PIE)? State yes/no or N/A: ___
 
 ### Going Concern Assessment — Preliminary
 1. Has management prepared a written going concern assessment? State yes/no and date: ___
@@ -984,6 +987,49 @@ All must be confirmed before physically signing:
 
 ---
 
+## GROUP: Audit Evidence — Methodology
+
+### Audit Sampling — Design, Selection & Evaluation (ISA 530)
+1. Population description and total value/count being sampled: N___ / ___ items
+2. Sampling approach — statistical or non-statistical? State and justify: ___
+3. What is the basis for sample size (tolerable misstatement, expected misstatement, risk, confidence)? State parameters used: ___
+4. Selection method — random, systematic, monetary-unit, or haphazard? State and confirm each item had a chance of selection: ___
+5. Sample size selected: ___ | Meets firm minimum for assessed risk level? Yes/No: ___
+6. Number of exceptions/misstatements in sample: ___ | Value: N___
+7. Projected misstatement to the population: N___ | Method of projection stated: ___
+8. Does projected misstatement exceed tolerable misstatement/performance materiality? State yes/no and response (extend testing/request adjustment): ___
+9. Were individually significant items tested 100% outside the sample? State threshold and items: ___
+10. Conclusion — does sample evidence support the population assertion? State: ___
+
+### Accounting Estimates — Audit Approach (ISA 540 Revised)
+1. Identify the estimate and the financial statement line affected: ___
+2. What are the method, significant assumptions, and data used by management? State: ___
+3. Assess estimation uncertainty — High / Medium / Low. Justify: ___
+4. Audit approach selected — test management process, develop independent estimate/range, or test subsequent events. State and why: ___
+5. Are significant assumptions reasonable individually and consistent with other audit evidence? State yes/no: ___
+6. Is there any indicator of management bias (e.g. favourable range clustering)? State yes/no and details: ___
+7. For high-uncertainty estimates, is estimation uncertainty disclosure adequate (IAS 1.125)? State yes/no: ___
+8. Conclusion on estimate — reasonable / understated / overstated, and misstatement impact: ___
+
+### Using the Work of an Auditor's Expert (ISA 620)
+1. Name of expert and field (e.g. reserves engineer, valuer, actuary, lawyer): ___
+2. Is this management's expert or auditor's expert? State: ___
+3. Competence, capability, and objectivity assessed (qualifications, memberships, independence)? State basis: ___
+4. Is scope of expert work adequate for the audit purpose? State yes/no: ___
+5. Are expert source data, assumptions, and methods reasonable and consistent with other evidence? State yes/no: ___
+6. Were expert findings corroborated and consistent with the financial statements? State yes/no and differences: ___
+7. Conclusion — is the expert's work adequate as audit evidence for the assertion? State: ___
+
+### Journal Entry Testing — Management Override (ISA 240.32)
+1. State the journal-entry population tested — period, accounts, and confirmation that full GL JE listing was obtained: ___
+2. State risk-based extraction criteria applied (entries to revenue without cash/receivable, unusual users/hours, round sums, suspense accounts, post-close/backdated, weak narratives): ___
+3. Number of entries selected for testing: ___ | Total value: N___
+4. For each selected entry — was supporting documentation obtained and business rationale confirmed? State exception count: ___
+5. Were any entries unsupported, unusual, or indicative of override/fraud? State yes/no and details: ___
+6. Conclusion on management-override risk based on JE testing: ___
+
+---
+
 # TEMPLATE: Fieldwork — Manufacturing
 
 ---
@@ -1054,7 +1100,7 @@ All must be confirmed before physically signing:
 1. Is the entity VAT-registered? State VAT registration number: ___
 2. Total VAT charged per returns filed for all months in the year: N___
 3. Does total taxable supplies per VAT returns agree to total revenue per the accounts? State yes/no and any differences (e.g. exempt supplies): ___
-4. Recalculate VAT: 7.5% × taxable supplies = expected VAT N___. Agrees to VAT charged? State yes/no and any difference: ___
+4. Recalculate VAT using the applicable statutory rate for the audit period: ___% × taxable supplies = expected VAT N___. Agrees to VAT charged? State yes/no and any difference: ___
 5. Were VAT returns filed on time each month? State yes/no and any late filings: ___
 6. Was VAT remitted to FIRS on time? State any late remittances: ___
 7. Does the year-end VAT payable balance agree to the most recent VAT return? State yes/no: ___
@@ -1782,10 +1828,10 @@ For each related party relationship — confirm the following are disclosed in t
 3. Are there any lifting imbalances at year-end (over or under-lift)? State yes/no and amount: ___
 4. How is the lifting imbalance accounted for — entitlement method or sales method? State method and IFRS basis: ___
 
-### PPT Treatment — Revenue Net of Royalties
-1. Is revenue presented gross or net of royalties? State which: ___
-2. Is the presentation consistent with IFRS 15.B34 principal vs agent analysis? State rationale: ___
-3. Total royalties for the year: N___ | Correctly excluded from revenue or included in costs? State treatment: ___
+### Tax Treatment — Revenue, Royalties and Government Take
+1. Is revenue presented gross or net of royalties/government take? State which: ___
+2. Is the presentation consistent with IFRS 15.B34 principal-vs-agent analysis? State rationale: ___
+3. Total royalties/government take for the year: N___ | Correctly classified in line with policy and tax basis (HCT/CIT or legacy PPT where unconverted)? State treatment: ___
 
 ### Signature Bonuses — Amortisation
 1. List all signature bonuses paid — amount, licence, and date paid: ___
@@ -1861,16 +1907,20 @@ Review each IFRS 6.20 indicator — state whether present:
 
 ## GROUP: Taxation — Oil & Gas
 
-### Petroleum Profits Tax Computation (NTA 2025)
-1. Applicable PPT rate — 65.75% (PSC/JOA) or 85% (non-PSC deepwater)? State basis: ___
-2. Review PPT computation:
-   Gross revenue: N___ | Less royalties: N___ | Less allowed expenses: N___ | Less capital allowances: N___ | Taxable income: N___ | PPT at ___% = N___
-3. Were Investment Tax Credits claimed? State amount: N___ | Verified against qualifying capex: ___
-4. Agrees to P&L tax expense? Yes/No: ___
+### Upstream Petroleum Taxation — HCT + CIT or Legacy PPT (NTA 2025 / PIA 2021)
+1. What is the entity's licence type and conversion status? State: PPL/PML under PIA (HCT + CIT) or legacy OML/OPL not yet converted (legacy PPT): ___
+2. If on PIA basis — confirm the two-tax computation:
+   CIT at 30% of chargeable profits: N___
+   HCT (state the rate applied and basis used): N___
+   Combined headline burden and rationale: ___
+3. If on legacy PPT basis — state applicable rate and confirm no PIA conversion contract has been executed: ___
+4. Were capital allowances, royalties (including realisable-price basis where applicable), and allowed deductions computed per current law? State yes/no: ___
+5. Have non-deductible expenses tied to non-compliance with VAT/import-duty rules been tested and adjusted where required? State yes/no: ___
+6. Agrees to P&L tax expense? Yes/No: ___
 
 ### Investment Tax Credit / Allowance Verification
 1. Total qualifying capital expenditure for ITC: N___
-2. For a sample — invoices obtained and confirmed as qualifying per PPTA definitions? State yes/no: ___
+2. For a sample — invoices obtained and confirmed as qualifying under the applicable regime (HCT/CIT framework or legacy PPT where applicable)? State yes/no: ___
 3. ITC rate applied: ___% | Expected ITC: N___ × ___% = N___ | Agrees to computation? Yes/No: ___
 
 ### Gas Transfer Pricing
@@ -1958,7 +2008,7 @@ Review each IFRS 6.20 indicator — state whether present:
 1. Trade payables, accruals, and unrecorded liabilities testing completed with satisfactory conclusions? Yes/No: ___
 2. Borrowings, lease liabilities, and covenant-related classification reviewed? Yes/No: ___
 3. Provisions including ARO/decommissioning, tax disputes, and regulatory exposures assessed under IAS 37? Yes/No: ___
-4. Statutory liabilities (PPT/CIT, VAT/WHT, NDDC and other levies) reconciled to filings and remittances? Yes/No: ___
+4. Statutory liabilities (HCT/CIT or legacy PPT where applicable, VAT/WHT, NDDC and other levies) reconciled to filings and remittances? Yes/No: ___
 5. Any material liability line lacking substantive coverage? State yes/no and details: ___
 
 ### Equity, Retained Earnings and Reserves Completion
@@ -2361,7 +2411,7 @@ Review each IFRS 6.20 indicator — state whether present:
 
 ### Sub-Contractor Costs — WHT Deduction Compliance
 1. Total payments to sub-contractors and professional service providers: N___
-2. Total WHT deducted at 5%: N___ | Expected: 5% × N___ = N___ | Agrees? Yes/No: ___
+2. Total WHT deducted at the rate in force for the service type: N___ | State applied rate and basis: ___% | Expected: ___% × N___ = N___ | Agrees? Yes/No: ___
 3. Was WHT remitted to FIRS within the prescribed period? State yes/no and late remittances: ___
 4. Were WHT credit notes issued to sub-contractors? State yes/no: ___
 5. Are there payments where WHT was not deducted? State yes/no and amounts: N___
@@ -2475,3 +2525,159 @@ Review each IFRS 6.20 indicator — state whether present:
 2. Are unresolved high-risk matters or missing evidence items still open? State yes/no and list: ___
 3. Are going concern and subsequent events conclusions aligned with disclosure and report wording? Yes/No: ___
 4. Is the file ready for partner sign-off without material outstanding issues? Yes/No: ___
+
+---
+
+# TEMPLATE: Education — Private School (Company Limited by Shares)
+
+---
+
+## GROUP: Planning — Entity-Specific
+
+### School Structure & Regulatory Standing
+1. Confirm legal form (private company limited by shares) and that audit is on a commercial IFRS basis. State: ___
+2. Is the school registered/approved by the relevant State Ministry of Education? Obtain reference and coverage period: ___
+3. Identify levels operated (nursery/primary/secondary/mixed) and number of campuses. Are records separate by campus? State: ___
+4. Identify promoter/proprietor and related entities (landlord, supplier, management company). Flag related-party risk: ___
+5. Is there government subvention/grant/intervention funding? State and confirm accounting treatment: ___
+
+### Tuition Revenue — Risk Assessment
+1. Describe the fee structure (per term/session, by level, and extras such as bus/feeding/uniform/exams): ___
+2. Is the school year aligned to financial year? If not, flag fee deferral (unearned income) risk: ___
+3. What is the enrolment system of record, and can fee income be reconciled to enrolment? State: ___
+4. Assess completeness risk: can enrolled students be unbilled or cash fees collected off-book? State risk and basis: ___
+
+## GROUP: Fieldwork — Tuition & School Income
+
+### Tuition Income — Completeness & Occurrence (the key area)
+1. Obtain enrolment register and fee schedule. Compute expected income (students by level × fee by level): N___
+2. Compare expected income to recorded income. Investigate variance (scholarships, discounts, entries/exits): N___ variance | explanation: ___
+3. Test completeness from enrolment register to ledger. State exceptions: ___
+4. Test occurrence from ledger receipts to student records/receipts. State exceptions: ___
+5. Are scholarships/bursaries/discounts authorised and documented? Test sample and state outcome: ___
+6. For cash-collected fees, reconcile receipt books/POS to banking. State findings: ___
+7. Conclusion on tuition income completeness and occurrence: ___
+
+### Fee Deferral — Unearned Income (Cutoff)
+1. For sessions crossing year-end, compute fees received relating to next period (deferred income): N___
+2. Is deferred income recognised as liability and excluded from current-year income? State yes/no: ___
+3. Are earned but unpaid fees recognised as income with receivable? State yes/no: ___
+4. Conclusion on revenue cutoff: ___
+
+### Fee Receivables & Bad Debts
+1. Obtain aged debtors listing and agree to leadsheet: ___
+2. Assess recoverability and compute required provision/ECL for long-outstanding balances: N___
+3. Confirm sample debtor balances to student records/parent correspondence: ___
+4. Conclusion on fee receivables valuation: ___
+
+### Other School Income
+1. Account for ancillary income (transport, feeding, uniform/book sales, exam fees, hall hire) and completeness: ___
+2. Test margin/reasonableness on resold items for income completeness: ___
+
+## GROUP: Fieldwork — School-Specific Costs
+
+### Staff Costs — Teaching and Non-Teaching
+1. Is teaching vs non-teaching payroll split reasonable, and are PAYE/PENCOM deductions correctly remitted? State: ___
+
+### Proprietor and Related-Party Transactions
+1. Are proprietor/related-party transactions (rent, management fees, loans) at arm's length and disclosed per IAS 24/CAMA? Test sample: ___
+
+### Capital Items — Classification and Depreciation
+1. Are buildings, buses, lab/ICT equipment, and furniture correctly capitalised vs expensed and depreciated? State: ___
+
+## GROUP: Tax (verify against NTA 2025)
+
+### Education Tax Position — Private School
+1. Confirm whether educational tax exemption is claimed and whether it qualifies under current law. State position and basis: ___
+
+### Current Tax, Capital Allowances and Development Levy
+1. If taxable, confirm CIT computation, capital allowances on school assets, and Development Levy treatment: ___
+
+### VAT Treatment — Tuition and Ancillary Income
+1. Confirm VAT treatment on tuition and ancillary taxable supplies under the current VAT Modification Order: ___
+
+---
+
+# TEMPLATE: Not-for-Profit / NGO (incl. school run as a foundation or company limited by guarantee)
+
+---
+
+## GROUP: Planning — NGO-Specific
+
+### Structure, Governing Framework & Funding Model
+1. Confirm legal form (incorporated trustees, company limited by guarantee, or foundation) and obtain registration evidence: ___
+2. Obtain constitution/trust deed and assess whether activities remain within objects. State: ___
+3. Identify funding model (grants, donations, membership, programme income, endowment) and major funders by restricted/unrestricted terms: ___
+4. Confirm relevant registrations/compliance (e.g. SCUML and other applicable regulators): ___
+5. List donor-imposed reporting requirements or grant conditions requiring compliance testing: ___
+
+### Fund Accounting Understanding
+1. Does the entity maintain restricted and unrestricted funds separately? State fund structure: ___
+2. Confirm file captions use Accumulated Fund and Income/Expenditure basis (not share capital/dividends): ___
+
+## GROUP: Fieldwork — Income & Funds
+
+### Grant & Donation Income — Completeness & Classification
+1. Obtain grant/donation schedule; agree major grants to agreements and bank receipts: ___
+2. For each major grant, confirm restricted vs unrestricted classification is correct. State exceptions: ___
+3. Is restricted grant income recognised as conditions are met/over grant period, with unspent balances deferred or carried in restricted funds? State basis: ___
+4. Test completeness controls over cash and in-kind donations. State assessment: ___
+5. Are in-kind donations measured and recognised appropriately? State: ___
+6. Conclusion on income completeness and fund classification: ___
+
+### Restricted Fund Utilisation — Compliance
+1. For sample restricted grants, test whether spending matched approved purpose and period. State exceptions: ___
+2. Reconcile opening balance + receipts - qualifying expenditure = closing restricted fund for major grants: N___
+3. Were any restricted funds used for unrestricted purposes? State yes/no and details: ___
+4. Do donor financial reports agree to audited figures? State: ___
+5. Conclusion on restricted-fund compliance: ___
+
+## GROUP: Fieldwork — Expenditure
+
+### Programme vs Support/Admin Expenditure
+1. Is expenditure analysed between programme and support/admin? Confirm basis of allocation: ___
+2. Test sample programme expenditure to support (invoices, beneficiary records, field reports): ___
+3. Assess admin-to-programme ratio reasonableness and donor cap compliance: ___
+4. Test payroll and consultant/field-staff costs for existence, statutory compliance, and correct fund charging: ___
+5. Conclusion on expenditure classification and occurrence: ___
+
+### Combined Case — NGO Operating a School
+1. Apply school tuition completeness procedures and confirm fee income is recorded in the correct fund structure: ___
+2. Confirm subsidised/free places are recorded and reconciled to capacity: ___
+
+## GROUP: Assets, Liabilities & Funds
+
+### Donated and Grant-Funded Assets
+1. Are donated/grant-funded assets capitalised where appropriate, and return conditions on grant termination disclosed? State: ___
+
+### Cash and Bank — Fund Segregation
+1. Are separate bank accounts maintained for restricted grants where required, and reconciliations complete? State: ___
+
+### Accumulated Fund and Fund Split Reconciliation
+1. Reconcile opening accumulated fund + surplus/(deficit) +/- transfers = closing balance, and agree to statements: ___
+2. Is restricted vs unrestricted accumulated fund split clearly disclosed? State yes/no: ___
+
+## GROUP: Tax & Statutory (verify against current law)
+
+### Tax-Exempt Status and Conditions
+1. Confirm tax-exempt status basis and assess whether commercial activity/private benefit risks could invalidate exemption: ___
+
+### PAYE, WHT and VAT Agent Obligations
+1. Even where income-tax exempt, confirm compliance with PAYE, WHT agent obligations, and VAT on commercial activities: ___
+
+### CAMA Filing and Annual Returns
+1. Confirm annual return and statutory filing obligations for entity type were met on time: ___
+
+## GROUP: Completion — NGO-Specific
+
+### Going Concern — Funding Continuity
+1. Assess donor-funding continuity (expiring grants, committed pipeline, concentration risk). State conclusion: ___
+
+### Financial Statements Presentation — Fund Structure
+1. Confirm statements present income/expenditure and fund balances correctly (restricted/unrestricted and deferred grants): ___
+
+### Related Parties and Governance Disclosures
+1. Are trustees/key management/connected entities and related transactions fully disclosed? State yes/no: ___
+
+### Donor Breach, Ultra Vires and Restricted-Fund Misuse
+1. Has any donor breach, ultra vires activity, or restricted-fund misuse been identified requiring reporting to governance/donors? State: ___
